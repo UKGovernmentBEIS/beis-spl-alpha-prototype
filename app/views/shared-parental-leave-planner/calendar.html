@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Parental leave and pay planner
+{% endblock %}
+
+{% set dueDate = data["due-date-year"] + "-" + data["due-date-month"] + "-" + data["due-date-day"]  %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Parental leave and pay planner
+      </h1>
+      <p>
+        Birth week is {{ dueDate | toBirthWeek }}.
+      </p>
+    </div>
+  </div>
+
+{% endblock %}

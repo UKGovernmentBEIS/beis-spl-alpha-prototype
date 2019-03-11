@@ -38,6 +38,12 @@ module.exports = function (env) {
 
   ------------------------------------------------------------------ */
 
+  filters.toBirthWeek = function(date) {
+    var utcDate = new Date(date.trim() + 'T00:00:00.000Z')
+    utcDate.setDate(utcDate.getDate() - utcDate.getDay())
+    return utcDate.toDateString()
+  }
+
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */

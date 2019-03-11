@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Parental leave and pay planner
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Parental leave and pay planner
+      </h1>
+      <p>
+        Shared parental leave is available for parents who are employed and planning on caring for their child with their partner.
+        It is available for up to 50 weeks, minus any maternity leave taken by the mother.
+        Parents can choose how to split the available leave between them. It can be taken in blocks, with periods of work in between,
+        so that childcare can be shared more equally between parents in the first year of their child’s life or placement if adopting.
+      </p>
+      <p>
+        Statutory Shared Parental Pay is paid at £145.18 (or 90% of your average weekly salary if you earn less than £161.31 per week).
+      </p>
+      <form action="/shared-parental-leave-planner/due-date" method="POST">
+        <input type="hidden" name="due-date-day" value="{{ dueDateDay }}">
+        <input type="hidden" name="due-date-month" value="{{ dueDateMonth }}">
+        <input type="hidden" name="due-date-year" value="{{ dueDateYear }}">
+        <button type="submit" class="govuk-button govuk-button--start">
+          Start now
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
