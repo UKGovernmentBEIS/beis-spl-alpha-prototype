@@ -37,14 +37,6 @@ table#leave-calendar {
     }
   }
 
-  .compulsory-maternity {
-    cursor: not-allowed;
-    background-color: #D8D8D8;
-    &::before {
-      content: 'Compulsory maternity leave'
-    }
-  }
-
   td.mother, td.partner {
     &:not(.maternity) {
       cursor: pointer;
