@@ -44,12 +44,12 @@ module.exports = function (env) {
   ]
 
   filters.toBirthWeek = function(dueDate, offset) {
-    var utcDate = new Date(dueDate.trim() + 'T00:00:00.000Z')
+    const date = new Date(dueDate.trim())
     // Add offset weeks and get previous Sunday.
-    utcDate.setDate(utcDate.getDate() + (offset * 7) - utcDate.getDay())
-    const date = ('0' + utcDate.getUTCDate()).slice(-2); // Ensure two digits.
-    const month = months[utcDate.getUTCMonth()];
-    return `${date} ${month}`;
+    date.setDate(date.getDate() + (offset * 7) - date.getDay())
+    const twoDigitDate = ('0' + date.getDate()).slice(-2); // Ensure two digits.
+    const monthName = months[date.getMonth()];
+    return `${twoDigitDate} ${monthName}`;
   }
 
   /* ------------------------------------------------------------------
