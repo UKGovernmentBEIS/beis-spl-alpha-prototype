@@ -43,7 +43,7 @@ module.exports = function (env) {
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
   ]
 
-  filters.toBirthWeek = function(dueDate, offset) {
+  filters.birthWeek = function(dueDate, offset) {
     const date = new Date(dueDate.trim())
     // Add offset weeks and get previous Sunday.
     date.setDate(date.getDate() + (offset * 7) - date.getDay())
