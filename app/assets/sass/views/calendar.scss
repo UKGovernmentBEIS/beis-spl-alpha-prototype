@@ -9,9 +9,11 @@ table#leave-calendar {
   }
 
   .birth-week {
-    background-color: #FFBF47;
     font-weight: bold;
     font-size: 0.875em;
+    &, & + tr > td:first-child {
+      background-color: #FFBF47;
+    }
   }
 
   .shared {
@@ -43,19 +45,21 @@ table#leave-calendar {
     }
   }
 
-  td:not(.compulsory-maternity) {
-    cursor: pointer;
-    &:hover {
-      position: relative;
-      &::after {
-        content:"";
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.1);
+  td.mother, td.partner {
+    &:not(.maternity) {
+      cursor: pointer;
+      &:hover {
+        position: relative;
+        &::after {
+          content:"";
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.1);
+        }
       }
     }
   }
