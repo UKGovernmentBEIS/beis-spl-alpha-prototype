@@ -7,23 +7,60 @@ if (window.console && window.console.info) {
 
 const SHARED = 'shared'
 const NOT_SHARED = 'not-shared'
+const ALL_LEAVE_TYPES = [SHARED, NOT_SHARED]
 
 const TOTAL_WEEKS_LEAVE = 52
+
+let isMouseDown = false
+let toggleAction = null
 
 $(document).ready(function () {
   window.GOVUKFrontend.initAll()
 
   updateWeeksTotals()
 
-  $('td.mother:not(.compulsory-maternity), td.partner').click(function () {
-    $this = $(this)
-    const selectedLeaveType = $('input[name=leave-type]:checked').val()
-    const leaveClassesToRemove = [SHARED, NOT_SHARED].filter(className => className != selectedLeaveType)
-    leaveClassesToRemove.forEach(leaveClass => $this.removeClass(leaveClass))
-    $this.toggleClass(selectedLeaveType)
-    updateWeeksTotals()
+  $('td.mother, td.partner').mousedown(function (e) {
+    // Only respond to primary mouse button.
+    if (e.which === 1) {
+      const $this = $(this)
+      toggleAction = getToggleAction($this)
+      toggleAction($this)
+    }
+    return false
+  }).mouseover(function () {
+    if (toggleAction) {
+      const $this = $(this)
+      toggleAction($this)
+    }
+  })
+
+  $(document).mouseup(function () {
+    toggleAction = null
+  }).mouseleave(function () {
+    toggleAction = null
   })
 })
+
+function getToggleAction($cell) {
+  const selectedLeaveType = $('input[name=leave-type]:checked').val()
+  const hasClass = $cell.hasClass(selectedLeaveType)
+  if (hasClass) {
+    return removeLeave.bind(undefined, selectedLeaveType)
+  } else {
+    return setLeave.bind(undefined, selectedLeaveType)
+  }
+}
+
+function removeLeave(leaveType, $cell) {
+  $cell.removeClass(leaveType)
+  updateWeeksTotals()
+}
+
+function setLeave(leaveType, $cell) {
+  ALL_LEAVE_TYPES.forEach(type => removeLeave(type, $cell))
+  $cell.addClass(leaveType)
+  updateWeeksTotals()
+}
 
 function updateWeeksTotals() {
   const shared = $('td.shared').length

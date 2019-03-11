@@ -4,6 +4,10 @@
 }
 
 table#leave-calendar {
+  td {
+    user-select: none;
+  }
+
   td:not(:first-child) {
     width: 42%;
   }
@@ -38,20 +42,18 @@ table#leave-calendar {
   }
 
   td.mother, td.partner {
-    &:not(.maternity) {
-      cursor: pointer;
-      &:hover {
-        position: relative;
-        &::after {
-          content:"";
-          display: block;
-          position: absolute;
-          top: 0;
-          right: 0;
-          left: 0;
-          bottom: 0;
-          background-color: rgba(0, 0, 0, 0.1);
-        }
+    cursor: pointer;
+    &:hover {
+      position: relative;
+      &::after {
+        content:"";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.1);
       }
     }
   }
