@@ -1,3 +1,5 @@
+{% from "radios/macro.njk" import govukRadios %}
+
 {% extends "layout.html" %}
 
 {% block pageTitle %}
@@ -19,12 +21,35 @@
       <p>
         To use the planner below select the leave type you want to plan and then click the weeks you want to take that leave.
       </p>
+      {{ govukRadios({
+        classes: "govuk-radios--inline",
+        idPrefix: "leave-type",
+        name: "leave-type",
+        fieldset: {
+          legend: {
+            text: "Type of leave",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: [
+          {
+            value: "shared",
+            text: "Shared parental leave",
+            checked: true
+          },
+          {
+            value: "not-shared",
+            text: "Maternity / Paternity leave"
+          }
+        ]
+      }) }}
       <table id="leave-calendar" class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col"></th>
-            <th class="govuk-table__header" scope="col">Parent 1: Mother</th>
-            <th class="govuk-table__header" scope="col">Parent 2: Partner</th>
+            <th class="govuk-table__header" scope="col">Mother</th>
+            <th class="govuk-table__header" scope="col">Partner</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -42,13 +67,11 @@
                 {{ dueDate | toBirthWeek(i) }}
               </td>
               {% if (i === 1) or (i === 2) %}
-                <td class="govuk-table__cell compulsory-maternity">
-                  Compulsory maternity leave
-                </td>
+                <td class="govuk-table__cell mother compulsory-maternity"></td>
               {% else %}
-                <td class="govuk-table__cell"></td>
+                <td class="govuk-table__cell mother"></td>
               {% endif %}
-              <td class="govuk-table__cell"></td>
+              <td class="govuk-table__cell partner"></td>
             </tr>
           {% endfor %}
         </tbody>

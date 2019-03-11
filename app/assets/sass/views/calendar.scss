@@ -9,7 +9,49 @@ table#leave-calendar {
     font-size: 0.875em;
   }
 
+  .shared {
+    background-color: #B2D0C2;
+    &::before {
+      content: 'Shared parental leave'
+    }
+  }
+
+  .mother.not-shared {
+    background-color: #B2CEE4;
+    &::before {
+      content: 'Maternity leave'
+    }
+  }
+
+  .partner.not-shared {
+    background-color: #CEB1B1;
+    &::before {
+      content: 'Paternity leave'
+    }
+  }
+
   .compulsory-maternity {
+    cursor: not-allowed;
     background-color: #D8D8D8;
+    &::before {
+      content: 'Compulsory maternity leave'
+    }
+  }
+
+  td:not(.compulsory-maternity) {
+    cursor: pointer;
+    &:hover {
+      position: relative;
+      &::after {
+        content:"";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+    }
   }
 }
