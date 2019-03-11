@@ -1,6 +1,11 @@
+#leave-calendar-container {
+  max-height: 80vh;
+  overflow: scroll;
+}
+
 table#leave-calendar {
   td:not(:first-child) {
-    width: 40%;
+    width: 42%;
   }
 
   .birth-week {
@@ -53,5 +58,12 @@ table#leave-calendar {
         background-color: rgba(0, 0, 0, 0.1);
       }
     }
+  }
+}
+
+.remaining-total {
+  color: $govuk-secondary-text-colour;
+  &.negative {
+    color: $govuk-error-colour;
   }
 }

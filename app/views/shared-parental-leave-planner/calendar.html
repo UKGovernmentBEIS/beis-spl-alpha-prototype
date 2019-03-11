@@ -1,4 +1,5 @@
 {% from "radios/macro.njk" import govukRadios %}
+{% from "summary-list/macro.njk" import govukSummaryList %}
 
 {% extends "layout.html" %}
 
@@ -16,10 +17,7 @@
         Parental leave and pay planner
       </h1>
       <p>
-        On this page you can plot your leave around the expected birth of your child, or placement date if you are adopting.
-      </p>
-      <p>
-        To use the planner below select the leave type you want to plan and then click the weeks you want to take that leave.
+        Use this tool to plan how you take leave in the first year after giving birth or adopting a child.
       </p>
       {{ govukRadios({
         classes: "govuk-radios--inline",
@@ -44,6 +42,10 @@
           }
         ]
       }) }}
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div id="leave-calendar-container" class="govuk-grid-column-two-thirds">
       <table id="leave-calendar" class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -77,6 +79,54 @@
         </tbody>
       </table>
     </div>
+    <div class="govuk-grid-column-one-third">
+      <h2 class="govuk-heading-m">
+        Leave weeks
+      </h2>
+      <p>Any unused maternity leave can be taken as shared parental leave.</p>
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Maternity"
+            },
+            value: {
+              html: '<span id="maternity-weeks"></span> weeks'
+            }
+          },
+          {
+            key: {
+              text: "Shared"
+            },
+            value: {
+              html: '<span id="shared-weeks"></span> weeks'
+            }
+          },
+          {
+            key: {
+              classes: "remaining-total",
+              text: "Remaining"
+            },
+            value: {
+              classes: "remaining-total",
+              html: '<span id="remaining-weeks"></span> weeks'
+            }
+          }
+        ]
+      }) }}
+      <p>Parental leave is a separate entitlement.</p>
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Paternity"
+            },
+            value: {
+              html: '<span id="paternity-weeks"></span> weeks'
+            }
+          }
+        ]
+      }) }}
   </div>
 
 {% endblock %}
