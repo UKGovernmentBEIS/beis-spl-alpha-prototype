@@ -1,0 +1,15 @@
+table#leave-calendar {
+  td:not(:first-child) {
+    width: 40%;
+  }
+
+  .birth-week {
+    background-color: #FFBF47;
+    font-weight: bold;
+    font-size: 0.875em;
+  }
+
+  .compulsory-maternity {
+    background-color: #D8D8D8;
+  }
+}

@@ -14,8 +14,45 @@
         Parental leave and pay planner
       </h1>
       <p>
-        Birth week is {{ dueDate | toBirthWeek }}.
+        On this page you can plot your leave around the expected birth of your child, or placement date if you are adopting.
       </p>
+      <p>
+        To use the planner below select the leave type you want to plan and then click the weeks you want to take that leave.
+      </p>
+      <table id="leave-calendar" class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col"></th>
+            <th class="govuk-table__header" scope="col">Parent 1: Mother</th>
+            <th class="govuk-table__header" scope="col">Parent 2: Partner</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for i in range(-8, 52) %}
+            {% if (i === 0) %}
+              <tr class="birth-week">
+                <td></td>
+                <td colspan="2">
+                  Birth week
+                </td>
+              </tr>
+            {% endif %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                {{ dueDate | toBirthWeek(i) }}
+              </td>
+              {% if (i === 1) or (i === 2) %}
+                <td class="govuk-table__cell compulsory-maternity">
+                  Compulsory maternity leave
+                </td>
+              {% else %}
+                <td class="govuk-table__cell"></td>
+              {% endif %}
+              <td class="govuk-table__cell"></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 

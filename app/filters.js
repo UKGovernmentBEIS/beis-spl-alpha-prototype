@@ -38,10 +38,18 @@ module.exports = function (env) {
 
   ------------------------------------------------------------------ */
 
-  filters.toBirthWeek = function(date) {
-    var utcDate = new Date(date.trim() + 'T00:00:00.000Z')
-    utcDate.setDate(utcDate.getDate() - utcDate.getDay())
-    return utcDate.toDateString()
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ]
+
+  filters.toBirthWeek = function(dueDate, offset) {
+    var utcDate = new Date(dueDate.trim() + 'T00:00:00.000Z')
+    // Add offset weeks and get previous Sunday.
+    utcDate.setDate(utcDate.getDate() + (offset * 7) - utcDate.getDay())
+    const date = ('0' + utcDate.getUTCDate()).slice(-2); // Ensure two digits.
+    const month = months[utcDate.getUTCMonth()];
+    return `${date} ${month}`;
   }
 
   /* ------------------------------------------------------------------
