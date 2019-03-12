@@ -41,8 +41,18 @@ table#leave-calendar {
     }
   }
 
-  td.mother, td.partner {
+  .mother.compulsory-maternity {
+    background-color: darken(#B2CEE4, 20%);
+    &::before {
+      content: 'Compulsory maternity leave'
+    }
+  }
+
+  .mother, .partner {
     cursor: pointer;
+    &.compulsory-maternity {
+      cursor: not-allowed;
+    }
     &:hover {
       position: relative;
       &::after {
@@ -63,5 +73,14 @@ table#leave-calendar {
   color: $govuk-secondary-text-colour;
   &.negative {
     color: $govuk-error-colour;
+  }
+}
+
+.leave-info {
+  .warning {
+    color: $govuk-error-colour;
+  }
+  .info {
+    color: $govuk-secondary-text-colour;
   }
 }

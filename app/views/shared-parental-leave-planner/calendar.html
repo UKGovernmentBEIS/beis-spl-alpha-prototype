@@ -17,7 +17,7 @@
         Parental leave and pay planner
       </h1>
       <p>
-        Use this tool to plan how you take leave in the first year after giving birth or adopting a child.
+        Use this tool to plan how you take leave when you have a child.
       </p>
       {{ govukRadios({
         classes: "govuk-radios--inline",
@@ -68,8 +68,12 @@
               <td class="govuk-table__cell">
                 {{ dueDate | birthWeek(i) }}
               </td>
-              <td class="govuk-table__cell mother"></td>
-              <td class="govuk-table__cell partner"></td>
+              {% if (i === 0) or (i === 1) %}
+                <td data-week="{{i}}" class="govuk-table__cell mother compulsory-maternity not-shared"></td>
+              {% else %}
+                <td data-week="{{i}}" class="govuk-table__cell mother"></td>
+              {% endif %}
+              <td data-week="{{i}}" class="govuk-table__cell partner"></td>
             </tr>
           {% endfor %}
         </tbody>
@@ -80,6 +84,7 @@
         Leave weeks
       </h2>
       <p>Any unused maternity leave can be taken as shared parental leave.</p>
+      <p>Paternity leave is separate.</p>
       {{ govukSummaryList({
         rows: [
           {
@@ -110,7 +115,20 @@
           }
         ]
       }) }}
-      <p>Paternity leave is a separate entitlement.</p>
+      <div class="leave-info">
+        <p id="maternity-gap" class="govuk-body-s warning">
+          You can't leave a gap in your maternity leave.
+        </p>
+        <p id="maternity-maximum" class="govuk-body-s warning">
+          You've taken more than the maximum of 52 weeks maternity or shared parental leave.
+        </p>
+        <p id="no-more-shared" class="govuk-body-s info">
+          You have no more shared parental leave, reduce your maternity leave to create more.
+        </p>
+        <p id="can-break-shared" class="govuk-body-s info">
+          Don't forget, you can break up shared parental leave with periods of work.
+        </p>
+      </div>
       {{ govukSummaryList({
         rows: [
           {
@@ -123,6 +141,17 @@
           }
         ]
       }) }}
+      <div class="leave-info">
+        <p id="paternity-gap" class="govuk-body-s warning">
+          You can't leave a gap in your paternity leave.
+        </p>
+        <p id="paternity-maximum" class="govuk-body-s warning">
+          You've taken more than the maximum of 2 weeks paternity leave.
+        </p>
+        <p id="paternity-period" class="govuk-body-s warning">
+          You can only take paternity leave in the first 8 weeks after the birth.
+        </p>
+      </div>
   </div>
 
 {% endblock %}
