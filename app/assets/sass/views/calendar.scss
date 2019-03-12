@@ -77,6 +77,9 @@ table#leave-calendar {
 }
 
 .leave-info {
+  p {
+    display: none;
+  }
   .warning {
     color: $govuk-error-colour;
   }
