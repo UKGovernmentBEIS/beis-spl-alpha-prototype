@@ -74,6 +74,8 @@ function onLeaveUpdated() {
   const paternityWeeks = paternity.length
   const remainingWeeks = MATERNITY_WEEKS_ENTITLEMENT - maternityWeeks - sharedWeeks
 
+  // Remaining weeks.
+
   $('#shared-weeks').text(sharedWeeks)
   $('#maternity-weeks').text(maternityWeeks)
   $('#paternity-weeks').text(paternityWeeks)
@@ -84,17 +86,19 @@ function onLeaveUpdated() {
     $('.remaining-total').addClass('negative')
   }
 
+  // Warnings.
+
   const hasMaternityGap = hasGap(maternity)
   const hasSharedGap = hasGap(motherShared) || hasGap(partnerShared)
   const hasPaternityGap = hasGap(paternity)
 
   const paternityOutOfRange = paternity.filter(function () {
-    const week = getWeek($(this))
+    const week = getWeekNumber($(this))
     return week < 0 || week > 7
   }).length !== 0
 
-  const firstMaternity = getWeek(maternity.first())
-  const firstShared = getWeek(shared.first())
+  const firstMaternity = getWeekNumber(maternity.first())
+  const firstShared = getWeekNumber(shared.first())
 
   setVisibility('maternity-gap', hasMaternityGap)
   setVisibility('maternity-maximum', remainingWeeks < 0)
@@ -106,10 +110,10 @@ function onLeaveUpdated() {
   setVisibility('shared-before-maternity', firstShared < firstMaternity)
 }
 
-function hasGap(leaveCells) {
-  const firstWeek = getWeek(leaveCells.first())
-  const lastWeek = getWeek(leaveCells.last())
-  const totalWeeks = leaveCells.length
+function hasGap(weeks) {
+  const firstWeek = getWeekNumber(weeks.first())
+  const lastWeek = getWeekNumber(weeks.last())
+  const totalWeeks = weeks.length
   return lastWeek - firstWeek >= totalWeeks
 }
 
@@ -122,6 +126,6 @@ function setVisibility(elementId, isVisible) {
   }
 }
 
-function getWeek($cell) {
+function getWeekNumber($cell) {
   return parseInt($cell.data('week'))
 }
