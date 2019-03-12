@@ -94,7 +94,7 @@ function onLeaveUpdated() {
   }).length !== 0
 
   const firstMaternity = getWeek(maternity.first())
-  const firstMotherShared = getWeek(shared.first())
+  const firstShared = getWeek(shared.first())
 
   setVisibility('maternity-gap', hasMaternityGap)
   setVisibility('maternity-maximum', remainingWeeks < 0)
@@ -103,7 +103,7 @@ function onLeaveUpdated() {
   setVisibility('paternity-gap', hasPaternityGap)
   setVisibility('paternity-maximum', paternityWeeks > PATERNITY_WEEKS_ENTITLEMENT)
   setVisibility('paternity-period', paternityOutOfRange)
-  setVisibility('shared-before-maternity', firstMotherShared < firstMaternity)
+  setVisibility('shared-before-maternity', firstShared < firstMaternity)
 }
 
 function hasGap(leaveCells) {
