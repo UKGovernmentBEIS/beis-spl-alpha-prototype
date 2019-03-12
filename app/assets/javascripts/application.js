@@ -20,45 +20,55 @@ $(document).ready(function () {
 
   onLeaveUpdated()
 
-  $('td.mother:not(.compulsory-maternity), td.partner').mousedown(function (e) {
+  $('td.mother:not(.compulsory-maternity)').mousedown(function (event) {
+    onMouseDown($(this), event, 'mother')
+  })
+
+  $('td.partner').mousedown(function (event) {
+    onMouseDown($(this), event, 'partner')
+  })
+
+  function onMouseDown($cell, e, parent) {
     // Only respond to primary mouse button.
     if (e.which === 1) {
-      const $this = $(this)
-      toggleAction = getToggleAction($this)
-      toggleAction($this)
+      toggleAction = getToggleAction($cell, parent)
+      toggleAction($cell.parent())
     }
-    return false
-  }).mouseover(function () {
+  }
+
+  $('tr.leave-week').mouseover(function () {
     if (toggleAction) {
       const $this = $(this)
       toggleAction($this)
     }
   })
 
-  $(document).mouseup(function () {
+  $('table#leave-calendar').mouseup(function () {
     toggleAction = null
   }).mouseleave(function () {
     toggleAction = null
   })
 })
 
-function getToggleAction($cell) {
+function getToggleAction($cell, parent) {
   const selectedLeaveType = $('input[name=leave-type]:checked').val()
   const hasClass = $cell.hasClass(selectedLeaveType)
   if (hasClass) {
-    return removeLeave.bind(undefined, selectedLeaveType)
+    return removeLeave.bind(undefined, selectedLeaveType, parent)
   } else {
-    return setLeave.bind(undefined, selectedLeaveType)
+    return setLeave.bind(undefined, selectedLeaveType, parent)
   }
 }
 
-function removeLeave(leaveType, $cell) {
+function removeLeave(leaveType, parent, $row) {
+  const $cell = $row.find('.' + parent)
   $cell.removeClass(leaveType)
   onLeaveUpdated()
 }
 
-function setLeave(leaveType, $cell) {
-  ALL_LEAVE_TYPES.forEach(type => removeLeave(type, $cell))
+function setLeave(leaveType, parent, $row) {
+  const $cell = $row.find('.' + parent)
+  ALL_LEAVE_TYPES.forEach(type => removeLeave(type, parent, $row))
   $cell.addClass(leaveType)
   onLeaveUpdated()
 }
