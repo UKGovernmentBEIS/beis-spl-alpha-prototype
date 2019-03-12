@@ -48,7 +48,7 @@
     </div>
   </div>
   <div class="govuk-grid-row">
-    <div id="leave-calendar-container" class="govuk-grid-column-two-thirds">
+    <div id="leave-calendar-container" class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
       <table id="leave-calendar" class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -69,7 +69,7 @@
             {% endif %}
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
-                {{ dueDate | birthWeek(i) }}
+                {{ dueDate | startOfWeek | offsetWeeks(i) | formatDate("DD MMM") }}
               </td>
               {% if (i === 0) or (i === 1) %}
                 <td data-week="{{i}}" class="govuk-table__cell mother compulsory-maternity not-shared"></td>
@@ -157,6 +157,37 @@
         <p id="paternity-period" class="govuk-body-s warning">
           You can only take paternity leave in the first 8 weeks after the birth.
         </p>
+      </div>
+  </div>
+  <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-l">Key dates</h2>
+        {% set dueDateLong %}
+          {{ dueDate | startOfWeek | formatDate("DD MMMM YYYY") }}
+        {% endset %}
+        {% set notifyEmployersDate %}
+          {{ dueDate | offsetWeeks(-15) | formatDate("DD MMMM YYYY") }}
+        {% endset %}
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Baby is due"
+              },
+              value: {
+                text: dueDateLong
+              }
+            },
+            {
+              key: {
+                text: "Notify employers of leave"
+              },
+              value: {
+                text: "by " + notifyEmployersDate
+              }
+            }
+          ]
+        }) }}
       </div>
   </div>
 

@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 module.exports = function (env) {
   /**
    * Instantiate object used to store the methods registered as a
@@ -43,13 +45,16 @@ module.exports = function (env) {
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
   ]
 
-  filters.birthWeek = function(dueDate, offset) {
-    const date = new Date(dueDate.trim())
-    // Add offset weeks and get previous Sunday.
-    date.setDate(date.getDate() + (offset * 7) - date.getDay())
-    const twoDigitDate = ('0' + date.getDate()).slice(-2); // Ensure two digits.
-    const monthName = months[date.getMonth()];
-    return `${twoDigitDate} ${monthName}`;
+  filters.startOfWeek = function (date) {
+    return moment(date).startOf('week')
+  }
+
+  filters.offsetWeeks = function (date, weekOffset) {
+    return moment(date).add(weekOffset, 'weeks')
+  }
+
+  filters.formatDate = function (date, format) {
+    return moment(date).format(format)
   }
 
   /* ------------------------------------------------------------------
