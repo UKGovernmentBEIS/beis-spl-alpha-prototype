@@ -5,11 +5,14 @@ if (window.console && window.console.info) {
   window.console.info('GOV.UK Prototype Kit - do not use for production')
 }
 
+let useSmartPlanner = true
+
 const COMPULSORY = 'compulsory'
 const MATERNITY = 'maternity'
 const PATERNITY = 'paternity'
 const SHARED = 'shared'
-const ALL_LEAVE_TYPES = [MATERNITY, PATERNITY, SHARED]
+const LEAVE = 'leave'
+const ALL_LEAVE_TYPES = [MATERNITY, PATERNITY, SHARED, LEAVE]
 
 const MOTHER = 'mother'
 const PARTNER = 'partner'
@@ -24,6 +27,10 @@ const $calendar = $('table#leave-calendar')
 
 $(document).ready(function () {
   window.GOVUKFrontend.initAll()
+
+  if (!useSmartPlanner) {
+    $('.type-of-leave').show()
+  }
 
   // Run once to intialize.
   onLeaveUpdated()
@@ -40,7 +47,7 @@ $(document).ready(function () {
     const $originalCell = $(this)
     const column = $originalCell.hasClass(MOTHER) ? MOTHER : PARTNER
     const leaveType = getSelectedLeaveType(column)
-    const cellAction = $originalCell.hasClass(leaveType) ? removeLeave : applyLeave
+    const cellAction = $originalCell.hasClass(leaveType) ? removeLeave : addLeave
     const onRowMouseOver = function () {
       const $cellInRow = $(this).find(`.${column}`)
       if ($cellInRow.hasClass(COMPULSORY)) {
@@ -62,6 +69,9 @@ $(document).ready(function () {
 })
 
 function getSelectedLeaveType(column) {
+  if (useSmartPlanner) {
+    return LEAVE
+  }
   const isShared = $('input[name=leave-type]:checked').val() === 'shared'
   if (isShared) {
     return SHARED
@@ -69,7 +79,7 @@ function getSelectedLeaveType(column) {
   return column === MOTHER ? MATERNITY : PATERNITY
 }
 
-function applyLeave($cell, leaveType) {
+function addLeave($cell, leaveType) {
   ALL_LEAVE_TYPES.forEach(type => removeLeave($cell, type))
   $cell.addClass(leaveType)
 }
@@ -79,6 +89,10 @@ function removeLeave($cell, leaveType) {
 }
 
 function onLeaveUpdated() {
+  if (useSmartPlanner) {
+    applyLeave()
+  }
+
   const shared = $(`td.${SHARED}`)
   const motherShared = $(`td.${MOTHER}.${SHARED}`)
   const partnerShared = $(`td.${PARTNER}.${SHARED}`)
@@ -131,4 +145,51 @@ function hasGap(weeks) {
 
 function getWeekNumber($cell) {
   return parseInt($cell.data('week'))
+}
+
+function applyLeave() {
+  applyMothersLeave()
+  applyPartnersLeave()
+}
+
+function applyMothersLeave() {
+  let hasStartedMaternityLeave = false
+  let hasFinishedMaternityLeave = false
+  $(`.${MOTHER}`).removeClass(SHARED).removeClass(MATERNITY).each(function () {
+    const $this = $(this)
+    if ($this.hasClass(COMPULSORY)) {
+      hasStartedMaternityLeave = true
+      $this.addClass(MATERNITY)
+    } else if ($this.hasClass(LEAVE)) {
+      const weekNumber = getWeekNumber($this)
+      hasStartedMaternityLeave = true
+      $this.addClass(weekNumber < 0 || !hasFinishedMaternityLeave ? MATERNITY : SHARED)
+    } else if (hasStartedMaternityLeave) {
+      hasFinishedMaternityLeave = true
+    }
+  })
+}
+
+function applyPartnersLeave() {
+  let hasStartedPaternityLeave = false
+  let hasFinishedPaternityLeave = false
+  let paternityLeaveUsed = 0
+  $(`.${PARTNER}`).removeClass(SHARED).removeClass(PATERNITY).each(function () {
+    const $this = $(this)
+    if ($this.hasClass(LEAVE)) {
+      const weekNumber = getWeekNumber($this)
+      const inFirstEightWeeks = 0 <= weekNumber && weekNumber < 8
+      const hasEntitlementRemaining = paternityLeaveUsed < PATERNITY_WEEKS_ENTITLEMENT
+      const canUsePaternityLeave = inFirstEightWeeks && !hasFinishedPaternityLeave && hasEntitlementRemaining
+      if (canUsePaternityLeave) {
+        hasStartedPaternityLeave = true
+        paternityLeaveUsed++
+        $this.addClass(PATERNITY)
+      } else {
+        $this.addClass(SHARED)
+      }
+    } else if (hasStartedPaternityLeave) {
+      hasFinishedPaternityLeave = true
+    }
+  })
 }
