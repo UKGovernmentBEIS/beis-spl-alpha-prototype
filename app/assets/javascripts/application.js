@@ -21,7 +21,6 @@ const MATERNITY_WEEKS_ENTITLEMENT = 52
 const PATERNITY_WEEKS_ENTITLEMENT = 2
 
 const $calendar = $('table#leave-calendar')
-let toggleAction = null
 
 $(document).ready(function () {
   window.GOVUKFrontend.initAll()
@@ -34,57 +33,49 @@ $(document).ready(function () {
       // Only respond to primary mouse button.
       return
     }
+
     $calendar.addClass(DRAGGING)
-    const $cell = $(this)
-    toggleAction = getToggleAction($cell)
-    const $row = $cell.parent()
-    toggleAction($row)
     event.preventDefault()
-  })
 
-  $('tr.leave-week').on('mouseover', function () {
-    if (!toggleAction) {
-      return
+    const $originalCell = $(this)
+    const column = $originalCell.hasClass(MOTHER) ? MOTHER : PARTNER
+    const leaveType = getSelectedLeaveType(column)
+    const cellAction = $originalCell.hasClass(leaveType) ? removeLeave : applyLeave
+    const onRowMouseOver = function () {
+      const $cellInRow = $(this).find(`.${column}`)
+      if ($cellInRow.hasClass(COMPULSORY)) {
+        return
+      }
+      cellAction($cellInRow, leaveType)
+      onLeaveUpdated()
     }
-    const $row = $(this)
-    toggleAction($row)
-  })
 
-  $calendar.on('mouseup mouseleave', function () {
-    $calendar.removeClass(DRAGGING)
-    toggleAction = null
+    onRowMouseOver.call($originalCell.parent())
+
+    const $leaveWeeks = $('tr.leave-week')
+    $leaveWeeks.on('mouseover', onRowMouseOver)
+    $calendar.one('mouseup mouseleave', function () {
+      $leaveWeeks.off('mouseover', onRowMouseOver)
+      $calendar.removeClass(DRAGGING)
+    })
   })
 })
 
-function getToggleAction($cell) {
-  const motherOrPartner = $cell.hasClass(MOTHER) ? MOTHER : PARTNER
-  const leaveType = getSelectedLeaveType(motherOrPartner)
-  const baseAction = $cell.hasClass(leaveType) ? removeLeave : setLeave
-  return baseAction.bind(null, leaveType, motherOrPartner)
-}
-
-function getSelectedLeaveType(motherOrPartner) {
+function getSelectedLeaveType(column) {
   const isShared = $('input[name=leave-type]:checked').val() === 'shared'
   if (isShared) {
     return SHARED
   }
-  return motherOrPartner === MOTHER ? MATERNITY : PATERNITY
+  return column === MOTHER ? MATERNITY : PATERNITY
 }
 
-function removeLeave(leaveType, motherOrPartner, $row) {
-  const $cell = $row.find(`.${motherOrPartner}`)
-  if ($cell.hasClass(COMPULSORY)) {
-    return
-  }
-  $cell.removeClass(leaveType)
-  onLeaveUpdated()
-}
-
-function setLeave(leaveType, motherOrPartner, $row) {
-  const $cell = $row.find(`.${motherOrPartner}`)
-  ALL_LEAVE_TYPES.forEach(type => removeLeave(type, motherOrPartner, $row))
+function applyLeave($cell, leaveType) {
+  ALL_LEAVE_TYPES.forEach(type => removeLeave($cell, type))
   $cell.addClass(leaveType)
-  onLeaveUpdated()
+}
+
+function removeLeave($cell, leaveType) {
+  $cell.removeClass(leaveType)
 }
 
 function onLeaveUpdated() {
