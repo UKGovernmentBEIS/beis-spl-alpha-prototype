@@ -5,8 +5,6 @@ if (window.console && window.console.info) {
   window.console.info('GOV.UK Prototype Kit - do not use for production')
 }
 
-let useSmartPlanner = true
-
 const COMPULSORY = 'compulsory'
 const MATERNITY = 'maternity'
 const PATERNITY = 'paternity'
@@ -27,10 +25,7 @@ const $calendar = $('table#leave-calendar')
 
 $(document).ready(function () {
   window.GOVUKFrontend.initAll()
-
-  if (!useSmartPlanner) {
-    $('.type-of-leave').show()
-  }
+  window.toggleSmartPlanner(true);
 
   // Run once to intialize.
   onLeaveUpdated()
@@ -68,8 +63,26 @@ $(document).ready(function () {
   })
 })
 
+window.toggleSmartPlanner = function (use) {
+  window.useSmartPlanner = use
+  $('.smart-planner-show').toggle(use)
+  $('.smart-planner-hide').toggle(!use)
+  if (use) {
+    applyLeave()
+  }
+}
+
+window.addEventListener('keydown', function (event) {
+  const option = Number(event.key)
+  if (option === 1) {
+    window.toggleSmartPlanner(false)
+  } else if (option === 2) {
+    window.toggleSmartPlanner(true)
+  }
+})
+
 function getSelectedLeaveType(column) {
-  if (useSmartPlanner) {
+  if (window.useSmartPlanner) {
     return LEAVE
   }
   const isShared = $('input[name=leave-type]:checked').val() === 'shared'
@@ -81,15 +94,19 @@ function getSelectedLeaveType(column) {
 
 function addLeave($cell, leaveType) {
   ALL_LEAVE_TYPES.forEach(type => removeLeave($cell, type))
+  $cell.addClass(LEAVE)
   $cell.addClass(leaveType)
 }
 
 function removeLeave($cell, leaveType) {
-  $cell.removeClass(leaveType)
+  if ($cell.hasClass(leaveType)) {
+    $cell.removeClass(LEAVE)
+    $cell.removeClass(leaveType)
+  }
 }
 
 function onLeaveUpdated() {
-  if (useSmartPlanner) {
+  if (window.useSmartPlanner) {
     applyLeave()
   }
 
