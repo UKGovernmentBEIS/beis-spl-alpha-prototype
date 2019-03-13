@@ -59,12 +59,8 @@ $(document).ready(function () {
 function getToggleAction($cell) {
   const motherOrPartner = $cell.hasClass(MOTHER) ? MOTHER : PARTNER
   const leaveType = getSelectedLeaveType(motherOrPartner)
-  const hasClass = $cell.hasClass(leaveType)
-  if (hasClass) {
-    return removeLeave.bind(null, leaveType, motherOrPartner)
-  } else {
-    return setLeave.bind(null, leaveType, motherOrPartner)
-  }
+  const baseAction = $cell.hasClass(leaveType) ? removeLeave : setLeave
+  return baseAction.bind(null, leaveType, motherOrPartner)
 }
 
 function getSelectedLeaveType(motherOrPartner) {
