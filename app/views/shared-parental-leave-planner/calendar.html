@@ -7,7 +7,7 @@
   Parental leave and pay planner
 {% endblock %}
 
-{% set dueDate = data["due-date-year"] + "-" + data["due-date-month"] + "-" + data["due-date-day"]  %}
+{% set dueDate %}{{ data["due-date-year"] }}-{{ data["due-date-month"] | twoDigit }}-{{ data["due-date-day"] | twoDigit }}{% endset %}
 
 {% block content %}
 

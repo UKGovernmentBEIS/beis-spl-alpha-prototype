@@ -40,11 +40,6 @@ module.exports = function (env) {
 
   ------------------------------------------------------------------ */
 
-  const months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-  ]
-
   filters.startOfWeek = function (date) {
     return moment(date).startOf('week')
   }
@@ -55,6 +50,13 @@ module.exports = function (env) {
 
   filters.formatDate = function (date, format) {
     return moment(date).format(format)
+  }
+
+  filters.twoDigit = function (number) {
+    if (isNaN(number)) {
+      return '00'
+    }
+    return ('0' + number).slice(-2)
   }
 
   /* ------------------------------------------------------------------
