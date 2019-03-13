@@ -4,6 +4,14 @@
 }
 
 table#leave-calendar {
+  th {
+    position: sticky;
+    top: 0;
+    background-color: govuk-colour("grey-3");
+    z-index: 1;
+    text-align: center;
+  }
+
   td {
     user-select: none;
   }
