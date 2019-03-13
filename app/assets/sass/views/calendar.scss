@@ -35,30 +35,29 @@ table#leave-calendar {
     }
   }
 
-  .mother.not-shared {
+  .mother.maternity {
     background-color: #B2CEE4;
     &::before {
       content: 'Maternity leave'
     }
+    &.compulsory {
+      background-color: darken(#B2CEE4, 20%);
+      &::before {
+        content: 'Compulsory maternity leave'
+      }
+    }
   }
 
-  .partner.not-shared {
+  .partner.paternity {
     background-color: #CEB1B1;
     &::before {
       content: 'Paternity leave'
     }
   }
 
-  .mother.compulsory-maternity {
-    background-color: darken(#B2CEE4, 20%);
-    &::before {
-      content: 'Compulsory maternity leave'
-    }
-  }
-
   .mother, .partner {
     cursor: pointer;
-    &.compulsory-maternity {
+    &.compulsory {
       cursor: not-allowed;
     }
     &:hover {
@@ -84,7 +83,7 @@ table#leave-calendar {
   }
 }
 
-.leave-info {
+.leave-messages {
   p {
     display: none;
   }

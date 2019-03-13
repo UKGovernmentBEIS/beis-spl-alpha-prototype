@@ -5,99 +5,108 @@ if (window.console && window.console.info) {
   window.console.info('GOV.UK Prototype Kit - do not use for production')
 }
 
+const COMPULSORY = 'compulsory'
+const MATERNITY = 'maternity'
+const PATERNITY = 'paternity'
 const SHARED = 'shared'
-const NOT_SHARED = 'not-shared'
-const ALL_LEAVE_TYPES = [SHARED, NOT_SHARED]
+const ALL_LEAVE_TYPES = [MATERNITY, PATERNITY, SHARED]
+
+const MOTHER = 'mother'
+const PARTNER = 'partner'
+
+const NEGATIVE = 'negative'
 
 const MATERNITY_WEEKS_ENTITLEMENT = 52
 const PATERNITY_WEEKS_ENTITLEMENT = 2
 
-let isMouseDown = false
+const $calendar = $('table#leave-calendar')
 let toggleAction = null
 
 $(document).ready(function () {
   window.GOVUKFrontend.initAll()
 
+  // Run once to intialize.
   onLeaveUpdated()
 
-  $('td.mother:not(.compulsory-maternity)').mousedown(function (event) {
-    onMouseDown($(this), event, 'mother')
-  })
-
-  $('td.partner').mousedown(function (event) {
-    onMouseDown($(this), event, 'partner')
-  })
-
-  function onMouseDown($cell, e, parent) {
-    // Only respond to primary mouse button.
-    if (e.which === 1) {
-      toggleAction = getToggleAction($cell, parent)
-      toggleAction($cell.parent())
+  $(`td.${MOTHER}:not(.${COMPULSORY}), td.${PARTNER}`).on('mousedown', function (event) {
+    if (event.which !== 1) {
+      // Only respond to primary mouse button.
+      return
     }
-  }
-
-  $('tr.leave-week').mouseover(function () {
-    if (toggleAction) {
-      const $this = $(this)
-      toggleAction($this)
-    }
+    const $cell = $(this)
+    toggleAction = getToggleAction($cell)
+    const $row = $cell.parent()
+    toggleAction($row)
+    event.preventDefault()
   })
 
-  $('table#leave-calendar').mouseup(function () {
-    toggleAction = null
-  }).mouseleave(function () {
+  $('tr.leave-week').on('mouseover', function () {
+    if (!toggleAction) {
+      return
+    }
+    const $row = $(this)
+    toggleAction($row)
+  })
+
+  $calendar.on('mouseup mouseleave', function () {
     toggleAction = null
   })
 })
 
-function getToggleAction($cell, parent) {
-  const selectedLeaveType = $('input[name=leave-type]:checked').val()
-  const hasClass = $cell.hasClass(selectedLeaveType)
+function getToggleAction($cell) {
+  const motherOrPartner = $cell.hasClass(MOTHER) ? MOTHER : PARTNER
+  const leaveType = getSelectedLeaveType(motherOrPartner)
+  const hasClass = $cell.hasClass(leaveType)
   if (hasClass) {
-    return removeLeave.bind(undefined, selectedLeaveType, parent)
+    return removeLeave.bind(null, leaveType, motherOrPartner)
   } else {
-    return setLeave.bind(undefined, selectedLeaveType, parent)
+    return setLeave.bind(null, leaveType, motherOrPartner)
   }
 }
 
-function removeLeave(leaveType, parent, $row) {
-  const $cell = $row.find('.' + parent)
-  if ($cell.hasClass('compulosry-maternity')) {
-    return;
+function getSelectedLeaveType(motherOrPartner) {
+  const isShared = $('input[name=leave-type]:checked').val() === 'shared'
+  if (isShared) {
+    return SHARED
+  }
+  return motherOrPartner === MOTHER ? MATERNITY : PATERNITY
+}
+
+function removeLeave(leaveType, motherOrPartner, $row) {
+  const $cell = $row.find(`.${motherOrPartner}`)
+  if ($cell.hasClass(COMPULSORY)) {
+    return
   }
   $cell.removeClass(leaveType)
   onLeaveUpdated()
 }
 
-function setLeave(leaveType, parent, $row) {
-  const $cell = $row.find('.' + parent)
-  ALL_LEAVE_TYPES.forEach(type => removeLeave(type, parent, $row))
+function setLeave(leaveType, motherOrPartner, $row) {
+  const $cell = $row.find(`.${motherOrPartner}`)
+  ALL_LEAVE_TYPES.forEach(type => removeLeave(type, motherOrPartner, $row))
   $cell.addClass(leaveType)
   onLeaveUpdated()
 }
 
 function onLeaveUpdated() {
-  const motherShared = $('td.mother.shared')
-  const partnerShared = $('td.partner.shared')
-  const shared = $('td.shared')
+  const shared = $(`td.${SHARED}`)
+  const motherShared = $(`td.${MOTHER}.${SHARED}`)
+  const partnerShared = $(`td.${PARTNER}.${SHARED}`)
+  const maternity = $(`td.${MOTHER}.${MATERNITY}`)
+  const paternity = $(`td.${PARTNER}.${PATERNITY}`)
+
   const sharedWeeks = shared.length
-  const maternity = $('td.mother.not-shared')
   const maternityWeeks = maternity.length
-  const paternity = $('td.partner.not-shared')
-  const paternityWeeks = paternity.length
   const remainingWeeks = MATERNITY_WEEKS_ENTITLEMENT - maternityWeeks - sharedWeeks
+  const paternityWeeks = paternity.length
 
   // Remaining weeks.
 
   $('#shared-weeks').text(sharedWeeks)
   $('#maternity-weeks').text(maternityWeeks)
-  $('#paternity-weeks').text(paternityWeeks)
   $('#remaining-weeks').text(remainingWeeks)
-  if (remainingWeeks >= 0) {
-    $('.remaining-total').removeClass('negative')
-  } else {
-    $('.remaining-total').addClass('negative')
-  }
+  $('#paternity-weeks').text(paternityWeeks)
+  $('.remaining-total').toggleClass(NEGATIVE, remainingWeeks < 0)
 
   // Warnings.
 
@@ -113,14 +122,14 @@ function onLeaveUpdated() {
   const firstMaternity = getWeekNumber(maternity.first())
   const firstShared = getWeekNumber(shared.first())
 
-  setVisibility('maternity-gap', hasMaternityGap)
-  setVisibility('maternity-maximum', remainingWeeks < 0)
-  setVisibility('no-more-shared', remainingWeeks <= 0)
-  setVisibility('can-break-shared', sharedWeeks > 0 && !hasSharedGap)
-  setVisibility('paternity-gap', hasPaternityGap)
-  setVisibility('paternity-maximum', paternityWeeks > PATERNITY_WEEKS_ENTITLEMENT)
-  setVisibility('paternity-period', paternityOutOfRange)
-  setVisibility('shared-before-maternity', firstShared < firstMaternity)
+  $('#maternity-gap').toggle(hasMaternityGap)
+  $('#maternity-maximum').toggle(remainingWeeks < 0)
+  $('#no-more-shared').toggle(remainingWeeks <= 0)
+  $('#can-break-shared').toggle(sharedWeeks > 0 && !hasSharedGap)
+  $('#paternity-gap').toggle(hasPaternityGap)
+  $('#paternity-maximum').toggle(paternityWeeks > PATERNITY_WEEKS_ENTITLEMENT)
+  $('#paternity-period').toggle(paternityOutOfRange)
+  $('#shared-before-maternity').toggle(firstShared < firstMaternity)
 }
 
 function hasGap(weeks) {
@@ -128,15 +137,6 @@ function hasGap(weeks) {
   const lastWeek = getWeekNumber(weeks.last())
   const totalWeeks = weeks.length
   return lastWeek - firstWeek >= totalWeeks
-}
-
-function setVisibility(elementId, isVisible) {
-  const $element = $(`#${elementId}`)
-  if (isVisible) {
-    $element.show()
-  } else {
-    $element.hide()
-  }
 }
 
 function getWeekNumber($cell) {

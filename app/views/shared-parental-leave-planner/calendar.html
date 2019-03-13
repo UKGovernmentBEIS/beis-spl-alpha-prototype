@@ -72,7 +72,7 @@
                 {{ dueDate | startOfWeek | offsetWeeks(i) | formatDate("DD MMM") }}
               </td>
               {% if (i === 0) or (i === 1) %}
-                <td data-week="{{i}}" class="govuk-table__cell mother compulsory-maternity not-shared"></td>
+                <td data-week="{{i}}" class="govuk-table__cell mother compulsory maternity"></td>
               {% else %}
                 <td data-week="{{i}}" class="govuk-table__cell mother"></td>
               {% endif %}
@@ -118,7 +118,7 @@
           }
         ]
       }) }}
-      <div class="leave-info">
+      <div class="leave-messages">
         <p id="maternity-gap" class="govuk-body-s warning">
           You can't leave a gap in your maternity leave.
         </p>
@@ -147,7 +147,7 @@
           }
         ]
       }) }}
-      <div class="leave-info">
+      <div class="leave-messages">
         <p id="paternity-gap" class="govuk-body-s warning">
           You can't leave a gap in your paternity leave.
         </p>
