@@ -56,7 +56,7 @@ table#leave-calendar {
   }
 
   .mother, .partner {
-    cursor: pointer;
+    cursor: cell;
     &.compulsory {
       cursor: not-allowed;
     }
@@ -72,6 +72,12 @@ table#leave-calendar {
         bottom: 0;
         background-color: rgba(0, 0, 0, 0.1);
       }
+    }
+  }
+
+  &.dragging {
+    .mother, .partner {
+      cursor: n-resize;
     }
   }
 }

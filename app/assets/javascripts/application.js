@@ -14,6 +14,7 @@ const ALL_LEAVE_TYPES = [MATERNITY, PATERNITY, SHARED]
 const MOTHER = 'mother'
 const PARTNER = 'partner'
 
+const DRAGGING = 'dragging'
 const NEGATIVE = 'negative'
 
 const MATERNITY_WEEKS_ENTITLEMENT = 52
@@ -33,6 +34,7 @@ $(document).ready(function () {
       // Only respond to primary mouse button.
       return
     }
+    $calendar.addClass(DRAGGING)
     const $cell = $(this)
     toggleAction = getToggleAction($cell)
     const $row = $cell.parent()
@@ -49,6 +51,7 @@ $(document).ready(function () {
   })
 
   $calendar.on('mouseup mouseleave', function () {
+    $calendar.removeClass(DRAGGING)
     toggleAction = null
   })
 })
