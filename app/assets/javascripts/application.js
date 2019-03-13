@@ -62,6 +62,9 @@ function getToggleAction($cell, parent) {
 
 function removeLeave(leaveType, parent, $row) {
   const $cell = $row.find('.' + parent)
+  if ($cell.hasClass('compulosry-maternity')) {
+    return;
+  }
   $cell.removeClass(leaveType)
   onLeaveUpdated()
 }
