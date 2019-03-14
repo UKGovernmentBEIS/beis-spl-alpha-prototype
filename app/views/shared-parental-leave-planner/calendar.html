@@ -75,7 +75,7 @@
                 {{ dueDate | startOfWeek | offsetWeeks(i) | formatDate("DD MMM") }}
               </td>
               <td data-week="{{i}}"
-                  class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory maternity disabled{% endif %}">
+                  class="govuk-table__cell mother {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}compulsory maternity disabled{% endif %}">
               </td>
               <td data-week="{{i}}" class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}"></td>
             </tr>

@@ -15,6 +15,7 @@ const ALL_LEAVE_TYPES = [MATERNITY, PATERNITY, SHARED, LEAVE]
 const MOTHER = 'mother'
 const PARTNER = 'partner'
 
+const BEFORE_BIRTH_WEEK = 'before-birth-week'
 const DISABLED = 'disabled'
 const DRAGGING = 'dragging'
 const NEGATIVE = 'negative'
@@ -42,8 +43,13 @@ $(document).ready(function () {
       return
     }
 
-    $calendar.addClass(DRAGGING)
+    if (window.useSmartPlanner && $originalCell.hasClass(MOTHER) && $originalCell.hasClass(BEFORE_BIRTH_WEEK)) {
+      handleMaternityBeforeBirthWeek($originalCell)
+      return
+    }
+
     event.preventDefault()
+    $calendar.addClass(DRAGGING)
 
     const column = $originalCell.hasClass(MOTHER) ? MOTHER : PARTNER
     const leaveType = getSelectedLeaveType(column)
@@ -85,6 +91,27 @@ window.addEventListener('keydown', function (event) {
     window.toggleSmartPlanner(true)
   }
 })
+
+function handleMaternityBeforeBirthWeek($cell) {
+  const weekNumber = getWeekNumber($cell)
+  const $beforeBirthWeek = $(`.${MOTHER}.${BEFORE_BIRTH_WEEK}`)
+  if ($cell.hasClass(LEAVE)) {
+    $beforeBirthWeek.each(function () {
+      const $this = $(this)
+      if (getWeekNumber($this) <= weekNumber) {
+        $this.removeClass(LEAVE)
+      }
+    })
+  } else {
+    $beforeBirthWeek.each(function () {
+      const $this = $(this)
+      if (getWeekNumber($this) >= weekNumber) {
+        $this.addClass(LEAVE)
+      }
+    })
+  }
+  onLeaveUpdated()
+}
 
 function getSelectedLeaveType(column) {
   if (window.useSmartPlanner) {
@@ -165,15 +192,19 @@ function applyMothersLeave() {
   let hasFinishedMaternityLeave = false
   $(`.${MOTHER}`).removeClass(SHARED).removeClass(MATERNITY).each(function () {
     const $this = $(this)
+    const weekNumber = getWeekNumber($this)
     if ($this.hasClass(COMPULSORY)) {
       hasStartedMaternityLeave = true
       $this.addClass(MATERNITY)
     } else if ($this.hasClass(LEAVE)) {
-      const weekNumber = getWeekNumber($this)
       hasStartedMaternityLeave = true
       $this.addClass(weekNumber < 0 || !hasFinishedMaternityLeave ? MATERNITY : SHARED)
     } else if (hasStartedMaternityLeave) {
-      hasFinishedMaternityLeave = true
+      if (weekNumber < 0) {
+        $this.addClass(MATERNITY)
+      } else {
+        hasFinishedMaternityLeave = true
+      }
     }
   })
 }
