@@ -122,7 +122,6 @@ function onLeaveUpdated() {
   const paternityWeeks = paternity.length
 
   // Remaining weeks.
-
   $('#shared-weeks').text(sharedWeeks)
   $('#maternity-weeks').text(maternityWeeks)
   $('#remaining-weeks').text(remainingWeeks)
@@ -130,27 +129,13 @@ function onLeaveUpdated() {
   $('.remaining-total').toggleClass(NEGATIVE, remainingWeeks < 0)
 
   // Warnings.
-
-  const hasMaternityGap = hasGap(maternity)
-  const hasSharedGap = hasGap(motherShared) || hasGap(partnerShared)
-  const hasPaternityGap = hasGap(paternity)
-
-  const paternityOutOfRange = paternity.filter(function () {
-    const week = getWeekNumber($(this))
-    return week < 0 || week > 7
-  }).length !== 0
-
-  const firstMaternity = getWeekNumber(maternity.first())
-  const firstShared = getWeekNumber(shared.first())
-
-  $('#maternity-gap').toggle(hasMaternityGap)
+  $('#maternity-gap').toggle(hasGap(maternity))
   $('#maternity-maximum').toggle(remainingWeeks < 0)
   $('#no-more-shared').toggle(remainingWeeks <= 0)
-  $('#can-break-shared').toggle(sharedWeeks > 0 && !hasSharedGap)
-  $('#paternity-gap').toggle(hasPaternityGap)
+  $('#can-break-shared').toggle(sharedWeeks > 0 && !(hasGap(motherShared) || hasGap(partnerShared)))
+  $('#paternity-gap').toggle(hasGap(paternity))
   $('#paternity-maximum').toggle(paternityWeeks > PATERNITY_WEEKS_ENTITLEMENT)
-  $('#paternity-period').toggle(paternityOutOfRange)
-  $('#shared-before-maternity').toggle(firstShared < firstMaternity)
+  $('#paternity-period').toggle(getWeekNumber(paternity.last()) > 7)
 }
 
 function hasGap(weeks) {
