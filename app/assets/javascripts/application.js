@@ -215,6 +215,7 @@ function applyMothersLeave() {
       $this.addClass(weekNumber < 0 || !hasFinishedMaternityLeave ? MATERNITY : SHARED)
     } else if (hasStartedMaternityLeave) {
       if (weekNumber < 0) {
+        $this.addClass(LEAVE)
         $this.addClass(MATERNITY)
       } else {
         hasFinishedMaternityLeave = true
