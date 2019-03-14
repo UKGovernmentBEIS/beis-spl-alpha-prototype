@@ -79,7 +79,7 @@ window.toggleSmartPlanner = function (use) {
   $('.smart-planner-show').toggle(use)
   $('.smart-planner-hide').toggle(!use)
   if (use) {
-    applyLeave()
+    onLeaveUpdated()
   }
 }
 
