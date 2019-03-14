@@ -1,3 +1,4 @@
+$colour-header: govuk-colour('grey-3');
 $colour-maternity: lighten(govuk-colour('blue'), 50%);
 $colour-paternity: lighten(govuk-colour('red'), 50%);
 $colour-shared: lighten(govuk-colour('light-green'), 25%);
@@ -17,7 +18,7 @@ table#leave-calendar {
   th {
     position: sticky;
     top: 0;
-    background-color: govuk-colour('grey-3');
+    background-color: $colour-header;
     z-index: 1;
     text-align: center;
   }
