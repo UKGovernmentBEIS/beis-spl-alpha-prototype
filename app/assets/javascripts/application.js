@@ -15,6 +15,7 @@ const ALL_LEAVE_TYPES = [MATERNITY, PATERNITY, SHARED, LEAVE]
 const MOTHER = 'mother'
 const PARTNER = 'partner'
 
+const DISABLED = 'disabled'
 const DRAGGING = 'dragging'
 const NEGATIVE = 'negative'
 
@@ -30,22 +31,26 @@ $(document).ready(function () {
   // Run once to intialize.
   onLeaveUpdated()
 
-  $(`td.${MOTHER}:not(.${COMPULSORY}), td.${PARTNER}`).on('mousedown', function (event) {
+  $(`td.${MOTHER}, td.${PARTNER}`).on('mousedown', function (event) {
     if (event.which !== 1) {
       // Only respond to primary mouse button.
+      return
+    }
+
+    const $originalCell = $(this)
+    if ($originalCell.hasClass(DISABLED)) {
       return
     }
 
     $calendar.addClass(DRAGGING)
     event.preventDefault()
 
-    const $originalCell = $(this)
     const column = $originalCell.hasClass(MOTHER) ? MOTHER : PARTNER
     const leaveType = getSelectedLeaveType(column)
     const cellAction = $originalCell.hasClass(leaveType) ? removeLeave : addLeave
     const onRowMouseOver = function () {
       const $cellInRow = $(this).find(`.${column}`)
-      if ($cellInRow.hasClass(COMPULSORY)) {
+      if ($cellInRow.hasClass(DISABLED)) {
         return
       }
       cellAction($cellInRow, leaveType)

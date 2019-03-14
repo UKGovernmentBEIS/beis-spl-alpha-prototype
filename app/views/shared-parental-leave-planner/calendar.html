@@ -68,16 +68,16 @@
                 </td>
               </tr>
             {% endif %}
+            {% set beforeBirthWeek = i < 0 %}
+            {% set firstTwoBirthWeeks = (i === 0) or (i === 1) %}
             <tr class="govuk-table__row leave-week">
               <td class="govuk-table__cell">
                 {{ dueDate | startOfWeek | offsetWeeks(i) | formatDate("DD MMM") }}
               </td>
-              {% if (i === 0) or (i === 1) %}
-                <td data-week="{{i}}" class="govuk-table__cell mother compulsory maternity"></td>
-              {% else %}
-                <td data-week="{{i}}" class="govuk-table__cell mother"></td>
-              {% endif %}
-              <td data-week="{{i}}" class="govuk-table__cell partner"></td>
+              <td data-week="{{i}}"
+                  class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory maternity disabled{% endif %}">
+              </td>
+              <td data-week="{{i}}" class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}"></td>
             </tr>
           {% endfor %}
         </tbody>

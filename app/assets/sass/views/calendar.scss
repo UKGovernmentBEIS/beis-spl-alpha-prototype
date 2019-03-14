@@ -11,7 +11,7 @@ table#leave-calendar {
   th {
     position: sticky;
     top: 0;
-    background-color: govuk-colour("grey-3");
+    background-color: govuk-colour('grey-3');
     z-index: 1;
     text-align: center;
   }
@@ -61,13 +61,14 @@ table#leave-calendar {
 
   .mother, .partner {
     cursor: cell;
-    &.compulsory {
+    &.disabled {
       cursor: not-allowed;
+      background-color: govuk-colour('grey-2');
     }
-    &:hover {
+    &:not(.disabled):hover {
       position: relative;
       &::after {
-        content:"";
+        content: '';
         display: block;
         position: absolute;
         top: 0;
