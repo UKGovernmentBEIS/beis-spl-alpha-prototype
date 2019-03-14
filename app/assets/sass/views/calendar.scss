@@ -1,3 +1,9 @@
+$colour-maternity: lighten(govuk-colour('blue'), 50%);
+$colour-paternity: lighten(govuk-colour('red'), 50%);
+$colour-shared: lighten(govuk-colour('light-green'), 25%);
+$colour-birth-week: govuk-colour('yellow');
+$colour-disabled: govuk-colour('grey-2');
+
 .smart-planner-hide {
   display: none;
 }
@@ -28,24 +34,24 @@ table#leave-calendar {
     font-weight: bold;
     font-size: 0.875em;
     &, & + tr > td:first-child {
-      background-color: #FFBF47;
+      background-color: $colour-birth-week;
     }
   }
 
   .shared {
-    background-color: #B2D0C2;
+    background-color: $colour-shared;
     &::before {
       content: 'Shared parental leave'
     }
   }
 
   .mother.maternity {
-    background-color: #B2CEE4;
+    background-color: $colour-maternity;
     &::before {
       content: 'Maternity leave'
     }
     &.compulsory {
-      background-color: darken(#B2CEE4, 20%);
+      background-color: darken($colour-maternity, 25%);
       &::before {
         content: 'Compulsory maternity leave'
       }
@@ -53,7 +59,7 @@ table#leave-calendar {
   }
 
   .partner.paternity {
-    background-color: #CEB1B1;
+    background-color: $colour-paternity;
     &::before {
       content: 'Paternity leave'
     }
@@ -63,7 +69,7 @@ table#leave-calendar {
     cursor: cell;
     &.disabled {
       cursor: not-allowed;
-      background-color: govuk-colour('grey-2');
+      background-color: $colour-disabled;
     }
     &:not(.disabled):hover {
       position: relative;
