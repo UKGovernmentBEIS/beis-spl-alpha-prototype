@@ -59,6 +59,10 @@ module.exports = function (env) {
     return ('0' + number).slice(-2)
   }
 
+  filters.lineIfNotEmpty = function (line) {
+    return line ? line + '<br>' : null
+  }
+
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */

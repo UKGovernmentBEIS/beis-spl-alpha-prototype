@@ -1,0 +1,101 @@
+{% from "input/macro.njk" import govukInput %}
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Parental leave planner
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Leave notices
+      </h1>
+      <h2 class="govuk-heading-l">
+        Your details
+      </h2>
+      {% set address %}
+        {{ data["address-line-1"] | lineIfNotEmpty | safe }}
+        {{ data["address-line-2"] | lineIfNotEmpty | safe }}
+        {{ data["address-town"] | lineIfNotEmpty | safe }}
+        {{ data["address-county"] | lineIfNotEmpty | safe }}
+        {{ data["address-postcode"] | lineIfNotEmpty | safe }}
+      {% endset %}
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Mother's name"
+            },
+            value: {
+              text: data["mothers-name"]
+            },
+            actions: {
+              items: [
+                {
+                  href: "mothers-name",
+                  text: "Change",
+                  visuallyHiddenText: "mother's name"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Partner's name"
+            },
+            value: {
+              text: data["partners-name"]
+            },
+            actions: {
+              items: [
+                {
+                  href: "partners-name",
+                  text: "Change",
+                  visuallyHiddenText: "partner's name"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Address"
+            },
+            value: {
+              html: address
+            },
+            actions: {
+              items: [
+                {
+                  href: "address",
+                  text: "Change",
+                  visuallyHiddenText: "address"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Mother's National Insurance number"
+            },
+            value: {
+              text: data["mothers-national-insurance-number"]
+            },
+            actions: {
+              items: [
+                {
+                  href: "mothers-national-insurance-number",
+                  text: "Change",
+                  visuallyHiddenText: "mother's national insurance number"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+    </div>
+  </div>
+
+{% endblock %}

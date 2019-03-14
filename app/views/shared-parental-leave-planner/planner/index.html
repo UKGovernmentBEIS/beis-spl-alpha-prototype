@@ -53,14 +53,6 @@
           }
         ]
       }) }}
-      <p>
-        Once you are happy with your leave, press continue to generate notices.
-      </p>
-      <form action="notices/mothers-name" method="POST">
-        <button type="submit" class="govuk-button">
-          Save and continue
-        </button>
-      </form>
     </div>
   </div>
   <div class="govuk-grid-row">
@@ -177,35 +169,43 @@
     </div>
   </div>
   <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-heading-l">Key dates</h2>
-        {% set dueDateLong %}
-          {{ dueDate | startOfWeek | formatDate("DD MMMM YYYY") }}
-        {% endset %}
-        {% set notifyEmployersDate %}
-          {{ dueDate | offsetWeeks(-15) | formatDate("DD MMMM YYYY") }}
-        {% endset %}
-        {{ govukSummaryList({
-          rows: [
-            {
-              key: {
-                text: "Baby is due"
-              },
-              value: {
-                text: dueDateLong
-              }
+    <div class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-heading-l">Key dates</h2>
+      {% set dueDateLong %}
+        {{ dueDate | startOfWeek | formatDate("DD MMMM YYYY") }}
+      {% endset %}
+      {% set notifyEmployersDate %}
+        {{ dueDate | offsetWeeks(-15) | formatDate("DD MMMM YYYY") }}
+      {% endset %}
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Baby is due"
             },
-            {
-              key: {
-                text: "Notify employers of maternity leave"
-              },
-              value: {
-                text: "by " + notifyEmployersDate
-              }
+            value: {
+              text: dueDateLong
             }
-          ]
-        }) }}
-      </div>
+          },
+          {
+            key: {
+              text: "Notify employers of maternity leave"
+            },
+            value: {
+              text: "by " + notifyEmployersDate
+            }
+          }
+        ]
+      }) }}
+      <p>
+        Continue with these dates and generate leave notices.
+      </p>
+      <form action="planner/mothers-name">
+        <button type="submit" class="govuk-button">
+          Save and continue
+        </button>
+      </form>
+    </div>
   </div>
 
 {% endblock %}
