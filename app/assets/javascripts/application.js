@@ -168,6 +168,7 @@ function onLeaveUpdated() {
   $('#can-break-shared').toggle(sharedWeeks > 0 && !(hasGap(motherShared) || hasGap(partnerShared)))
   $('#paternity-gap').toggle(hasGap(paternity))
   $('#paternity-maximum').toggle(paternityWeeks > PATERNITY_WEEKS_ENTITLEMENT)
+  $('#shared-before-maternity').toggle(getWeekNumber(shared.first()) < getWeekNumber(maternity.first()))
   $('#paternity-period').toggle(getWeekNumber(paternity.last()) > 7)
 }
 
