@@ -99,10 +99,11 @@ function addLeave($cell, leaveType) {
 }
 
 function removeLeave($cell, leaveType) {
-  if ($cell.hasClass(leaveType)) {
-    $cell.removeClass(LEAVE)
-    $cell.removeClass(leaveType)
+  if (!$cell.hasClass(leaveType)) {
+    return
   }
+  $cell.removeClass(LEAVE)
+  $cell.removeClass(leaveType)
 }
 
 function onLeaveUpdated() {
