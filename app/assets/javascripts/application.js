@@ -29,6 +29,10 @@ $(document).ready(function () {
   window.GOVUKFrontend.initAll()
   window.toggleSmartPlanner(true);
 
+  if ($calendar.length > 0) {
+    scrollToBirthWeek()
+  }
+
   // Run once to intialize.
   onLeaveUpdated()
 
@@ -91,6 +95,15 @@ window.addEventListener('keydown', function (event) {
     window.toggleSmartPlanner(true)
   }
 })
+
+function scrollToBirthWeek() {
+  const $scrollContainer = $('#leave-calendar-container')
+  const calendarTop = $calendar.position().top
+  const birthWeekTop = $calendar.find('.birth-week').position().top
+  const headerHeight = $calendar.find('.govuk-table__header').outerHeight()
+  const rowHeight = $calendar.find('.govuk-table__row').outerHeight()
+  $scrollContainer.scrollTop(birthWeekTop - calendarTop - headerHeight - rowHeight * 1.5)
+}
 
 function handleMaternityBeforeBirthWeek($cell) {
   const weekNumber = getWeekNumber($cell)
