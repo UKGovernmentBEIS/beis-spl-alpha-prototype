@@ -183,6 +183,10 @@ function onLeaveUpdated() {
   $('#paternity-maximum').toggle(paternityWeeks > PATERNITY_WEEKS_ENTITLEMENT)
   $('#shared-before-maternity').toggle(getWeekNumber(shared.first()) < getWeekNumber(maternity.first()))
   $('#paternity-period').toggle(getWeekNumber(paternity.last()) > 7)
+
+  // Form values.
+  $('#mother-shared').val(motherShared.length)
+  $('#partner-shared').val(partnerShared.length)
 }
 
 function hasGap(weeks) {

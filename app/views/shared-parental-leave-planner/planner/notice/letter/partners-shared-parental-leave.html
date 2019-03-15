@@ -1,0 +1,81 @@
+{% from "input/macro.njk" import govukInput %}
+{% import "data-macros.njk" as dataMacros %}
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Plan leave and pay when you have a child
+{% endblock %}
+
+{% set dueDate %}
+  {{ dataMacros.dueDate(data) }}
+{% endset %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Partner's shared parental leave notice
+      </h1>
+      <div class="letter">
+        <p>
+          Dear employer,
+        </p>
+        <p>
+          Please accept this letter as notification that I, {{ data["partners-name"] }}, am entitled to and intend to take shared parental leave (SPL).
+        </p>
+        <p>
+          My baby's expected date of birth is {{ dueDate | trim | formatDate("DD MMMM YYYY") }}.
+        </p>
+        <p>
+          My partner, {{ data["mothers-name"] }} (the mother) who lives at {{ dataMacros.address(data, ",") }} is entitled to maternity leave.
+          Her national insurance number is {{ data["mothers-national-insurance-number"] }}. She will take a total of [total number of maternity weeks taken] weeks statutory maternity leave,
+          starting on [maternity leave start date] and ending on [maternity leave end date].
+          This will create [total number of SPL weeks created] weeks of SPL in total.
+        </p>
+        <p>
+          I intend to take [total number of weeks of SPL the partner intends to take] weeks of SPL, starting on [Partner's SPL start date] and ending on [Partner's SPL end date].
+        </p>
+        <p>
+          I confirm that I am the father of the child, or at the time of the birth I was/will be the mother's spouse, the mother's civil partner and/or the mother's partner living with her and the child in an enduring relationship.
+        </p>
+        <p>
+          I have been (or will be) continuously employed for 26 weeks at the end of the 15th week before the week in which the child is due.
+        </p>
+        <p>
+          I will remain employed with this employer until any period of SPL that I intend to take.
+        </p>
+        <p>
+          I had (or will have) the main responsibility for the care of our child at the time of the child's birth (along with the child's mother who has made the declaration below).
+        </p>
+        <p>
+          I will give my employer a copy of my child's birth certificate or a declaration of the date and place of the birth where no certificate is available if my employer asks for this within 14 days of the date of this notice.
+        </p>
+        <p>
+          I will give my employer the name and address of the mother's employer or a declaration that she does not have an employer if my employer asks for this within 14 days of the date of this notice.
+        </p>
+        <p>
+          I will inform my employer immediately if I am no longer caring for our child or if my partner revokes her notice to curtail her maternity leave or statutory maternity pay / maternity allowance period.
+        </p>
+        <p>
+          I (or my partner) have given a period of SPL notice.
+        </p>
+        <p>
+          The information provided in this declaration is accurate and meets the notification requirements for SPL.
+        </p>
+        <p class="sign-off">
+          Yours faithfully,
+        </p>
+        <p>
+          {{ data["partners-name"] }}
+        </p>
+        <p>
+          <!-- Today's date. -->
+          {{ undefined | formatDate("DD MMMM YYYY") }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

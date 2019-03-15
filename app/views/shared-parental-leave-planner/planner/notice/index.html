@@ -90,19 +90,33 @@
         ]
       }) }}
       <h2 class="govuk-heading-l">
-        Letters of notice
+        Letters of notice for shared parental leave
       </h2>
-      <p>
-        These letters can be used to inform your employer of your intention to take leave.
-      </p>
-      <ul class="govuk-body">
-        <li>
-          <a href="notice/letter/mothers-curtailment-and-shared-parental-leave">Mother's curtailment notice and intention to take shared parental leave</a>
-        </li>
-        <li>
-          <a href="notice/letter/partners-shared-parental-leave">Partner's shared parental leave</a>
-        </li>
-      </ul>
+      {% set motherTakingSpl = (data["mother-shared"] | int) > 0 %}
+      {% set partnerTakingSpl = (data["partner-shared"] | int) > 0 %}
+      {% if motherTakingSpl or partnerTakingSpl %}
+        <p>
+          These letters can be used to inform employers of intention to take shared parental leave.
+        </p>
+        <ul class="govuk-body">
+          {% if motherTakingSpl %}
+            <li>
+              <a href="notice/letter/mothers-curtailment-and-shared-parental-leave">Mother's curtailment notice and intention to take shared parental leave</a>
+            </li>
+          {% elif partnerTakingSpl %}
+            <li>
+              <a href="notice/letter/mothers-curtailment-and-consent-for-partners-shared-parental-leave">Mother's curtailment notice and consent for partner to take shared parental leave</a>
+            </li>
+          {% endif %}
+          {% if partnerTakingSpl %}
+            <li>
+              <a href="notice/letter/partners-shared-parental-leave">Partner's intention to take shared parental leave</a>
+            </li>
+          {% endif %}
+        </ul>
+      {% else %}
+        <p>Neither the mother nor her partner are intending to take shared parental leave.</p>
+      {% endif %}
     </div>
   </div>
 
