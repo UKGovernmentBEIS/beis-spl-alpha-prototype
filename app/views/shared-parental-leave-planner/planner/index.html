@@ -19,43 +19,12 @@
       <h1 class="govuk-heading-xl">
         Plan leave and pay when you have a child
       </h1>
-      <p class="smart-planner-hide">
-        Use the calendar below to plan maternity, paternity and shared parental leave weeks around your child's expected birth week or placement date.
-      </p>
-      <p class="smart-planner-hide">
-        Shared parental leave is created from any unused maternity leave. The mother and the father can take three blocks of shared parental leave each.
-        They can take this leave separately, or together.
-      </p>
-      <p class="smart-planner-show">
+      <p>
         Use the calendar below to select the weeks you and your partner would like to take off work when you're having a child.
       </p>
-      <p class="smart-planner-show">
+      <p>
         The planner will work out the most suitable type of leave based on who is taking time off, when it’s being taken and how many weeks you want to take.
       </p>
-      {{ govukRadios({
-        classes: "govuk-radios--inline",
-        idPrefix: "leave-type",
-        name: "leave-type",
-        fieldset: {
-          classes: "smart-planner-hide",
-          legend: {
-            text: "Type of leave",
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
-          }
-        },
-        items: [
-          {
-            value: "not-shared",
-            text: "Maternity / Paternity leave",
-            checked: true
-          },
-          {
-            value: "shared",
-            text: "Shared parental leave"
-          }
-        ]
-      }) }}
     </div>
   </div>
   <div class="govuk-grid-row">
@@ -98,7 +67,6 @@
         Leave weeks
       </h2>
       <p>Any unused maternity leave can be taken as shared parental leave.</p>
-      <p>Paternity leave is separate.</p>
       {{ govukSummaryList({
         rows: [
           {
@@ -130,14 +98,8 @@
         ]
       }) }}
       <div class="leave-messages">
-        <p id="maternity-gap" class="govuk-body-s warning">
-          You cannot leave a gap in your maternity leave.
-        </p>
         <p id="maternity-maximum" class="govuk-body-s warning">
           You have taken more than the maximum of 52 weeks maternity or shared parental leave.
-        </p>
-        <p id="shared-before-maternity" class="govuk-body-s warning">
-          You cannot take shared parental leave before maternity leave has started.
         </p>
         <p id="no-more-shared" class="govuk-body-s info">
           You have no more shared parental leave, reduce your maternity leave to create more.
@@ -146,6 +108,7 @@
           Remember, you can break up shared parental leave with periods of work.
         </p>
       </div>
+      <p>Paternity leave is a separate entitlement.</p>
       {{ govukSummaryList({
         rows: [
           {
@@ -158,17 +121,6 @@
           }
         ]
       }) }}
-      <div class="leave-messages">
-        <p id="paternity-gap" class="govuk-body-s warning">
-          You cannot leave a gap in your paternity leave.
-        </p>
-        <p id="paternity-maximum" class="govuk-body-s warning">
-          You have taken more than the maximum of 2 weeks paternity leave.
-        </p>
-        <p id="paternity-period" class="govuk-body-s warning">
-          You can only take paternity leave in the first 8 weeks after the birth.
-        </p>
-      </div>
     </div>
   </div>
   <div class="govuk-grid-row">

@@ -10,7 +10,6 @@ const MATERNITY = 'maternity'
 const PATERNITY = 'paternity'
 const SHARED = 'shared'
 const LEAVE = 'leave'
-const ALL_LEAVE_TYPES = [MATERNITY, PATERNITY, SHARED, LEAVE]
 
 const MOTHER = 'mother'
 const PARTNER = 'partner'
@@ -27,7 +26,6 @@ const $calendar = $('table#leave-calendar')
 
 $(document).ready(function () {
   window.GOVUKFrontend.initAll()
-  window.toggleSmartPlanner(true);
 
   if ($calendar.length > 0) {
     scrollToBirthWeek()
@@ -43,11 +41,12 @@ $(document).ready(function () {
     }
 
     const $originalCell = $(this)
+
     if ($originalCell.hasClass(DISABLED)) {
       return
     }
 
-    if (window.useSmartPlanner && $originalCell.hasClass(MOTHER) && $originalCell.hasClass(BEFORE_BIRTH_WEEK)) {
+    if ($originalCell.hasClass(MOTHER) && $originalCell.hasClass(BEFORE_BIRTH_WEEK)) {
       handleMaternityBeforeBirthWeek($originalCell)
       return
     }
@@ -56,14 +55,13 @@ $(document).ready(function () {
     $calendar.addClass(DRAGGING)
 
     const column = $originalCell.hasClass(MOTHER) ? MOTHER : PARTNER
-    const leaveType = getSelectedLeaveType(column)
-    const cellAction = $originalCell.hasClass(leaveType) ? removeLeave : addLeave
+    const addOrRemoveLeave = $originalCell.hasClass(LEAVE) ? removeLeave : addLeave
     const onRowMouseOver = function () {
       const $cellInRow = $(this).find(`.${column}`)
       if ($cellInRow.hasClass(DISABLED)) {
         return
       }
-      cellAction($cellInRow, leaveType)
+      addOrRemoveLeave($cellInRow)
       onLeaveUpdated()
     }
 
@@ -76,24 +74,6 @@ $(document).ready(function () {
       $calendar.removeClass(DRAGGING)
     })
   })
-})
-
-window.toggleSmartPlanner = function (use) {
-  window.useSmartPlanner = use
-  $('.smart-planner-show').toggle(use)
-  $('.smart-planner-hide').toggle(!use)
-  if (use) {
-    onLeaveUpdated()
-  }
-}
-
-window.addEventListener('keydown', function (event) {
-  const option = Number(event.key)
-  if (option === 1) {
-    window.toggleSmartPlanner(false)
-  } else if (option === 2) {
-    window.toggleSmartPlanner(true)
-  }
 })
 
 function scrollToBirthWeek() {
@@ -126,35 +106,16 @@ function handleMaternityBeforeBirthWeek($cell) {
   onLeaveUpdated()
 }
 
-function getSelectedLeaveType(column) {
-  if (window.useSmartPlanner) {
-    return LEAVE
-  }
-  const isShared = $('input[name=leave-type]:checked').val() === 'shared'
-  if (isShared) {
-    return SHARED
-  }
-  return column === MOTHER ? MATERNITY : PATERNITY
-}
-
-function addLeave($cell, leaveType) {
-  ALL_LEAVE_TYPES.forEach(type => removeLeave($cell, type))
+function addLeave($cell,) {
   $cell.addClass(LEAVE)
-  $cell.addClass(leaveType)
 }
 
-function removeLeave($cell, leaveType) {
-  if (!$cell.hasClass(leaveType)) {
-    return
-  }
+function removeLeave($cell) {
   $cell.removeClass(LEAVE)
-  $cell.removeClass(leaveType)
 }
 
 function onLeaveUpdated() {
-  if (window.useSmartPlanner) {
-    applyLeave()
-  }
+  applyLeave()
 
   const shared = $(`td.${SHARED}`)
   const motherShared = $(`td.${MOTHER}.${SHARED}`)
@@ -175,14 +136,9 @@ function onLeaveUpdated() {
   $('.remaining-total').toggleClass(NEGATIVE, remainingWeeks < 0)
 
   // Warnings.
-  $('#maternity-gap').toggle(hasGap(maternity))
   $('#maternity-maximum').toggle(remainingWeeks < 0)
   $('#no-more-shared').toggle(remainingWeeks <= 0)
   $('#can-break-shared').toggle(sharedWeeks > 0 && !(hasGap(motherShared) || hasGap(partnerShared)))
-  $('#paternity-gap').toggle(hasGap(paternity))
-  $('#paternity-maximum').toggle(paternityWeeks > PATERNITY_WEEKS_ENTITLEMENT)
-  $('#shared-before-maternity').toggle(getWeekNumber(shared.first()) < getWeekNumber(maternity.first()))
-  $('#paternity-period').toggle(getWeekNumber(paternity.last()) > 7)
 
   // Form values.
   $('#mother-shared').val(motherShared.length)
