@@ -9,7 +9,6 @@ const COMPULSORY = 'compulsory'
 const MATERNITY = 'maternity'
 const PATERNITY = 'paternity'
 const SHARED = 'shared'
-const LEAVE = 'leave'
 
 const MOTHER = 'mother'
 const PARTNER = 'partner'
@@ -55,7 +54,7 @@ $(document).ready(function () {
     $calendar.addClass(DRAGGING)
 
     const column = $originalCell.hasClass(MOTHER) ? MOTHER : PARTNER
-    const addOrRemoveLeave = $originalCell.hasClass(LEAVE) ? removeLeave : addLeave
+    const addOrRemoveLeave = hasLeave($originalCell) ? removeLeave : addLeave
     const onRowMouseOver = function () {
       const $cellInRow = $(this).find(`.${column}`)
       if ($cellInRow.hasClass(DISABLED)) {
@@ -88,18 +87,18 @@ function scrollToBirthWeek() {
 function handleMaternityBeforeBirthWeek($cell) {
   const weekNumber = getWeekNumber($cell)
   const $beforeBirthWeek = $(`.${MOTHER}.${BEFORE_BIRTH_WEEK}`)
-  if ($cell.hasClass(LEAVE)) {
+  if (hasLeave($cell)) {
     $beforeBirthWeek.each(function () {
       const $this = $(this)
       if (getWeekNumber($this) <= weekNumber) {
-        $this.removeClass(LEAVE)
+        removeLeave($this)
       }
     })
   } else {
     $beforeBirthWeek.each(function () {
       const $this = $(this)
       if (getWeekNumber($this) >= weekNumber) {
-        $this.addClass(LEAVE)
+        addLeave($this)
       }
     })
   }
@@ -107,11 +106,15 @@ function handleMaternityBeforeBirthWeek($cell) {
 }
 
 function addLeave($cell,) {
-  $cell.addClass(LEAVE)
+  $cell.addClass('leave')
 }
 
 function removeLeave($cell) {
-  $cell.removeClass(LEAVE)
+  $cell.removeClass('leave')
+}
+
+function hasLeave($cell) {
+  return $cell.hasClass('leave')
 }
 
 function onLeaveUpdated() {
@@ -167,15 +170,16 @@ function applyMothersLeave() {
   $(`.${MOTHER}`).removeClass(SHARED).removeClass(MATERNITY).each(function () {
     const $this = $(this)
     const weekNumber = getWeekNumber($this)
+    console.log(hasLeave($this))
     if ($this.hasClass(COMPULSORY)) {
       hasStartedMaternityLeave = true
       $this.addClass(MATERNITY)
-    } else if ($this.hasClass(LEAVE)) {
+    } else if (hasLeave($this)) {
       hasStartedMaternityLeave = true
       $this.addClass(weekNumber < 0 || !hasFinishedMaternityLeave ? MATERNITY : SHARED)
     } else if (hasStartedMaternityLeave) {
       if (weekNumber < 0) {
-        $this.addClass(LEAVE)
+        addLeave($this)
         $this.addClass(MATERNITY)
       } else {
         hasFinishedMaternityLeave = true
@@ -190,7 +194,7 @@ function applyPartnersLeave() {
   let paternityLeaveUsed = 0
   $(`.${PARTNER}`).removeClass(SHARED).removeClass(PATERNITY).each(function () {
     const $this = $(this)
-    if ($this.hasClass(LEAVE)) {
+    if (hasLeave($this)) {
       const weekNumber = getWeekNumber($this)
       const inFirstEightWeeks = 0 <= weekNumber && weekNumber < 8
       const hasEntitlementRemaining = paternityLeaveUsed < PATERNITY_WEEKS_ENTITLEMENT
