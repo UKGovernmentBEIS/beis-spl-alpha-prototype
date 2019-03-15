@@ -96,7 +96,21 @@
       {% set partnerTakingSpl = (data["partner-shared"] | int) > 0 %}
       {% if motherTakingSpl or partnerTakingSpl %}
         <p>
-          These letters can be used to inform employers of intention to take shared parental leave.
+          {% if motherTakingSpl and partnerTakingSpl %}
+            Both mother and partner are intending to take shared parental leave.
+          {% elif motherTakingSpl %}
+            Only the mother is intending to take shared parental leave.
+          {% else %}
+            Only the mother's partner is intending to take shared parental leave.
+          {% endif %}
+        </p>
+        <p>
+          {% if partnerTakingSpl %}
+            These letters
+          {% else %}
+            This letter
+          {% endif %}
+          can be used to inform employers of the intention to take shared parental leave.
         </p>
         <ul class="govuk-body">
           {% if motherTakingSpl %}
