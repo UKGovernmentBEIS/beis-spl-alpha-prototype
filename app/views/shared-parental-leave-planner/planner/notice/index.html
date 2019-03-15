@@ -12,8 +12,11 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">
-        Leave notices
+        Notice to employers
       </h1>
+      <p>
+        Check your details are correct, then click on the links below to see letters you can use to notify your employer of your leave plans.
+      </p>
       <h2 class="govuk-heading-l">
         Your details
       </h2>
@@ -97,7 +100,7 @@
       {% if motherTakingSpl or partnerTakingSpl %}
         <p>
           {% if motherTakingSpl and partnerTakingSpl %}
-            Both mother and partner are intending to take shared parental leave.
+            Both the mother and her partner are intending to take shared parental leave.
           {% elif motherTakingSpl %}
             Only the mother is intending to take shared parental leave.
           {% else %}
@@ -112,24 +115,32 @@
           {% endif %}
           can be used to inform employers of the intention to take shared parental leave.
         </p>
-        <ul class="govuk-body">
+        <ul class="govuk-list govuk-list--bullet">
           {% if motherTakingSpl %}
             <li>
-              <a href="notice/letter/mothers-curtailment-and-shared-parental-leave">Mother's curtailment notice and intention to take shared parental leave</a>
+              <a href="notice/letter/mothers-curtailment-and-shared-parental-leave">
+                Mother's curtailment notice and intention to take shared parental leave
+              </a>
             </li>
           {% elif partnerTakingSpl %}
             <li>
-              <a href="notice/letter/mothers-curtailment-and-consent-for-partners-shared-parental-leave">Mother's curtailment notice and consent for partner to take shared parental leave</a>
+              <a href="notice/letter/mothers-curtailment-and-consent-for-partners-shared-parental-leave">
+                Mother's curtailment notice and consent for partner to take shared parental leave
+              </a>
             </li>
           {% endif %}
           {% if partnerTakingSpl %}
             <li>
-              <a href="notice/letter/partners-shared-parental-leave">Partner's intention to take shared parental leave</a>
+              <a href="notice/letter/partners-shared-parental-leave">
+                Partner's intention to take shared parental leave
+              </a>
             </li>
           {% endif %}
         </ul>
       {% else %}
-        <p>Neither the mother nor her partner are intending to take shared parental leave.</p>
+        <p>
+          Neither the mother nor her partner are intending to take shared parental leave.
+        </p>
       {% endif %}
     </div>
   </div>
