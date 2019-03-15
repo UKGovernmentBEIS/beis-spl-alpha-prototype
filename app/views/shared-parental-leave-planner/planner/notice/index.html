@@ -1,4 +1,5 @@
 {% from "input/macro.njk" import govukInput %}
+{% import "data-macros.njk" as dataMacros %}
 
 {% extends "layout.html" %}
 
@@ -16,13 +17,6 @@
       <h2 class="govuk-heading-l">
         Your details
       </h2>
-      {% set address %}
-        {{ data["address-line-1"] | lineIfNotEmpty | safe }}
-        {{ data["address-line-2"] | lineIfNotEmpty | safe }}
-        {{ data["address-town"] | lineIfNotEmpty | safe }}
-        {{ data["address-county"] | lineIfNotEmpty | safe }}
-        {{ data["address-postcode"] | lineIfNotEmpty | safe }}
-      {% endset %}
       {{ govukSummaryList({
         rows: [
           {
@@ -64,7 +58,7 @@
               text: "Address"
             },
             value: {
-              html: address
+              html: dataMacros.address(data, "<br>")
             },
             actions: {
               items: [

@@ -59,8 +59,8 @@ module.exports = function (env) {
     return ('0' + number).slice(-2)
   }
 
-  filters.lineIfNotEmpty = function (line) {
-    return line ? line + '<br>' : null
+  filters.lineIfNotEmpty = function (line, endOfLine) {
+    return line && line.trim() !== '' ? line + endOfLine : ''
   }
 
   /* ------------------------------------------------------------------

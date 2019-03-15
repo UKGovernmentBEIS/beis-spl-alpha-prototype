@@ -1,0 +1,11 @@
+{% macro dueDate(data) %}
+  {{ data["due-date-year"] }}-{{ data["due-date-month"] | twoDigit }}-{{ data["due-date-day"] | twoDigit }}
+{% endmacro %}
+
+{% macro address(data, endOfLine) %}
+  {{ data["address-line-1"] | escape | lineIfNotEmpty(endOfLine) | safe }}
+  {{ data["address-line-2"] | escape | lineIfNotEmpty(endOfLine) | safe }}
+  {{ data["address-town"] | escape | lineIfNotEmpty(endOfLine) | safe }}
+  {{ data["address-county"] | escape | lineIfNotEmpty(endOfLine) | safe }}
+  {{ data["address-postcode"] | escape | lineIfNotEmpty(endOfLine) | safe }}
+{% endmacro %}

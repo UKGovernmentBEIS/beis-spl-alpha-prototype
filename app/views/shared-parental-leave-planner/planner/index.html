@@ -1,5 +1,6 @@
 {% from "radios/macro.njk" import govukRadios %}
 {% from "summary-list/macro.njk" import govukSummaryList %}
+{% import "data-macros.njk" as dataMacros %}
 
 {% extends "layout.html" %}
 
@@ -7,7 +8,9 @@
   Plan leave and pay when you have a child
 {% endblock %}
 
-{% set dueDate %}{{ data["due-date-year"] }}-{{ data["due-date-month"] | twoDigit }}-{{ data["due-date-day"] | twoDigit }}{% endset %}
+{% set dueDate %}
+  {{ dataMacros.dueDate(data) }}
+{% endset %}
 
 {% block content %}
 
@@ -79,7 +82,7 @@
             {% set firstTwoBirthWeeks = (i === 0) or (i === 1) %}
             <tr class="govuk-table__row leave-week">
               <td class="govuk-table__cell">
-                {{ dueDate | startOfWeek | offsetWeeks(i) | formatDate("DD MMM") }}
+                {{ dueDate | trim | startOfWeek | offsetWeeks(i) | formatDate("DD MMM") }}
               </td>
               <td data-week="{{i}}"
                   class="govuk-table__cell mother {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}compulsory maternity disabled{% endif %}">
@@ -172,10 +175,10 @@
     <div class="govuk-grid-column-two-thirds">
       <h2 class="govuk-heading-l">Key dates</h2>
       {% set dueDateLong %}
-        {{ dueDate | startOfWeek | formatDate("DD MMMM YYYY") }}
+        {{ dueDate | trim | startOfWeek | formatDate("DD MMMM YYYY") }}
       {% endset %}
       {% set notifyEmployersDate %}
-        {{ dueDate | offsetWeeks(-15) | formatDate("DD MMMM YYYY") }}
+        {{ dueDate | trim | offsetWeeks(-15) | formatDate("DD MMMM YYYY") }}
       {% endset %}
       {{ govukSummaryList({
         rows: [
