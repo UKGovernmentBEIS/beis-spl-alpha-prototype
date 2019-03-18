@@ -27,7 +27,8 @@
       </p>
     </div>
   </div>
-  <form action="planner/mothers-name">
+  <form action="planner/key-dates" method="POST">
+    <input name="due-date" type="hidden" value="{{ dueDate | trim }}">
     <div class="govuk-grid-row">
       <div id="leave-calendar-container" class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
         <table id="leave-calendar" class="govuk-table">
@@ -60,7 +61,6 @@
                 <td data-week="{{i}}"
                   class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory disabled{% endif %}">
                   <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
-                    {% if firstTwoBirthWeeks %}disabled{% endif %}
                     {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
                   <label for="{{ motherId }}">
                     <span class="maternity-leave">
@@ -79,7 +79,6 @@
                 <td data-week="{{i}}"
                   class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}">
                   <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
-                    {% if beforeBirthWeek %}disabled{% endif %}
                     {% if data[partnerId] %}checked{% endif %}>
                   <label for="{{ partnerId }}">
                     <span class="paternity-leave">
@@ -158,35 +157,8 @@
     </div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-heading-l">Key dates</h2>
-        {% set dueDateLong %}
-          {{ dueDate | trim | startOfWeek | formatDate("DD MMMM YYYY") }}
-        {% endset %}
-        {% set notifyEmployersDate %}
-          {{ dueDate | trim | offsetWeeks(-15) | formatDate("DD MMMM YYYY") }}
-        {% endset %}
-        {{ govukSummaryList({
-          rows: [
-            {
-              key: {
-                text: "Baby is due"
-              },
-              value: {
-                text: dueDateLong
-              }
-            },
-            {
-              key: {
-                text: "Notify employers of maternity leave"
-              },
-              value: {
-                text: "by " + notifyEmployersDate
-              }
-            }
-          ]
-        }) }}
         <p>
-          If you are happy with these dates, press next to get a personalised letter that you can use to notify your employer of your leave plans.
+          Press next for a summary of key dates.
         </p>
         <button type="submit" class="govuk-button">
           Next

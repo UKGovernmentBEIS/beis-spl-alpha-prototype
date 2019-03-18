@@ -1,0 +1,32 @@
+{% from "summary-list/macro.njk" import govukSummaryList %}
+
+{% macro leaveBlockSummary(name, block) %}
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: {
+          text: name + " starts"
+        },
+        value: {
+          text: block.start | formatDate("DD MMMM YYYY")
+        }
+      },
+      {
+        key: {
+          text: name + " ends"
+        },
+        value: {
+          text: block.end | offsetWeeks(1) | formatDate("DD MMMM YYYY")
+        }
+      },
+      {
+        key: {
+          text: "Length"
+        },
+        value: {
+          text: block.length
+        }
+      }
+    ]
+  }) }}
+{% endmacro %}

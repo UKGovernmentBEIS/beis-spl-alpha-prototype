@@ -1,0 +1,64 @@
+{% from "summary-list/macro.njk" import govukSummaryList %}
+{% from "leave-block-summary.njk" import leaveBlockSummary %}
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Plan leave and pay when you have a child
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Key dates summary
+      </h1>
+      <p>
+        If you are happy with these dates, press next at the bottom of the page to get a personalised letter that you can use to notify your employer of your leave plans.
+      </p>
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: "Baby is due"
+            },
+            value: {
+              text: dueDate | formatDate("DD MMMM YYYY")
+            }
+          },
+          {
+            key: {
+              text: "Notify employers of maternity leave"
+            },
+            value: {
+              text: "by " + (dueDate | offsetWeeks(-15) | formatDate("DD MMMM YYYY"))
+            }
+          }
+        ]
+      }) }}
+      <h2 class="govuk-heading-l">
+        Mother's leave dates
+      </h2>
+      {{ leaveBlockSummary("Maternity leave", maternityLeave) }}
+      {% for block in mothersSplBlocks %}
+        {{ leaveBlockSummary("Shared parental leave block " + block.number, block) }}
+      {% endfor %}
+      <h2 class="govuk-heading-l">
+        Partner's leave dates
+      </h2>
+      {% if paternityLeave %}
+        {{ leaveBlockSummary("Paternity leave", paternityLeave) }}
+      {% endif %}
+      {% for block in partnersSplBlocks %}
+        {{ leaveBlockSummary("Shared parental leave block " + block.number, block) }}
+      {% endfor %}
+      <form action="mothers-name" method="POST">
+        <button type="submit" class="govuk-button">
+          Next
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
