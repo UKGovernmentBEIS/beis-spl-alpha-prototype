@@ -27,6 +27,7 @@
       </p>
     </div>
   </div>
+  <form action="planner/mothers-name">
   <div class="govuk-grid-row">
     <div id="leave-calendar-container" class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
       <table id="leave-calendar" class="govuk-table">
@@ -59,7 +60,8 @@
               <td data-week="{{i}}"
                 class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory disabled{% endif %}">
                 <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
-                  {% if firstTwoBirthWeeks %}disabled checked{% endif %}>
+                  {% if firstTwoBirthWeeks %}disabled{% endif %}
+                  {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
                 <label for="{{ motherId }}">
                   <span class="maternity-leave">
                     {% if firstTwoBirthWeeks %}
@@ -77,7 +79,8 @@
               <td data-week="{{i}}"
                 class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}">
                 <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
-                  {% if beforeBirthWeek %}disabled{% endif %}>
+                  {% if beforeBirthWeek %}disabled{% endif %}
+                  {% if data[partnerId] %}checked{% endif %}>
                 <label for="{{ partnerId }}">
                   <span class="paternity-leave">
                     Paternity leave
@@ -185,12 +188,11 @@
       <p>
         If you are happy with these dates, press next to get a personalised letter that you can use to notify your employer of your leave plans.
       </p>
-      <form action="planner/mothers-name">
         <button type="submit" class="govuk-button">
           Next
         </button>
-      </form>
+      </div>
     </div>
-  </div>
+  </form>
 
 {% endblock %}

@@ -113,11 +113,6 @@ table#leave-calendar {
     }
   }
 
-  .week {
-    /* Fallback. */
-    @include leave($colour-leave);
-  }
-
   .week.before-birth-week {
     &.mother-leave .mother {
       @include maternityLeave();

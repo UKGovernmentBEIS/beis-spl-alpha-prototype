@@ -35,7 +35,7 @@ $(document).ready(function () {
       const $this = $(this)
       const $row = $(this).closest('tr')
       $row.toggleClass(`${parent}-leave`, $this.prop('checked'))
-    })
+    }).change() // Initialize.
   })
 
   // Run once to intialize.
