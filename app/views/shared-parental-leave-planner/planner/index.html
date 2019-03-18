@@ -28,166 +28,166 @@
     </div>
   </div>
   <form action="planner/mothers-name">
-  <div class="govuk-grid-row">
-    <div id="leave-calendar-container" class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
-      <table id="leave-calendar" class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col"></th>
-            <th class="govuk-table__header" scope="col">Mother</th>
-            <th class="govuk-table__header" scope="col">Partner</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          {% for i in range(-11, 51) %}
-            {% if (i === 0) %}
-              <tr class="birth-week govuk-!-font-weight-bold govuk-!-font-size-16">
-                <td></td>
-                <td colspan="2">
-                  Birth week
+    <div class="govuk-grid-row">
+      <div id="leave-calendar-container" class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
+        <table id="leave-calendar" class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col"></th>
+              <th class="govuk-table__header" scope="col">Mother</th>
+              <th class="govuk-table__header" scope="col">Partner</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% for i in range(-11, 51) %}
+              {% if (i === 0) %}
+                <tr class="birth-week govuk-!-font-weight-bold govuk-!-font-size-16">
+                  <td></td>
+                  <td colspan="2">
+                    Birth week
+                  </td>
+                </tr>
+              {% endif %}
+              {% set beforeBirthWeek = i < 0 %}
+              {% set firstTwoBirthWeeks = (i >= 0) and (i < 2) %}
+              {% set firstEightBirthWeeks = (i >= 0) and (i < 8) %}
+              {% set date = (dueDate | trim | startOfWeek | offsetWeeks(i) | formatDate("YYYY-MM-DD")) %}
+              <tr class="govuk-table__row week {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}mother-leave{% endif %} {% if firstEightBirthWeeks %}paternity-eligible-week{% endif %}">
+                <td class="govuk-table__cell">
+                  {{ date | formatDate("DD MMM") }}
+                </td>
+                {% set motherId = "mother-" + date %}
+                <td data-week="{{i}}"
+                  class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory disabled{% endif %}">
+                  <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
+                    {% if firstTwoBirthWeeks %}disabled{% endif %}
+                    {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
+                  <label for="{{ motherId }}">
+                    <span class="maternity-leave">
+                      {% if firstTwoBirthWeeks %}
+                        Compulsory maternity leave
+                      {% else %}
+                        Maternity leave
+                      {% endif %}
+                    </span>
+                    <span class="shared-parental-leave">
+                      Shared parental leave
+                    </span>
+                  </label>
+                </td>
+                {% set partnerId = "partner-" + date %}
+                <td data-week="{{i}}"
+                  class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}">
+                  <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
+                    {% if beforeBirthWeek %}disabled{% endif %}
+                    {% if data[partnerId] %}checked{% endif %}>
+                  <label for="{{ partnerId }}">
+                    <span class="paternity-leave">
+                      Paternity leave
+                    </span>
+                    <span class="shared-parental-leave">
+                      Shared parental leave
+                    </span>
+                  </label>
                 </td>
               </tr>
-            {% endif %}
-            {% set beforeBirthWeek = i < 0 %}
-            {% set firstTwoBirthWeeks = (i >= 0) and (i < 2) %}
-            {% set firstEightBirthWeeks = (i >= 0) and (i < 8) %}
-            {% set date = (dueDate | trim | startOfWeek | offsetWeeks(i) | formatDate("YYYY-MM-DD")) %}
-            <tr class="govuk-table__row week {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}mother-leave{% endif %} {% if firstEightBirthWeeks %}paternity-eligible-week{% endif %}">
-              <td class="govuk-table__cell">
-                {{ date | formatDate("DD MMM") }}
-              </td>
-              {% set motherId = "mother-" + date %}
-              <td data-week="{{i}}"
-                class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory disabled{% endif %}">
-                <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
-                  {% if firstTwoBirthWeeks %}disabled{% endif %}
-                  {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
-                <label for="{{ motherId }}">
-                  <span class="maternity-leave">
-                    {% if firstTwoBirthWeeks %}
-                      Compulsory maternity leave
-                    {% else %}
-                      Maternity leave
-                    {% endif %}
-                  </span>
-                  <span class="shared-parental-leave">
-                    Shared parental leave
-                  </span>
-                </label>
-              </td>
-              {% set partnerId = "partner-" + date %}
-              <td data-week="{{i}}"
-                class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}">
-                <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
-                  {% if beforeBirthWeek %}disabled{% endif %}
-                  {% if data[partnerId] %}checked{% endif %}>
-                <label for="{{ partnerId }}">
-                  <span class="paternity-leave">
-                    Paternity leave
-                  </span>
-                  <span class="shared-parental-leave">
-                    Shared parental leave
-                  </span>
-                </label>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    <div class="govuk-grid-column-one-third">
-      <h2 class="govuk-heading-m">
-        Leave weeks
-      </h2>
-      <p>Any unused maternity leave can be taken as shared parental leave.</p>
-      {{ govukSummaryList({
-        rows: [
-          {
-            key: {
-              text: "Maternity"
-            },
-            value: {
-              html: '<span id="maternity-weeks"></span> weeks'
-            }
-          },
-          {
-            key: {
-              text: "Shared"
-            },
-            value: {
-              html: '<span id="shared-weeks"></span> weeks'
-            }
-          },
-          {
-            key: {
-              classes: "remaining-total",
-              text: "Remaining"
-            },
-            value: {
-              classes: "remaining-total",
-              html: '<span id="remaining-weeks"></span> weeks'
-            }
-          }
-        ]
-      }) }}
-      <div class="leave-messages">
-        <p id="maternity-maximum" class="govuk-body-s warning">
-          You have taken more than the maximum of 52 weeks maternity or shared parental leave.
-        </p>
-        <p id="no-more-shared" class="govuk-body-s info">
-          You have no more shared parental leave, reduce your maternity leave to create more.
-        </p>
-        <p id="can-break-shared" class="govuk-body-s info">
-          Remember, you can break up shared parental leave with periods of work.
-        </p>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
-      <p>Paternity leave is a separate entitlement.</p>
-      {{ govukSummaryList({
-        rows: [
-          {
-            key: {
-              text: "Paternity"
+      <div class="govuk-grid-column-one-third">
+        <h2 class="govuk-heading-m">
+          Leave weeks
+        </h2>
+        <p>Any unused maternity leave can be taken as shared parental leave.</p>
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Maternity"
+              },
+              value: {
+                html: '<span id="maternity-weeks"></span> weeks'
+              }
             },
-            value: {
-              html: '<span id="paternity-weeks"></span> weeks'
+            {
+              key: {
+                text: "Shared"
+              },
+              value: {
+                html: '<span id="shared-weeks"></span> weeks'
+              }
+            },
+            {
+              key: {
+                classes: "remaining-total",
+                text: "Remaining"
+              },
+              value: {
+                classes: "remaining-total",
+                html: '<span id="remaining-weeks"></span> weeks'
+              }
             }
-          }
-        ]
-      }) }}
+          ]
+        }) }}
+        <div class="leave-messages">
+          <p id="maternity-maximum" class="govuk-body-s warning">
+            You have taken more than the maximum of 52 weeks maternity or shared parental leave.
+          </p>
+          <p id="no-more-shared" class="govuk-body-s info">
+            You have no more shared parental leave, reduce your maternity leave to create more.
+          </p>
+          <p id="can-break-shared" class="govuk-body-s info">
+            Remember, you can break up shared parental leave with periods of work.
+          </p>
+        </div>
+        <p>Paternity leave is a separate entitlement.</p>
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Paternity"
+              },
+              value: {
+                html: '<span id="paternity-weeks"></span> weeks'
+              }
+            }
+          ]
+        }) }}
+      </div>
     </div>
-  </div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h2 class="govuk-heading-l">Key dates</h2>
-      {% set dueDateLong %}
-        {{ dueDate | trim | startOfWeek | formatDate("DD MMMM YYYY") }}
-      {% endset %}
-      {% set notifyEmployersDate %}
-        {{ dueDate | trim | offsetWeeks(-15) | formatDate("DD MMMM YYYY") }}
-      {% endset %}
-      {{ govukSummaryList({
-        rows: [
-          {
-            key: {
-              text: "Baby is due"
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-l">Key dates</h2>
+        {% set dueDateLong %}
+          {{ dueDate | trim | startOfWeek | formatDate("DD MMMM YYYY") }}
+        {% endset %}
+        {% set notifyEmployersDate %}
+          {{ dueDate | trim | offsetWeeks(-15) | formatDate("DD MMMM YYYY") }}
+        {% endset %}
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Baby is due"
+              },
+              value: {
+                text: dueDateLong
+              }
             },
-            value: {
-              text: dueDateLong
+            {
+              key: {
+                text: "Notify employers of maternity leave"
+              },
+              value: {
+                text: "by " + notifyEmployersDate
+              }
             }
-          },
-          {
-            key: {
-              text: "Notify employers of maternity leave"
-            },
-            value: {
-              text: "by " + notifyEmployersDate
-            }
-          }
-        ]
-      }) }}
-      <p>
-        If you are happy with these dates, press next to get a personalised letter that you can use to notify your employer of your leave plans.
-      </p>
+          ]
+        }) }}
+        <p>
+          If you are happy with these dates, press next to get a personalised letter that you can use to notify your employer of your leave plans.
+        </p>
         <button type="submit" class="govuk-button">
           Next
         </button>
