@@ -40,7 +40,7 @@
         <tbody class="govuk-table__body">
           {% for i in range(-11, 51) %}
             {% if (i === 0) %}
-              <tr class="birth-week">
+              <tr class="birth-week govuk-!-font-weight-bold govuk-!-font-size-16">
                 <td></td>
                 <td colspan="2">
                   Birth week
@@ -48,15 +48,45 @@
               </tr>
             {% endif %}
             {% set beforeBirthWeek = i < 0 %}
-            {% set firstTwoBirthWeeks = (i === 0) or (i === 1) %}
-            <tr class="govuk-table__row leave-week">
+            {% set firstTwoBirthWeeks = (i >= 0) and (i < 2) %}
+            {% set firstEightBirthWeeks = (i >= 0) and (i < 8) %}
+            {% set date = (dueDate | trim | startOfWeek | offsetWeeks(i) | formatDate("YYYY-MM-DD")) %}
+            <tr class="govuk-table__row week {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}mother-leave{% endif %} {% if firstEightBirthWeeks %}paternity-eligible-week{% endif %}">
               <td class="govuk-table__cell">
-                {{ dueDate | trim | startOfWeek | offsetWeeks(i) | formatDate("DD MMM") }}
+                {{ date | formatDate("DD MMM") }}
               </td>
+              {% set motherId = "mother-" + date %}
               <td data-week="{{i}}"
-                  class="govuk-table__cell mother {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}compulsory maternity disabled{% endif %}">
+                class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory disabled{% endif %}">
+                <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
+                  {% if firstTwoBirthWeeks %}disabled checked{% endif %}>
+                <label for="{{ motherId }}">
+                  <span class="maternity-leave">
+                    {% if firstTwoBirthWeeks %}
+                      Compulsory maternity leave
+                    {% else %}
+                      Maternity leave
+                    {% endif %}
+                  </span>
+                  <span class="shared-parental-leave">
+                    Shared parental leave
+                  </span>
+                </label>
               </td>
-              <td data-week="{{i}}" class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}"></td>
+              {% set partnerId = "partner-" + date %}
+              <td data-week="{{i}}"
+                class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}">
+                <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
+                  {% if beforeBirthWeek %}disabled{% endif %}>
+                <label for="{{ partnerId }}">
+                  <span class="paternity-leave">
+                    Paternity leave
+                  </span>
+                  <span class="shared-parental-leave">
+                    Shared parental leave
+                  </span>
+                </label>
+              </td>
             </tr>
           {% endfor %}
         </tbody>
@@ -156,8 +186,6 @@
         If you are happy with these dates, press next to get a personalised letter that you can use to notify your employer of your leave plans.
       </p>
       <form action="planner/mothers-name">
-        <input id="mother-shared" name="mother-shared" type="hidden" value="0">
-        <input id="partner-shared" name="partner-shared" type="hidden" value="0">
         <button type="submit" class="govuk-button">
           Next
         </button>

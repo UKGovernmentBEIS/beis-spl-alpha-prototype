@@ -30,22 +30,30 @@ $(document).ready(function () {
     scrollToBirthWeek()
   }
 
+  [MOTHER, PARTNER].forEach(function (parent) {
+    $(`.${parent}-leave-input`).on('change', function () {
+      const $this = $(this)
+      const $row = $(this).closest('tr')
+      $row.toggleClass(`${parent}-leave`, $this.prop('checked'))
+    })
+  })
+
   // Run once to intialize.
   onLeaveUpdated()
 
-  $(`td.${MOTHER}, td.${PARTNER}`).on('mousedown', function (event) {
+  $(`input.mother-leave-input + label, input.partner-leave-input + label`).on('click', function (e) {
+    e.preventDefault()
+  }).on('mousedown', function (event) {
     if (event.which !== 1) {
       // Only respond to primary mouse button.
       return
     }
 
-    const $originalCell = $(this)
-
+    const $originalCell = $(this).closest('td')
     if ($originalCell.hasClass(DISABLED)) {
       return
     }
-
-    if ($originalCell.hasClass(MOTHER) && $originalCell.hasClass(BEFORE_BIRTH_WEEK)) {
+    if ($originalCell.hasClass(MOTHER) && getWeekNumber($originalCell) < 0) {
       handleMaternityBeforeBirthWeek($originalCell)
       return
     }
@@ -64,12 +72,13 @@ $(document).ready(function () {
       onLeaveUpdated()
     }
 
+    // Handle row that was clicked on.
     onRowMouseOver.call($originalCell.parent())
 
-    const $leaveWeeks = $('tr.leave-week')
-    $leaveWeeks.on('mouseover', onRowMouseOver)
+    const $weeks = $('tr.week')
+    $weeks.on('mouseover', onRowMouseOver)
     $calendar.one('mouseup mouseleave', function () {
-      $leaveWeeks.off('mouseover', onRowMouseOver)
+      $weeks.off('mouseover', onRowMouseOver)
       $calendar.removeClass(DRAGGING)
     })
   })
@@ -86,8 +95,9 @@ function scrollToBirthWeek() {
 
 function handleMaternityBeforeBirthWeek($cell) {
   const weekNumber = getWeekNumber($cell)
-  const $beforeBirthWeek = $(`.${MOTHER}.${BEFORE_BIRTH_WEEK}`)
+  const $beforeBirthWeek = $(`.${BEFORE_BIRTH_WEEK} .${MOTHER}`)
   if (hasLeave($cell)) {
+    // Remove leave from this week and all previous weeks.
     $beforeBirthWeek.each(function () {
       const $this = $(this)
       if (getWeekNumber($this) <= weekNumber) {
@@ -95,6 +105,7 @@ function handleMaternityBeforeBirthWeek($cell) {
       }
     })
   } else {
+    // Add leave to week and all weeks up to birth week.
     $beforeBirthWeek.each(function () {
       const $this = $(this)
       if (getWeekNumber($this) >= weekNumber) {
@@ -105,26 +116,28 @@ function handleMaternityBeforeBirthWeek($cell) {
   onLeaveUpdated()
 }
 
-function addLeave($cell,) {
-  $cell.addClass('leave')
+function addLeave($cell) {
+  toggleLeave($cell, true)
 }
 
 function removeLeave($cell) {
-  $cell.removeClass('leave')
+  toggleLeave($cell, false)
+}
+
+function toggleLeave($cell, checked) {
+  const $input = $cell.find('input')
+  $input.prop('checked', checked)
+  $input.change()
 }
 
 function hasLeave($cell) {
-  return $cell.hasClass('leave')
+  return $cell.find('input').prop('checked')
 }
 
 function onLeaveUpdated() {
-  applyLeave()
-
-  const shared = $(`td.${SHARED}`)
-  const motherShared = $(`td.${MOTHER}.${SHARED}`)
-  const partnerShared = $(`td.${PARTNER}.${SHARED}`)
-  const maternity = $(`td.${MOTHER}.${MATERNITY}`)
-  const paternity = $(`td.${PARTNER}.${PATERNITY}`)
+  const shared = $('.shared-parental-leave:visible')
+  const maternity = $('.maternity-leave:visible')
+  const paternity = $('.paternity-leave:visible')
 
   const sharedWeeks = shared.length
   const maternityWeeks = maternity.length
@@ -141,73 +154,8 @@ function onLeaveUpdated() {
   // Warnings.
   $('#maternity-maximum').toggle(remainingWeeks < 0)
   $('#no-more-shared').toggle(remainingWeeks <= 0)
-  $('#can-break-shared').toggle(sharedWeeks > 0 && !(hasGap(motherShared) || hasGap(partnerShared)))
-
-  // Form values.
-  $('#mother-shared').val(motherShared.length)
-  $('#partner-shared').val(partnerShared.length)
-}
-
-function hasGap(weeks) {
-  const firstWeek = getWeekNumber(weeks.first())
-  const lastWeek = getWeekNumber(weeks.last())
-  const totalWeeks = weeks.length
-  return lastWeek - firstWeek >= totalWeeks
 }
 
 function getWeekNumber($cell) {
   return parseInt($cell.data('week'))
-}
-
-function applyLeave() {
-  applyMothersLeave()
-  applyPartnersLeave()
-}
-
-function applyMothersLeave() {
-  let hasStartedMaternityLeave = false
-  let hasFinishedMaternityLeave = false
-  $(`.${MOTHER}`).removeClass(SHARED).removeClass(MATERNITY).each(function () {
-    const $this = $(this)
-    const weekNumber = getWeekNumber($this)
-    console.log(hasLeave($this))
-    if ($this.hasClass(COMPULSORY)) {
-      hasStartedMaternityLeave = true
-      $this.addClass(MATERNITY)
-    } else if (hasLeave($this)) {
-      hasStartedMaternityLeave = true
-      $this.addClass(weekNumber < 0 || !hasFinishedMaternityLeave ? MATERNITY : SHARED)
-    } else if (hasStartedMaternityLeave) {
-      if (weekNumber < 0) {
-        addLeave($this)
-        $this.addClass(MATERNITY)
-      } else {
-        hasFinishedMaternityLeave = true
-      }
-    }
-  })
-}
-
-function applyPartnersLeave() {
-  let hasStartedPaternityLeave = false
-  let hasFinishedPaternityLeave = false
-  let paternityLeaveUsed = 0
-  $(`.${PARTNER}`).removeClass(SHARED).removeClass(PATERNITY).each(function () {
-    const $this = $(this)
-    if (hasLeave($this)) {
-      const weekNumber = getWeekNumber($this)
-      const inFirstEightWeeks = 0 <= weekNumber && weekNumber < 8
-      const hasEntitlementRemaining = paternityLeaveUsed < PATERNITY_WEEKS_ENTITLEMENT
-      const canUsePaternityLeave = inFirstEightWeeks && !hasFinishedPaternityLeave && hasEntitlementRemaining
-      if (canUsePaternityLeave) {
-        hasStartedPaternityLeave = true
-        paternityLeaveUsed++
-        $this.addClass(PATERNITY)
-      } else {
-        $this.addClass(SHARED)
-      }
-    } else if (hasStartedPaternityLeave) {
-      hasFinishedPaternityLeave = true
-    }
-  })
 }

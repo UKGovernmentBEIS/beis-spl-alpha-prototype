@@ -1,5 +1,7 @@
 $colour-header: govuk-colour('grey-3');
+$colour-leave: lighten(govuk-colour('orange'), 25%);
 $colour-maternity: lighten(govuk-colour('blue'), 50%);
+$colour-compulsory-maternity: darken($colour-maternity, 25%);
 $colour-paternity: lighten(govuk-colour('red'), 50%);
 $colour-shared: lighten(govuk-colour('light-green'), 25%);
 $colour-birth-week: govuk-colour('yellow');
@@ -28,64 +30,132 @@ table#leave-calendar {
   }
 
   .birth-week {
-    font-weight: bold;
-    font-size: 0.875em;
     &, & + tr > td:first-child {
       background-color: $colour-birth-week;
     }
   }
 
-  .shared {
-    background-color: $colour-shared;
-    &::before {
-      content: 'Shared parental leave'
-    }
-  }
-
-  .mother.maternity {
-    background-color: $colour-maternity;
-    &::before {
-      content: 'Maternity leave'
-    }
-    &.compulsory {
-      background-color: darken($colour-maternity, 25%);
-      &::before {
-        content: 'Compulsory maternity leave'
+  .week {
+    td {
+      position: relative;
+      &.disabled label {
+        cursor: not-allowed !important;
+        background-color: $colour-disabled;
       }
     }
-  }
-
-  .partner.paternity {
-    background-color: $colour-paternity;
-    &::before {
-      content: 'Paternity leave'
-    }
-  }
-
-  .mother, .partner {
-    cursor: cell;
-    &.disabled {
-      cursor: not-allowed;
-      background-color: $colour-disabled;
-    }
-    &:not(.disabled):hover {
-      position: relative;
-      &::after {
-        content: '';
-        display: block;
+    input[type="checkbox"] {
+      display: none;
+      + label {
+        cursor: cell;
         position: absolute;
         top: 0;
         right: 0;
-        left: 0;
         bottom: 0;
-        background-color: rgba(0, 0, 0, 0.1);
+        left: 0;
       }
     }
   }
 
   &.dragging {
-    .mother, .partner {
+    tr {
       cursor: n-resize;
+    }
+  }
+
+  .maternity-leave, .paternity-leave, .shared-parental-leave {
+    display: none;
+    padding: 10px 20px 10px 0;
+  }
+
+  @mixin leave($colour) {
+    input:checked + label {
+      background-color: $colour;
+    }
+  }
+
+  @mixin maternityLeave() {
+    @include leave($colour-maternity);
+    .maternity-leave {
+      display: block;
+    }
+    .shared-parental-leave {
+      display: none;
+    }
+  }
+
+  @mixin compulsoryMaternityLeave() {
+    @include leave($colour-compulsory-maternity);
+    .maternity-leave {
+      display: block;
+    }
+    .shared-parental-leave {
+      display: none;
+    }
+  }
+
+  @mixin paternityLeave() {
+    @include leave($colour-paternity);
+    .paternity-leave {
+      display: block;
+    }
+    .shared-parental-leave {
+      display: none;
+    }
+  }
+
+  @mixin sharedParentalLeave() {
+    @include leave($colour-shared);
+    .maternity-leave, .paternity-leave {
+      display: none;
+    }
+    .shared-parental-leave {
+      display: block;
+    }
+  }
+
+  .week {
+    /* Fallback. */
+    @include leave($colour-leave);
+  }
+
+  .week.before-birth-week {
+    &.mother-leave .mother {
+      @include maternityLeave();
+    }
+  }
+
+  .birth-week ~ .week {
+    &.mother-leave {
+      .mother {
+        @include maternityLeave();
+        &.compulsory {
+          @include compulsoryMaternityLeave();
+        }
+      }
+      /* Shared parental leave after maternity leave has ended. */
+      + .week:not(.mother-leave) ~ .week.mother-leave .mother {
+        @include sharedParentalLeave();
+      }
+    }
+
+    &.partner-leave {
+      &.paternity-eligible-week {
+        .partner {
+          @include paternityLeave();
+        }
+        /* Shared parental leave after gap in partner's leave. */
+        + .week:not(.partner-leave) ~ .week.partner-leave .partner {
+          @include sharedParentalLeave();
+        }
+        /* Shared parental leave after two weeks of paternity leave. */
+        + .partner-leave ~ .partner-leave .partner {
+          @include sharedParentalLeave();
+        }
+      }
+      /* Shared parental leave outside paternity leave eligibility window. */
+      .partner {
+        @include sharedParentalLeave();
+      }
     }
   }
 }
