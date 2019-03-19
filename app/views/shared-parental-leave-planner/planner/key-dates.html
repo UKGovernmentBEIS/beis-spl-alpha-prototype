@@ -53,6 +53,11 @@
       <h2 class="govuk-heading-l">
         Partner's leave dates
       </h2>
+      {% if (not data["paternity-leave"]) and (data["partners-spl-blocks"].length === 0) %}
+        <p>
+          The mother's partner is not planning to take any paternity leave or shared parental leave.
+        </p>
+      {% endif %}
       {% if data["paternity-leave"] %}
         {{ leaveBlockSummary("Paternity leave", data["paternity-leave"]) }}
       {% endif %}

@@ -101,8 +101,8 @@
       <h2 class="govuk-heading-l">
         Letters of notice for shared parental leave
       </h2>
-      {% set motherTakingSpl = (data["mother-shared"] | int) > 0 %}
-      {% set partnerTakingSpl = (data["partner-shared"] | int) > 0 %}
+      {% set motherTakingSpl = data["mothers-spl-blocks"].length > 0 %}
+      {% set partnerTakingSpl = data["partners-spl-blocks"].length > 0 %}
       {% if motherTakingSpl or partnerTakingSpl %}
         <p>
           {% if motherTakingSpl and partnerTakingSpl %}
