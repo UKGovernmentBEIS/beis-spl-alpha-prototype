@@ -1,4 +1,6 @@
+{% from "back-link/macro.njk" import govukBackLink %}
 {% from "input/macro.njk" import govukInput %}
+
 {% import "data-macros.njk" as dataMacros %}
 
 {% extends "layout.html" %}
@@ -11,6 +13,10 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      {{ govukBackLink({
+        text: "Back",
+        href: "mothers-national-insurance-number"
+      }) }}
       <h1 class="govuk-heading-xl">
         Notice to employers
       </h1>

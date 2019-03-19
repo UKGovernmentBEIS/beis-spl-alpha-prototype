@@ -1,3 +1,4 @@
+{% from "back-link/macro.njk" import govukBackLink %}
 {% from "input/macro.njk" import govukInput %}
 {% from "fieldset/macro.njk" import govukFieldset %}
 
@@ -11,6 +12,10 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      {{ govukBackLink({
+        text: "Back",
+        href: "partners-name"
+      }) }}
       <h1 class="govuk-heading-xl">
         Notice to employers
       </h1>

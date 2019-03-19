@@ -1,5 +1,7 @@
+{% from "back-link/macro.njk" import govukBackLink %}
 {% from "radios/macro.njk" import govukRadios %}
 {% from "summary-list/macro.njk" import govukSummaryList %}
+
 {% import "data-macros.njk" as dataMacros %}
 
 {% extends "layout.html" %}
@@ -16,6 +18,10 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      {{ govukBackLink({
+        text: "Back",
+        href: "due-date"
+      }) }}
       <h1 class="govuk-heading-xl">
         Plan leave and pay when you have a child
       </h1>
