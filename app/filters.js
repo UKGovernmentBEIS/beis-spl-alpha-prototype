@@ -59,6 +59,10 @@ module.exports = function (env) {
     return ('0' + number).slice(-2)
   }
 
+  filters.totalWeeks = function (end, start) {
+    return Math.abs(moment(end).diff(start, 'weeks')) + 1
+  }
+
   filters.lineIfNotEmpty = function (line, endOfLine) {
     return line && line.trim() !== '' ? line + endOfLine : ''
   }

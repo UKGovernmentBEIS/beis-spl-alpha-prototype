@@ -1,6 +1,7 @@
 {% from "summary-list/macro.njk" import govukSummaryList %}
 
 {% macro leaveBlockSummary(name, block) %}
+  {% set weeks = (block.end | totalWeeks(block.start)) | int %}
   {{ govukSummaryList({
     rows: [
       {
@@ -24,7 +25,7 @@
           text: "Length"
         },
         value: {
-          text: block.length
+          text: weeks + " week" + ("s" if weeks !== 1)
         }
       }
     ]

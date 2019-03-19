@@ -24,7 +24,7 @@
               text: "Baby is due"
             },
             value: {
-              text: dueDate | formatDate("DD MMMM YYYY")
+              text: data["due-date"] | formatDate("DD MMMM YYYY")
             }
           },
           {
@@ -32,7 +32,7 @@
               text: "Notify employers of maternity leave"
             },
             value: {
-              text: "by " + (dueDate | offsetWeeks(-15) | formatDate("DD MMMM YYYY"))
+              text: "by " + (data["due-date"] | offsetWeeks(-15) | formatDate("DD MMMM YYYY"))
             }
           }
         ]
@@ -40,18 +40,18 @@
       <h2 class="govuk-heading-l">
         Mother's leave dates
       </h2>
-      {{ leaveBlockSummary("Maternity leave", maternityLeave) }}
-      {% for block in mothersSplBlocks %}
-        {{ leaveBlockSummary("Shared parental leave block " + block.number, block) }}
+      {{ leaveBlockSummary("Maternity leave", data["maternity-leave"]) }}
+      {% for block in data["mothers-spl-blocks"] %}
+        {{ leaveBlockSummary("Shared parental leave block " + loop.index, block) }}
       {% endfor %}
       <h2 class="govuk-heading-l">
         Partner's leave dates
       </h2>
-      {% if paternityLeave %}
-        {{ leaveBlockSummary("Paternity leave", paternityLeave) }}
+      {% if data["paternity-leave"] %}
+        {{ leaveBlockSummary("Paternity leave", data["paternity-leave"]) }}
       {% endif %}
-      {% for block in partnersSplBlocks %}
-        {{ leaveBlockSummary("Shared parental leave block " + block.number, block) }}
+      {% for block in data["partners-spl-blocks"] %}
+        {{ leaveBlockSummary("Shared parental leave block " + loop.index, block) }}
       {% endfor %}
       <form action="mothers-name" method="POST">
         <button type="submit" class="govuk-button">
