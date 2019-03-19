@@ -44,7 +44,7 @@ table#leave-calendar {
       }
     }
     input[type="checkbox"] {
-      display: none;
+      visibility: hidden;
       + label {
         cursor: cell;
         position: absolute;
