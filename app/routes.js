@@ -3,6 +3,8 @@ const router = express.Router()
 
 const moment = require('moment')
 
+const encoder = require('./assets/javascripts/utils')
+
 // Add your routes here - above the module.exports line
 
 router.get('/shared-parental-leave-planner', function (req, res) {
@@ -12,11 +14,9 @@ router.get('/shared-parental-leave-planner', function (req, res) {
   res.render('shared-parental-leave-planner/index', { dueDateDay, dueDateMonth, dueDateYear })
 })
 
-const base64Chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'
-
 router.get('/shared-parental-leave-planner/planner', function (req, res) {
   const savedData = req.query['s'] || ''
-  const savedDataPattern = /^(\d\d\d\d-\d\d-\d\d)-([0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\-_]+)$/
+  const savedDataPattern = /^(\d\d\d\d-\d\d-\d\d)-(.+)$/
   const savedDataMatch = savedData.match(savedDataPattern)
 
   if (!savedData || !savedDataMatch) {
@@ -27,23 +27,10 @@ router.get('/shared-parental-leave-planner/planner', function (req, res) {
   const dueDate = savedDataMatch[1]
   req.session.data['due-date'] = dueDate
 
-  const birthWeek = moment(dueDate).startOf('week')
-  const encodedDates = savedDataMatch[2]
-  for (let i = 0; i < encodedDates.length; i++) {
-    const char = encodedDates[i]
-    const code = base64Chars.indexOf(char)
-    let binary = code.toString(2)
-    while (binary.length < 6) {
-      binary = '0' + binary
-    }
-    for (let j = 0; j < 6; j++) {
-      const weekNumber = -11 + (i * 3) + Math.floor(j / 2)
-      const week = birthWeek.clone().add(weekNumber, 'weeks').format('YYYY-MM-DD')
-      const parent = j % 2 === 0 ? 'mother' : 'partner'
-      const isLeave = parseInt(binary[j]) === 1
-      req.session.data[`${parent}-${week}`] = isLeave
-    }
-  }
+  const encodedWeeks = savedDataMatch[2]
+  const firstWeek = moment(dueDate).startOf('week').subtract(11, 'weeks')
+  const weeks = encoder.decodeWeeks(encodedWeeks, firstWeek, moment)
+  Object.assign(req.session.data, weeks)
 
   res.redirect('/shared-parental-leave-planner/planner')
 })
