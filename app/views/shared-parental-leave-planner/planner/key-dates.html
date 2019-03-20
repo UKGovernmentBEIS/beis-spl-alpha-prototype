@@ -48,7 +48,12 @@
       </h2>
       {{ leaveBlockSummary("Maternity leave", data["maternity-leave"]) }}
       {% for block in data["mothers-spl-blocks"] %}
-        {{ leaveBlockSummary("Shared parental leave block " + loop.index, block) }}
+        {% if loop.index === 1 %}
+          <h3 class="govuk-heading-m">
+            Shared parental leave
+          </h3>
+        {% endif %}
+        {{ leaveBlockSummary("Block " + loop.index, block) }}
       {% endfor %}
       <h2 class="govuk-heading-l">
         Partner's leave dates
@@ -62,7 +67,12 @@
         {{ leaveBlockSummary("Paternity leave", data["paternity-leave"]) }}
       {% endif %}
       {% for block in data["partners-spl-blocks"] %}
-        {{ leaveBlockSummary("Shared parental leave block " + loop.index, block) }}
+        {% if loop.index === 1 %}
+          <h3 class="govuk-heading-m">
+            Shared parental leave
+          </h3>
+        {% endif %}
+        {{ leaveBlockSummary("Block " + loop.index, block) }}
       {% endfor %}
       <form action="mothers-name" method="POST">
         <button type="submit" class="govuk-button">
