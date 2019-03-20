@@ -35,6 +35,10 @@ table#leave-calendar {
     }
   }
 
+  .month {
+    background-color: $colour-header;
+  }
+
   .week {
     td {
       position: relative;
@@ -128,7 +132,7 @@ table#leave-calendar {
         }
       }
       /* Shared parental leave after maternity leave has ended. */
-      + .week:not(.mother-leave) ~ .week.mother-leave .mother {
+      ~ .week:not(.mother-leave) ~ .week.mother-leave .mother {
         @include sharedParentalLeave();
       }
     }
