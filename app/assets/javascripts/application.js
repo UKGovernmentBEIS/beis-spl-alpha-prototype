@@ -5,11 +5,6 @@ if (window.console && window.console.info) {
   window.console.info('GOV.UK Prototype Kit - do not use for production')
 }
 
-const COMPULSORY = 'compulsory'
-const MATERNITY = 'maternity'
-const PATERNITY = 'paternity'
-const SHARED = 'shared'
-
 const MOTHER = 'mother'
 const PARTNER = 'partner'
 
@@ -41,8 +36,8 @@ $(document).ready(function () {
   // Run once to intialize.
   onLeaveUpdated()
 
-  $(`input.mother-leave-input + label, input.partner-leave-input + label`).on('click', function (e) {
-    e.preventDefault()
+  $('input[class$="-leave-input"] + label').on('click', function (event) {
+    event.preventDefault()
   }).on('mousedown', function (event) {
     if (event.which !== 1) {
       // Only respond to primary mouse button.
@@ -53,12 +48,14 @@ $(document).ready(function () {
     if ($originalCell.hasClass(DISABLED)) {
       return
     }
+
+    event.preventDefault()
+
     if ($originalCell.hasClass(MOTHER) && getWeekNumber($originalCell) < 0) {
       handleMaternityBeforeBirthWeek($originalCell)
       return
     }
 
-    event.preventDefault()
     $calendar.addClass(DRAGGING)
 
     const column = $originalCell.hasClass(MOTHER) ? MOTHER : PARTNER
@@ -140,8 +137,8 @@ function getWeekNumber($cell) {
 
 function onLeaveUpdated() {
   const maternityWeeks = $('.maternity-leave:visible').length
-  const mothersSplWeeks = $('.mother .shared-parental-leave:visible').length
-  const partnersSplWeeks = $('.partner .shared-parental-leave:visible').length
+  const mothersSplWeeks = $(`.${MOTHER} .shared-parental-leave:visible`).length
+  const partnersSplWeeks = $(`.${PARTNER} .shared-parental-leave:visible`).length
   const paternityWeeks = $('.paternity-leave:visible').length
 
   const maternitySplRemainingWeeks = MATERNITY_WEEKS_ENTITLEMENT - maternityWeeks - mothersSplWeeks - partnersSplWeeks
@@ -156,7 +153,6 @@ function onLeaveUpdated() {
 
   $('#paternity-weeks').text(toWeeksString(paternityWeeks))
   $('#paternity-remaining-weeks').text(toWeeksString(paternityRemainingWeeks))
-
 
   // Warnings.
   $('#maternity-maximum').toggle(maternitySplRemainingWeeks < 0)
