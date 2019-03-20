@@ -155,10 +155,16 @@ table#leave-calendar {
   }
 }
 
-.remaining-total {
-  color: $govuk-secondary-text-colour;
-  &.negative {
-    color: $govuk-error-colour;
+.planner-sidebar {
+  dt {
+    width: 50%;
+  }
+
+  .maternity-spl-remaining-total {
+    color: $govuk-secondary-text-colour;
+    &.negative {
+      color: $govuk-error-colour;
+    }
   }
 }
 

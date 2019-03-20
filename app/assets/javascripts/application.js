@@ -134,28 +134,35 @@ function hasLeave($cell) {
   return $cell.find('input').prop('checked')
 }
 
-function onLeaveUpdated() {
-  const shared = $('.shared-parental-leave:visible')
-  const maternity = $('.maternity-leave:visible')
-  const paternity = $('.paternity-leave:visible')
-
-  const sharedWeeks = shared.length
-  const maternityWeeks = maternity.length
-  const remainingWeeks = MATERNITY_WEEKS_ENTITLEMENT - maternityWeeks - sharedWeeks
-  const paternityWeeks = paternity.length
-
-  // Remaining weeks.
-  $('#shared-weeks').text(sharedWeeks)
-  $('#maternity-weeks').text(maternityWeeks)
-  $('#remaining-weeks').text(remainingWeeks)
-  $('#paternity-weeks').text(paternityWeeks)
-  $('.remaining-total').toggleClass(NEGATIVE, remainingWeeks < 0)
-
-  // Warnings.
-  $('#maternity-maximum').toggle(remainingWeeks < 0)
-  $('#no-more-shared').toggle(remainingWeeks <= 0)
-}
-
 function getWeekNumber($cell) {
   return parseInt($cell.data('week'))
+}
+
+function onLeaveUpdated() {
+  const maternityWeeks = $('.maternity-leave:visible').length
+  const mothersSplWeeks = $('.mother .shared-parental-leave:visible').length
+  const partnersSplWeeks = $('.partner .shared-parental-leave:visible').length
+  const paternityWeeks = $('.paternity-leave:visible').length
+
+  const maternitySplRemainingWeeks = MATERNITY_WEEKS_ENTITLEMENT - maternityWeeks - mothersSplWeeks - partnersSplWeeks
+  const paternityRemainingWeeks = PATERNITY_WEEKS_ENTITLEMENT - paternityWeeks
+
+  // Remaining weeks.
+  $('#maternity-weeks').text(toWeeksString(maternityWeeks))
+  $('#mothers-spl-weeks').text(toWeeksString(mothersSplWeeks))
+  $('#partners-spl-weeks').text(toWeeksString(partnersSplWeeks))
+  $('#maternity-spl-remaining-weeks').text(toWeeksString(maternitySplRemainingWeeks))
+  $('.maternity-spl-remaining-total').toggleClass(NEGATIVE, maternitySplRemainingWeeks < 0)
+
+  $('#paternity-weeks').text(toWeeksString(paternityWeeks))
+  $('#paternity-remaining-weeks').text(toWeeksString(paternityRemainingWeeks))
+
+
+  // Warnings.
+  $('#maternity-maximum').toggle(maternitySplRemainingWeeks < 0)
+  $('#no-more-shared').toggle(maternitySplRemainingWeeks <= 0)
+}
+
+function toWeeksString(numberOfWeeks) {
+  return `${numberOfWeeks} week${numberOfWeeks === 1 ? '' : 's'}`
 }

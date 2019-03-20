@@ -106,31 +106,40 @@
         </h2>
         <p>Any unused maternity leave can be taken as shared parental leave.</p>
         {{ govukSummaryList({
+          classes: "planner-sidebar",
           rows: [
             {
               key: {
                 text: "Maternity"
               },
               value: {
-                html: '<span id="maternity-weeks"></span> weeks'
+                html: '<span id="maternity-weeks"></span>'
               }
             },
             {
               key: {
-                text: "Shared"
+                text: "Mother's SPL"
               },
               value: {
-                html: '<span id="shared-weeks"></span> weeks'
+                html: '<span id="mothers-spl-weeks"></span>'
               }
             },
             {
               key: {
-                classes: "remaining-total",
+                text: "Partners's SPL"
+              },
+              value: {
+                html: '<span id="partners-spl-weeks"></span>'
+              }
+            },
+            {
+              key: {
+                classes: "maternity-spl-remaining-total",
                 text: "Remaining"
               },
               value: {
-                classes: "remaining-total",
-                html: '<span id="remaining-weeks"></span> weeks'
+                classes: "maternity-spl-remaining-total",
+                html: '<span id="maternity-spl-remaining-weeks"></span>'
               }
             }
           ]
@@ -148,13 +157,22 @@
         </div>
         <p>Paternity leave is a separate entitlement.</p>
         {{ govukSummaryList({
+          classes: "planner-sidebar",
           rows: [
             {
               key: {
                 text: "Paternity"
               },
               value: {
-                html: '<span id="paternity-weeks"></span> weeks'
+                html: '<span id="paternity-weeks"></span>'
+              }
+            },
+            {
+              key: {
+                text: "Remaining"
+              },
+              value: {
+                html: '<span id="paternity-remaining-weeks"></span>'
               }
             }
           ]
