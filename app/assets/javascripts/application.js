@@ -162,3 +162,26 @@ function onLeaveUpdated() {
 function toWeeksString(numberOfWeeks) {
   return `${numberOfWeeks} week${numberOfWeeks === 1 ? '' : 's'}`
 }
+
+const base64Chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'
+
+function getSaveLink() {
+  const dueDate = $('input[name="due-date"]').val()
+  let encodedDates = ''
+  let currentCharCode = ''
+  console.log($('.week').length)
+  $('.week').each(function () {
+    if (currentCharCode.length === 6) {
+      encodedDates += base64Chars[parseInt(currentCharCode, 2)]
+      currentCharCode = ''
+    }
+    const $this = $(this)
+    currentCharCode += hasLeave($this.find(`.${MOTHER}`)) ? '1' : '0'
+    currentCharCode += hasLeave($this.find(`.${PARTNER}`)) ? '1' : '0'
+  })
+  while (currentCharCode.length < 6) {
+    currentCharCode += '0'
+  }
+  encodedDates += base64Chars[parseInt(currentCharCode, 2)]
+  return `${location.protocol}//${location.host}${location.pathname}?s=${dueDate}-${encodedDates}`
+}

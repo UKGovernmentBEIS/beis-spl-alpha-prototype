@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% set dueDate %}
-  {{ dataMacros.dueDate(data) }}
+  {{ data["due-date"] or dataMacros.dueDate(data) }}
 {% endset %}
 
 {% block content %}
@@ -46,7 +46,7 @@
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-            {% for i in range(-11, 51) %}
+            {% for i in range(-11, 52) %}
               {% if (i === 0) %}
                 <tr class="birth-week govuk-!-font-weight-bold govuk-!-font-size-16">
                   <td></td>
