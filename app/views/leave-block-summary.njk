@@ -27,7 +27,16 @@
         value: {
           text: weeks + " week" + ("s" if weeks !== 1)
         }
+      },
+      {
+        key: {
+          text: "Notify employers"
+        },
+        value: {
+          html: "by " + (options.notify.date | formatDate("DD MMMM YYYY")) + ("*" if options.notify.asterisk) + "<br>" +
+            "(" + options.notify.explanation + ")"
+        }
       }
-    ].concat(options.additionalRows if options.additionalRows else [])
+    ]
   }) }}
 {% endmacro %}

@@ -12,6 +12,9 @@
 {% set motherHasSpl = data["mothers-spl-blocks"] and data["mothers-spl-blocks"].length > 0 %}
 {% set partnerHasSpl = data["partners-spl-blocks"] and data["partners-spl-blocks"].length > 0 %}
 {% set partnerHasPaternityLeave = data["paternity-leave"] %}
+{% set multipleSplPerNoticeHtml %}
+  <p>* You can use one notice for multiple blocks of shared parental leave.</p>
+{% endset %}
 
 {% block content %}
 
@@ -45,17 +48,10 @@
       {{ leaveBlockSummary({
         name: "Maternity leave",
         block: data["maternity-leave"],
-        additionalRows: [
-          {
-            key: {
-              text: "Notify employer"
-            },
-            value: {
-              html: "by " + (data["due-date"] | offsetWeeks(-15) | formatDate("DD MMMM YYYY")) +
-                "<br>(15 weeks before due date)"
-            }
-          }
-        ]
+        notify: {
+          date: data["due-date"] | offsetWeeks(-15),
+          explanation: "15 weeks before due date"
+        }
       }) }}
       <h4 class="govuk-heading-s">
         How to apply
@@ -78,28 +74,21 @@
         {% for block in data["mothers-spl-blocks"] %}
           {{ leaveBlockSummary({
             name: "Block " + loop.index,
-            block: block
+            block: block,
+            notify: {
+              date: block.start | offsetWeeks(-8),
+              explanation: "8 weeks before block starts",
+              asterisk: loop.length > 1
+            }
           }) }}
         {% endfor %}
-        {{ govukSummaryList({
-          rows: [
-            {
-              key: {
-                text: "Notify employer"
-              },
-              value: {
-                html: "by " + (data["mothers-spl-blocks"][0].start | offsetWeeks(-8) | formatDate("DD MMMM YYYY")) +
-                  "<br>(8 weeks before start of first SPL block)"
-              }
-            }
-          ]
-        }) }}
+        {{ (multipleSplPerNoticeHtml | safe) if data["mothers-spl-blocks"].length > 1 }}
         <h4 class="govuk-heading-s">
           How to apply
         </h4>
         <p>
-          The mother must notify her employer that she wants to curtail her maternity leave to create shared parental leave.
-          She can complete the <a href="#">Maternity pay curtailment form</a>.
+          The mother must notify her employer that she wants to reduce her maternity leave to create shared parental leave.
+          She can complete the <a href="#">Maternity leave curtailment form</a>.
         </p>
         <p>
           The mother must notify her employer of her intention to take shared parental leave.
@@ -128,16 +117,10 @@
         {{ leaveBlockSummary({
           name: "Paternity leave",
           block: data["paternity-leave"],
-          additionalRows: [
-            {
-              key: {
-                text: "Notify employer"
-              },
-              value: {
-                html: "by " + (data["due-date"] | offsetWeeks(-15) | formatDate("DD MMMM YYYY")) + "<br>(15 weeks before due date)"
-              }
-            }
-          ]
+          notify: {
+            date: data["due-date"] | offsetWeeks(-15),
+            explanation: "15 weeks before due date"
+          }
         }) }}
         <h4 class="govuk-heading-s">
           How to apply
@@ -159,28 +142,21 @@
         {% for block in data["partners-spl-blocks"] %}
           {{ leaveBlockSummary({
             name: "Block " + loop.index,
-            block: block
+            block: block,
+            notify: {
+              date: block.start | offsetWeeks(-8),
+              explanation: "8 weeks before block starts",
+              asterisk: loop.length > 1
+            }
           }) }}
         {% endfor %}
-        {{ govukSummaryList({
-          rows: [
-            {
-              key: {
-                text: "Notify employer"
-              },
-              value: {
-                html: "by " + (data["partners-spl-blocks"][0].start | offsetWeeks(-8) | formatDate("DD MMMM YYYY")) +
-                  "<br>(8 weeks before start of first SPL block)"
-              }
-            }
-          ]
-        }) }}
+        {{ (multipleSplPerNoticeHtml | safe) if data["partners-spl-blocks"].length > 1 }}
         <h4 class="govuk-heading-s">
           How to apply
         </h4>
         <p>
-          The mother must notify her employer that she wants to curtail her maternity leave to create shared parental leave.
-          She can complete the <a href="#">Maternity pay curtailment form</a>.
+          The mother must notify her employer that she wants to reduce her maternity leave to create shared parental leave.
+          She can complete the <a href="javascript:alert('Notice forms are coming soon!')">Maternity leave curtailment form</a>.
         </p>
         {% if (not motherHasSpl) %}
           <p>
