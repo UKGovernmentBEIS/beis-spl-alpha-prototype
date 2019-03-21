@@ -9,6 +9,10 @@
   Plan leave and pay when you have a child
 {% endblock %}
 
+{% set motherHasSpl = data["mothers-spl-blocks"] and data["mothers-spl-blocks"].length > 0 %}
+{% set partnerHasSpl = data["partners-spl-blocks"] and data["partners-spl-blocks"].length > 0 %}
+{% set partnerHasPaternityLeave = data["paternity-leave"] %}
+
 {% block content %}
 
   <div class="govuk-grid-row">
@@ -20,9 +24,6 @@
       <h1 class="govuk-heading-xl">
         Key dates summary
       </h1>
-      <p>
-        If you are happy with these dates, press next at the bottom of the page to get a personalised letter that you can use to notify your employer of your leave plans.
-      </p>
       {{ govukSummaryList({
         rows: [
           {
@@ -32,48 +33,171 @@
             value: {
               text: data["due-date"] | formatDate("DD MMMM YYYY")
             }
-          },
-          {
-            key: {
-              text: "Notify employers of maternity leave"
-            },
-            value: {
-              text: "by " + (data["due-date"] | offsetWeeks(-15) | formatDate("DD MMMM YYYY"))
-            }
           }
         ]
       }) }}
       <h2 class="govuk-heading-l">
         Mother's leave dates
       </h2>
-      {{ leaveBlockSummary("Maternity leave", data["maternity-leave"]) }}
-      {% for block in data["mothers-spl-blocks"] %}
-        {% if loop.index === 1 %}
-          <h3 class="govuk-heading-m">
-            Shared parental leave
-          </h3>
-        {% endif %}
-        {{ leaveBlockSummary("Block " + loop.index, block) }}
-      {% endfor %}
+      <h3 class="govuk-heading-m">
+        Maternity leave
+      </h3>
+      {{ leaveBlockSummary({
+        name: "Maternity leave",
+        block: data["maternity-leave"],
+        additionalRows: [
+          {
+            key: {
+              text: "Notify employer"
+            },
+            value: {
+              html: "by " + (data["due-date"] | offsetWeeks(-15) | formatDate("DD MMMM YYYY")) +
+                "<br>(15 weeks before due date)"
+            }
+          }
+        ]
+      }) }}
+      <h4 class="govuk-heading-s">
+        How to apply
+      </h4>
+      <p>
+        Tell your employer when the baby is due and when you want to start your maternity leave.
+        Your employer can ask for this in writing.
+        Your employer must write to you within 28 days confirming your start and end dates.
+      </p>
+      <h4 class="govuk-heading-s">
+        Changing your plans
+      </h4>
+      <p>
+        You must give 28 days notice to your employer if you want to change your maternity leave dates.
+      </p>
+      {% if motherHasSpl %}
+        <h3 class="govuk-heading-m">
+          Shared parental leave
+        </h3>
+        {% for block in data["mothers-spl-blocks"] %}
+          {{ leaveBlockSummary({
+            name: "Block " + loop.index,
+            block: block
+          }) }}
+        {% endfor %}
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Notify employer"
+              },
+              value: {
+                html: "by " + (data["mothers-spl-blocks"][0].start | offsetWeeks(-8) | formatDate("DD MMMM YYYY")) +
+                  "<br>(8 weeks before start of first SPL block)"
+              }
+            }
+          ]
+        }) }}
+        <h4 class="govuk-heading-s">
+          How to apply
+        </h4>
+        <p>
+          The mother must notify her employer that she wants to curtail her maternity leave to create shared parental leave.
+          She can complete the <a href="#">Maternity pay curtailment form</a>.
+        </p>
+        <p>
+          The mother must notify her employer of her intention to take shared parental leave.
+          She can complete the <a href="#">Mother’s shared parental leave notice form</a>.
+        </p>
+        <h4 class="govuk-heading-s">
+          Changing your plans
+        </h4>
+        <p>
+          You can change your shared parental leave plan later but you must give your employer at least
+          8 weeks’ notice before you want to begin a block of leave.
+        </p>
+      {% endif %}
       <h2 class="govuk-heading-l">
         Partner's leave dates
       </h2>
-      {% if (not data["paternity-leave"]) and (data["partners-spl-blocks"].length === 0) %}
+      {% if (not partnerHasPaternityLeave) and (not partnerHasSpl) %}
         <p>
           The mother's partner is not planning to take any paternity leave or shared parental leave.
         </p>
       {% endif %}
-      {% if data["paternity-leave"] %}
-        {{ leaveBlockSummary("Paternity leave", data["paternity-leave"]) }}
+      {% if partnerHasPaternityLeave %}
+        <h3 class="govuk-heading-m">
+          Paternity leave
+        </h3>
+        {{ leaveBlockSummary({
+          name: "Paternity leave",
+          block: data["paternity-leave"],
+          additionalRows: [
+            {
+              key: {
+                text: "Notify employer"
+              },
+              value: {
+                html: "by " + (data["due-date"] | offsetWeeks(-15) | formatDate("DD MMMM YYYY")) + "<br>(15 weeks before due date)"
+              }
+            }
+          ]
+        }) }}
+        <h4 class="govuk-heading-s">
+          How to apply
+        </h4>
+        <p>
+          Use <a href="#">form SC3</a> to apply to your employer for Statutory Paternity Pay (SPP) and Leave.
+        </p>
+        <h4 class="govuk-heading-s">
+          Changing your plans
+        </h4>
+        <p>
+          You must give 28 days notice to your employer if you want to change your paternity leave dates.
+        </p>
       {% endif %}
-      {% for block in data["partners-spl-blocks"] %}
-        {% if loop.index === 1 %}
-          <h3 class="govuk-heading-m">
-            Shared parental leave
-          </h3>
-        {% endif %}
-        {{ leaveBlockSummary("Block " + loop.index, block) }}
-      {% endfor %}
+      {% if partnerHasSpl %}
+        <h3 class="govuk-heading-m">
+          Shared parental leave
+        </h3>
+        {% for block in data["partners-spl-blocks"] %}
+          {{ leaveBlockSummary({
+            name: "Block " + loop.index,
+            block: block
+          }) }}
+        {% endfor %}
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Notify employer"
+              },
+              value: {
+                html: "by " + (data["partners-spl-blocks"][0].start | offsetWeeks(-8) | formatDate("DD MMMM YYYY")) +
+                  "<br>(8 weeks before start of first SPL block)"
+              }
+            }
+          ]
+        }) }}
+        <h4 class="govuk-heading-s">
+          How to apply
+        </h4>
+        <p>
+          The mother must notify her employer that she wants to curtail her maternity leave to create shared parental leave.
+          She can complete the <a href="#">Maternity pay curtailment form</a>.
+        </p>
+        <p>
+          The mother must notify her employer that she does not intend to take shared parental leave but her partner does.
+          She can complete the <a href="#">Mother’s consent to partner taking SPL form</a>.
+        </p>
+        <p>
+          The mother's partner must notify their employer of their intention to take shared parental leave.
+          The partner can complete the <a href="#">Partner’s shared parental leave notice form</a>.
+        </p>
+        <h4 class="govuk-heading-s">
+          Changing your plans
+        </h4>
+        <p>
+          You can change your shared parental leave plan later but you must give your employer at least
+          8 weeks’ notice before you want to begin a block of leave.
+        </p>
+      {% endif %}
     </div>
   </div>
 

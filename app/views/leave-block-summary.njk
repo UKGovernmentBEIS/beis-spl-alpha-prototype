@@ -1,23 +1,23 @@
 {% from "summary-list/macro.njk" import govukSummaryList %}
 
-{% macro leaveBlockSummary(name, block) %}
-  {% set weeks = (block.end | totalWeeks(block.start)) | int %}
+{% macro leaveBlockSummary(options) %}
+  {% set weeks = (options.block.end | totalWeeks(options.block.start)) | int %}
   {{ govukSummaryList({
     rows: [
       {
         key: {
-          text: name + " starts"
+          text: options.name + " starts"
         },
         value: {
-          text: block.start | formatDate("DD MMMM YYYY")
+          text: options.block.start | formatDate("DD MMMM YYYY")
         }
       },
       {
         key: {
-          text: name + " ends"
+          text: options.name + " ends"
         },
         value: {
-          text: block.end | offsetWeeks(1) | formatDate("DD MMMM YYYY")
+          text: options.block.end | offsetWeeks(1) | formatDate("DD MMMM YYYY")
         }
       },
       {
@@ -28,6 +28,6 @@
           text: weeks + " week" + ("s" if weeks !== 1)
         }
       }
-    ]
+    ].concat(options.additionalRows if options.additionalRows else [])
   }) }}
 {% endmacro %}
