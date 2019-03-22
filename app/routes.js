@@ -25,39 +25,20 @@ router.get('/shared-parental-leave-planner/planner', function (req, res) {
   res.redirect('/shared-parental-leave-planner/planner')
 })
 
-router.post('/shared-parental-leave-planner/planner/key-dates', function (req, res) {
-  const dueDate = req.session.data['due-date']
-
-  const leaveWeeks = parseLeaveWeeks(req.session.data)
-  const motherLeaveBlocks = Array.from(getLeaveBlocks(leaveWeeks.mother))
-  const partnerLeaveBlocks = Array.from(getLeaveBlocks(leaveWeeks.partner))
-
-  const maternityLeave = motherLeaveBlocks.shift()
-  req.session.data['maternity-leave'] = maternityLeave
-  req.session.data['mothers-spl-blocks'] = motherLeaveBlocks
-
-  const firstPartnerBlock = partnerLeaveBlocks[0]
-  const hasPaternityLeave = firstPartnerBlock && isEligiblePaternityWeek(firstPartnerBlock.start, dueDate)
-  let paternityLeave = null
-  if (hasPaternityLeave) {
-    const paternityLeaveStart = firstPartnerBlock.start
-    const secondWeek = moment(paternityLeaveStart).add(1, 'week')
-    const secondWeekIsPaternity = isEligiblePaternityWeek(secondWeek, dueDate) && secondWeek.isSameOrBefore(firstPartnerBlock.end)
-    const paternityLeaveEnd = secondWeekIsPaternity ? secondWeek.format('YYYY-MM-DD') : paternityLeaveStart
-    paternityLeave = { start: paternityLeaveStart, end: paternityLeaveEnd}
-    const weekAfterPaternity = moment(paternityLeaveEnd).add(1, 'week')
-    if (weekAfterPaternity.isSameOrBefore(firstPartnerBlock.end)) {
-      // Shift first block date to repurpose as first SPL block.
-      firstPartnerBlock.start = weekAfterPaternity.format('YYYY-MM-DD')
-    } else {
-      // First block was only paternity leave, so remove it.
-      partnerLeaveBlocks.shift()
-    }
+router.get('/shared-parental-leave-planner/planner/key-dates', function (req, res) {
+  const { query, session } = req
+  const savedData = parseSavedDataFromQuery(query)
+  if (!savedData) {
+    res.render('shared-parental-leave-planner/planner/key-dates')
+    return
   }
+  addSavedDataToSession(session, savedData)
+  addLeaveWeeksToSession(session)
+  res.redirect('/shared-parental-leave-planner/planner/key-dates')
+})
 
-  req.session.data['paternity-leave'] = paternityLeave
-  req.session.data['partners-spl-blocks'] = partnerLeaveBlocks
-
+router.post('/shared-parental-leave-planner/planner/key-dates', function (req, res) {
+  addLeaveWeeksToSession(req.session)
   res.redirect('/shared-parental-leave-planner/planner/key-dates')
 })
 
@@ -74,19 +55,52 @@ function addSavedDataToSession(session, savedData) {
   const { dueDate, encodedWeeks } = savedData
   const firstWeek = moment(dueDate).startOf('week').subtract(11, 'weeks')
   const weeks = encoder.decodeWeeks(encodedWeeks, firstWeek, moment)
-  Object.assign(session.data, { dueDate, ...weeks })
+  Object.assign(session.data, { 'due-date': dueDate, ...weeks })
+}
+
+function addLeaveWeeksToSession(session) {
+  const dueDate = session.data['due-date']
+  const leaveWeeks = parseLeaveWeeks(session.data)
+  const mothersLeaveBlocks = Array.from(getLeaveBlocks(leaveWeeks.mother))
+  const partnersLeaveBlocks = Array.from(getLeaveBlocks(leaveWeeks.partner))
+
+  const maternityLeave = mothersLeaveBlocks.shift()
+  session.data['maternity-leave'] = maternityLeave
+  session.data['mothers-spl-blocks'] = mothersLeaveBlocks
+
+  const firstPartnerBlock = partnersLeaveBlocks[0]
+  const hasPaternityLeave = firstPartnerBlock && isEligiblePaternityWeek(firstPartnerBlock.start, dueDate)
+  let paternityLeave = null
+  if (hasPaternityLeave) {
+    const paternityLeaveStart = firstPartnerBlock.start
+    const secondWeek = moment(paternityLeaveStart).add(1, 'week')
+    const secondWeekIsPaternity = isEligiblePaternityWeek(secondWeek, dueDate) && secondWeek.isSameOrBefore(firstPartnerBlock.end)
+    const paternityLeaveEnd = secondWeekIsPaternity ? secondWeek.format('YYYY-MM-DD') : paternityLeaveStart
+    paternityLeave = { start: paternityLeaveStart, end: paternityLeaveEnd}
+    const weekAfterPaternity = moment(paternityLeaveEnd).add(1, 'week')
+    if (weekAfterPaternity.isSameOrBefore(firstPartnerBlock.end)) {
+      // Shift first block date to repurpose as first SPL block.
+      firstPartnerBlock.start = weekAfterPaternity.format('YYYY-MM-DD')
+    } else {
+      // First block was only paternity leave, so remove it.
+      partnersLeaveBlocks.shift()
+    }
+  }
+  session.data['paternity-leave'] = paternityLeave
+  session.data['partners-spl-blocks'] = partnersLeaveBlocks
 }
 
 function parseLeaveWeeks(data) {
   const leaveWeeks = { mother: [], partner: [] }
   for (const [key, value] of Object.entries(data)) {
     const keyMatch = key.match(/^(mother|partner)-(\d\d\d\d-\d\d-\d\d)$/)
-    if (!keyMatch || value != 'on') {
+    if (!keyMatch) {
       continue
     }
-    const parent = keyMatch[1]
-    const date = keyMatch[2]
-    leaveWeeks[parent].push(date)
+    if (value === true || value == 'on') {
+      const [_, parent, date] = keyMatch
+      leaveWeeks[parent].push(date)
+    }
   }
   return leaveWeeks
 }
