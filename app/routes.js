@@ -15,23 +15,13 @@ router.get('/shared-parental-leave-planner', function (req, res) {
 })
 
 router.get('/shared-parental-leave-planner/planner', function (req, res) {
-  const savedData = req.query['s'] || ''
-  const savedDataPattern = /^(\d\d\d\d-\d\d-\d\d)-(.+)$/
-  const savedDataMatch = savedData.match(savedDataPattern)
-
-  if (!savedData || !savedDataMatch) {
+  const { query, session } = req
+  const savedData = parseSavedDataFromQuery(query)
+  if (!savedData) {
     res.render('shared-parental-leave-planner/planner/index')
     return
   }
-
-  const dueDate = savedDataMatch[1]
-  req.session.data['due-date'] = dueDate
-
-  const encodedWeeks = savedDataMatch[2]
-  const firstWeek = moment(dueDate).startOf('week').subtract(11, 'weeks')
-  const weeks = encoder.decodeWeeks(encodedWeeks, firstWeek, moment)
-  Object.assign(req.session.data, weeks)
-
+  addSavedDataToSession(session, savedData)
   res.redirect('/shared-parental-leave-planner/planner')
 })
 
@@ -70,6 +60,22 @@ router.post('/shared-parental-leave-planner/planner/key-dates', function (req, r
 
   res.redirect('/shared-parental-leave-planner/planner/key-dates')
 })
+
+function parseSavedDataFromQuery(query) {
+  const savedData = query['s']
+  if (!savedData) {
+    return null
+  }
+  const [_, dueDate, encodedWeeks] = savedData.match(/^(\d\d\d\d-\d\d-\d\d)-(.+)$/)
+  return { dueDate, encodedWeeks }
+}
+
+function addSavedDataToSession(session, savedData) {
+  const { dueDate, encodedWeeks } = savedData
+  const firstWeek = moment(dueDate).startOf('week').subtract(11, 'weeks')
+  const weeks = encoder.decodeWeeks(encodedWeeks, firstWeek, moment)
+  Object.assign(session.data, { dueDate, ...weeks })
+}
 
 function parseLeaveWeeks(data) {
   const leaveWeeks = { mother: [], partner: [] }

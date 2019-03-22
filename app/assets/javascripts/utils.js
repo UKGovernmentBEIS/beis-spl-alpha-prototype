@@ -32,8 +32,8 @@
         binary = '0' + binary
       }
       for (let j = 0; j < 6; j++) {
-        const weekNumber = (i * 3) + Math.floor(j / 2)
-        const week = moment(firstWeek).add(weekNumber, 'weeks').format('YYYY-MM-DD')
+        const weekOffset = (i * 3) + Math.floor(j / 2)
+        const week = moment(firstWeek).add(weekOffset, 'weeks').format('YYYY-MM-DD')
         const parent = j % 2 === 0 ? 'mother' : 'partner'
         const isLeave = parseInt(binary[j]) === 1
         weeks[`${parent}-${week}`] = isLeave
