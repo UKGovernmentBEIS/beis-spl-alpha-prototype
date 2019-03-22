@@ -26,10 +26,10 @@ $(document).ready(function () {
   }
 
   [MOTHER, PARTNER].forEach(function (parent) {
-    $(`.${parent}-leave-input`).on('change', function () {
+    $('.' + parent + '-leave-input').on('change', function () {
       const $this = $(this)
       const $row = $(this).closest('tr')
-      $row.toggleClass(`${parent}-leave`, $this.prop('checked'))
+      $row.toggleClass(parent + '-leave', $this.prop('checked'))
     }).change() // Initialize.
   })
 
@@ -61,7 +61,7 @@ $(document).ready(function () {
     const column = $originalCell.hasClass(MOTHER) ? MOTHER : PARTNER
     const addOrRemoveLeave = hasLeave($originalCell) ? removeLeave : addLeave
     const onRowMouseOver = function () {
-      const $cellInRow = $(this).find(`.${column}`)
+      const $cellInRow = $(this).find('.' + column)
       if ($cellInRow.hasClass(DISABLED)) {
         return
       }
@@ -92,7 +92,7 @@ function scrollToBirthWeek() {
 
 function handleMaternityBeforeBirthWeek($cell) {
   const weekNumber = getWeekNumber($cell)
-  const $beforeBirthWeek = $(`.${BEFORE_BIRTH_WEEK} .${MOTHER}`)
+  const $beforeBirthWeek = $('.' + BEFORE_BIRTH_WEEK + ' .' + MOTHER)
   if (hasLeave($cell)) {
     // Remove leave from this week and all previous weeks.
     $beforeBirthWeek.each(function () {
@@ -137,8 +137,8 @@ function getWeekNumber($cell) {
 
 function onLeaveUpdated() {
   const maternityWeeks = $('.maternity-leave:visible').length
-  const mothersSplWeeks = $(`.${MOTHER} .shared-parental-leave:visible`).length
-  const partnersSplWeeks = $(`.${PARTNER} .shared-parental-leave:visible`).length
+  const mothersSplWeeks = $('.' + MOTHER + ' .shared-parental-leave:visible').length
+  const partnersSplWeeks = $('.' + PARTNER + ' .shared-parental-leave:visible').length
   const paternityWeeks = $('.paternity-leave:visible').length
 
   const maternitySplRemainingWeeks = MATERNITY_WEEKS_ENTITLEMENT - maternityWeeks - mothersSplWeeks - partnersSplWeeks
@@ -160,17 +160,18 @@ function onLeaveUpdated() {
 }
 
 function toWeeksString(numberOfWeeks) {
-  return `${numberOfWeeks} week${numberOfWeeks === 1 ? '' : 's'}`
+  return numberOfWeeks + ' week' + (numberOfWeeks === 1 ? '' : 's')
 }
 
 function getSaveLink() {
   const dueDate = $('input[name="due-date"]').val()
   const weeks = $('.week').map(function () {
     const $this = $(this)
-    const mother = hasLeave($this.find(`.${MOTHER}`))
-    const partner = hasLeave($this.find(`.${PARTNER}`))
-    return { mother, partner }
+    return {
+      mother: hasLeave($this.find('.' + MOTHER)),
+      partner: hasLeave($this.find('.' + PARTNER))
+    }
   })
   const encodedWeeks = utils.encodeWeeks(weeks.toArray())
-  return `${location.protocol}//${location.host}${location.pathname}?s=${dueDate}-${encodedWeeks}`
+  return location.protocol + '//' + location.host + location.pathname + '?s=' + dueDate + '-' + encodedWeeks
 }
