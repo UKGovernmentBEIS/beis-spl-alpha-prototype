@@ -10,9 +10,12 @@ $colour-disabled: govuk-colour('grey-2');
 #leave-calendar-container {
   max-height: 80vh;
   overflow-y: scroll;
+  border: solid 2px govuk-colour('grey-2')
 }
 
 table#leave-calendar {
+  margin: 0;
+
   th {
     position: sticky;
     top: 0;
