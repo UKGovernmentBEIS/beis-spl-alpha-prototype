@@ -78,7 +78,10 @@
                     class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory disabled{% endif %}">
                     <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
                       {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
-                    <label for="{{ motherId }}">
+                    <label {% if not firstTwoBirthWeeks %}for="{{ motherId }}"{% endif %}>
+                      <span class="unassigned-leave">
+                        Leave
+                      </span>
                       <span class="maternity-leave">
                         {% if firstTwoBirthWeeks %}
                           Compulsory maternity leave
@@ -94,16 +97,21 @@
                   {% set partnerId = "partner-" + date %}
                   <td data-week="{{i}}"
                     class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}">
-                    <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
-                      {% if data[partnerId] %}checked{% endif %}>
-                    <label for="{{ partnerId }}">
-                      <span class="paternity-leave">
-                        Paternity leave
-                      </span>
-                      <span class="shared-parental-leave">
-                        Shared parental leave
-                      </span>
-                    </label>
+                    {% if (not beforeBirthWeek) %}
+                      <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
+                        {% if data[partnerId] %}checked{% endif %}>
+                      <label for="{{ partnerId }}">
+                        <span class="unassigned-leave">
+                          Leave
+                        </span>
+                        <span class="paternity-leave">
+                          Paternity leave
+                        </span>
+                        <span class="shared-parental-leave">
+                          Shared parental leave
+                        </span>
+                      </label>
+                    {% endif %}
                   </td>
                 </tr>
               {% endfor %}

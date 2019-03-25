@@ -69,55 +69,39 @@ table#leave-calendar {
     }
   }
 
-  .maternity-leave, .paternity-leave, .shared-parental-leave {
-    display: none;
+  .unassigned-leave, .maternity-leave, .paternity-leave, .shared-parental-leave {
     padding: 10px 20px 10px 0;
+    display: none;
   }
 
-  @mixin leave($colour) {
+  @mixin leave($colour, $leave-type) {
     input:checked + label {
       background-color: $colour;
+      .unassigned-leave, .maternity-leave, .paternity-leave, .shared-parental-leave {
+        display: none;
+      }
+      .#{$leave-type} {
+        display: block;
+      }
     }
   }
 
+  @include leave($colour-leave, 'unassigned-leave');
+
   @mixin maternityLeave() {
-    @include leave($colour-maternity);
-    .maternity-leave {
-      display: block;
-    }
-    .shared-parental-leave {
-      display: none;
-    }
+    @include leave($colour-maternity, 'maternity-leave');
   }
 
   @mixin compulsoryMaternityLeave() {
-    @include leave($colour-compulsory-maternity);
-    .maternity-leave {
-      display: block;
-    }
-    .shared-parental-leave {
-      display: none;
-    }
+    @include leave($colour-compulsory-maternity, 'maternity-leave');
   }
 
   @mixin paternityLeave() {
-    @include leave($colour-paternity);
-    .paternity-leave {
-      display: block;
-    }
-    .shared-parental-leave {
-      display: none;
-    }
+    @include leave($colour-paternity, 'paternity-leave');
   }
 
   @mixin sharedParentalLeave() {
-    @include leave($colour-shared);
-    .maternity-leave, .paternity-leave {
-      display: none;
-    }
-    .shared-parental-leave {
-      display: block;
-    }
+    @include leave($colour-shared, 'shared-parental-leave');
   }
 
   .week.before-birth-week {
