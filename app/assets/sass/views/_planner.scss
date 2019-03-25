@@ -7,6 +7,10 @@ $colour-shared: lighten(govuk-colour('light-green'), 25%);
 $colour-birth-week: govuk-colour('yellow');
 $colour-disabled: govuk-colour('grey-2');
 
+body:not(.has-js) .js-only {
+  display: none;
+}
+
 #leave-calendar-container {
   max-height: 80vh;
   overflow-y: scroll;
