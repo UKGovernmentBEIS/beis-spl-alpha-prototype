@@ -51,9 +51,11 @@ table#leave-calendar {
   .week {
     td {
       position: relative;
-      &.disabled label {
-        cursor: not-allowed !important;
+      &.disabled {
         background-color: $colour-disabled;
+        &, label {
+          cursor: not-allowed !important;
+        }
       }
     }
     input[type="checkbox"] {
