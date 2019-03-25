@@ -2,18 +2,19 @@
 {% from "radios/macro.njk" import govukRadios %}
 {% from "summary-list/macro.njk" import govukSummaryList %}
 
-{% import "data-macros.njk" as dataMacros %}
-
 {% extends "layout.html" %}
 
 {% block pageTitle %}
   Plan leave and pay when you have a child
 {% endblock %}
 
-{% set dueDateUntrimmed %}
-  {{ data["due-date"] or dataMacros.dueDate(data) }}
+{% set dueDate %}
+  {%- if data["due-date"] %}
+    {{- data["due-date"] -}}
+  {% else %}
+    {{- data["due-date-year"] }}-{{ data["due-date-month"] | twoDigit }}-{{ data["due-date-day"] | twoDigit -}}
+  {% endif -%}
 {% endset %}
-{% set dueDate = (dueDateUntrimmed | trim) %}
 
 {% block content %}
 
