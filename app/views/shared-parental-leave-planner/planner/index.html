@@ -73,7 +73,7 @@
                 {% set firstEightBirthWeeks = (i >= 0) and (i < 8) %}
                 <tr class="govuk-table__row week {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}mother-leave{% endif %} {% if firstEightBirthWeeks %}paternity-eligible-week{% endif %}">
                   <td class="govuk-table__cell">
-                    {{ date | formatDate("DD MMM") }}
+                    {{ date | formatDate("DD [<br>] MMM") | safe }}
                   </td>
                   {% set motherId = "mother-" + date %}
                   <td data-week="{{i}}"

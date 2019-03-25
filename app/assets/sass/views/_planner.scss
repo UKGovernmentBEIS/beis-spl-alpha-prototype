@@ -53,6 +53,11 @@ table#leave-calendar {
           cursor: not-allowed !important;
         }
       }
+      @media only screen and (min-width: 1020px) {
+        br {
+          display: none;
+        }
+      }
     }
     input[type="checkbox"] {
       visibility: hidden;
@@ -74,7 +79,7 @@ table#leave-calendar {
   }
 
   .unassigned-leave, .maternity-leave, .paternity-leave, .shared-parental-leave {
-    padding: 10px 20px 10px 0;
+    padding: 10px 10px 10px 0;
     display: none;
   }
 
@@ -153,6 +158,7 @@ table#leave-calendar {
 .planner-sidebar {
   dt {
     width: 50%;
+    padding-right: 10px;
   }
 
   .maternity-spl-remaining-total {
