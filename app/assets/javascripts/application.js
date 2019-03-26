@@ -151,6 +151,9 @@ function onLeaveUpdated() {
   const maternitySplRemainingWeeks = MATERNITY_WEEKS_ENTITLEMENT - maternityWeeks - mothersSplWeeks - partnersSplWeeks
   const paternityRemainingWeeks = PATERNITY_WEEKS_ENTITLEMENT - paternityWeeks
 
+  $('.mother-leave').removeClass('last-mother-leave').last().addClass('last-mother-leave')
+  $('.partner-leave').removeClass('last-partner-leave').last().addClass('last-partner-leave')
+
   // Remaining weeks.
   $('#maternity-weeks').text(toWeeksString(maternityWeeks))
   $('#mothers-spl-weeks').text(toWeeksString(mothersSplWeeks))

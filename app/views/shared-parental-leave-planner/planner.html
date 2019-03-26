@@ -81,6 +81,9 @@
                   <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
                     {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
                   <label {% if not firstTwoBirthWeeks %}for="{{ motherId }}"{% endif %}>
+                    <span class="work-or-other-leave">
+                      Work or other leave
+                    </span>
                     <span class="unassigned-leave">
                       Leave
                     </span>
@@ -102,6 +105,9 @@
                     <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
                       {% if data[partnerId] %}checked{% endif %}>
                     <label for="{{ partnerId }}">
+                      <span class="work-or-other-leave">
+                        Work or other leave
+                      </span>
                       <span class="unassigned-leave">
                         Leave
                       </span>

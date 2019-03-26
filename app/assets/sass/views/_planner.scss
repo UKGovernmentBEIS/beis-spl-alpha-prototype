@@ -61,6 +61,11 @@ table#leave-calendar {
         bottom: 0;
         left: 0;
       }
+      &:checked {
+        + label .work-or-other-leave {
+          display: none
+        }
+      }
     }
   }
 
@@ -72,6 +77,22 @@ table#leave-calendar {
 
   .unassigned-leave, .maternity-leave, .paternity-leave, .shared-parental-leave {
     padding: 10px 10px 10px 0;
+    display: none;
+  }
+
+  .work-or-other-leave {
+    padding: 10px 10px 10px 0;
+    color: $govuk-secondary-text-colour;
+    display: none;
+  }
+
+  .mother-leave ~ .week .mother .work-or-other-leave,
+  .partner-leave ~ .week .partner .work-or-other-leave {
+      display: block;
+  }
+
+  .last-mother-leave ~ .week .mother .work-or-other-leave,
+  .last-partner-leave ~ .week .partner .work-or-other-leave {
     display: none;
   }
 
