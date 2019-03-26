@@ -71,13 +71,13 @@
               {% set beforeBirthWeek = i < 0 %}
               {% set firstTwoBirthWeeks = (i >= 0) and (i < 2) %}
               {% set firstEightBirthWeeks = (i >= 0) and (i < 8) %}
-              <tr class="govuk-table__row week {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}mother-leave{% endif %} {% if firstEightBirthWeeks %}paternity-eligible-week{% endif %}">
+              <tr data-week="{{i}}"
+                class="govuk-table__row week {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}mother-leave{% endif %} {% if firstEightBirthWeeks %}paternity-eligible-week{% endif %}">
                 <td class="govuk-table__cell">
                   {{ date | formatDate("DD [<br>] MMM") | safe }}
                 </td>
                 {% set motherId = "mother-" + date %}
-                <td data-week="{{i}}"
-                  class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory disabled{% endif %}">
+                <td class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory disabled{% endif %}">
                   <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
                     {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
                   <label {% if not firstTwoBirthWeeks %}for="{{ motherId }}"{% endif %}>
@@ -97,8 +97,7 @@
                   </label>
                 </td>
                 {% set partnerId = "partner-" + date %}
-                <td data-week="{{i}}"
-                  class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}">
+                <td class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}">
                   {% if (not beforeBirthWeek) %}
                     <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
                       {% if data[partnerId] %}checked{% endif %}>

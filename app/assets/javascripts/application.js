@@ -58,19 +58,25 @@ $(document).ready(function () {
 
     $calendar.addClass(DRAGGING)
 
+    const $originalRow = $originalCell.parent()
     const column = $originalCell.hasClass(MOTHER) ? MOTHER : PARTNER
     const addOrRemoveLeave = hasLeave($originalCell) ? removeLeave : addLeave
     const onRowMouseOver = function () {
-      const $cellInRow = $(this).find('.' + column)
-      if ($cellInRow.hasClass(DISABLED)) {
-        return
-      }
-      addOrRemoveLeave($cellInRow)
+      const $row = $(this)
+      const isForward = getWeekNumber($row) >= getWeekNumber($originalRow)
+      const $rowsBetween = isForward ? $originalRow.nextUntil($row.next()) : $originalRow.prevUntil($row.prev())
+      $rowsBetween.add($originalRow).each(function () {
+        const $cellInRow = $(this).find('.' + column)
+        if ($cellInRow.hasClass(DISABLED)) {
+          return
+        }
+        addOrRemoveLeave($cellInRow)
+      })
       onLeaveUpdated()
     }
 
     // Handle row that was clicked on.
-    onRowMouseOver.call($originalCell.parent())
+    onRowMouseOver.call($originalRow)
 
     const $weeks = $('tr.week')
     $weeks.on('mouseover', onRowMouseOver)
@@ -131,8 +137,9 @@ function hasLeave($cell) {
   return $cell.find('input').prop('checked')
 }
 
-function getWeekNumber($cell) {
-  return parseInt($cell.data('week'))
+function getWeekNumber($cellOrRow) {
+  const $row = $cellOrRow.prop('tagName') === 'TR' ? $cellOrRow : $cellOrRow.parent()
+  return parseInt($row.data('week'))
 }
 
 function onLeaveUpdated() {
