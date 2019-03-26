@@ -18,28 +18,28 @@ router.get('/shared-parental-leave-planner/planner', function (req, res) {
   const { query, session } = req
   const savedData = parseSavedDataFromQuery(query)
   if (!savedData) {
-    res.render('shared-parental-leave-planner/planner/index')
+    res.render('shared-parental-leave-planner/planner')
     return
   }
   addSavedDataToSession(session, savedData)
   res.redirect('/shared-parental-leave-planner/planner')
 })
 
-router.get('/shared-parental-leave-planner/planner/key-dates', function (req, res) {
+router.get('/shared-parental-leave-planner/key-dates', function (req, res) {
   const { query, session } = req
   const savedData = parseSavedDataFromQuery(query)
   if (!savedData) {
-    res.render('shared-parental-leave-planner/planner/key-dates')
+    res.render('shared-parental-leave-planner/key-dates')
     return
   }
   addSavedDataToSession(session, savedData)
   addLeaveWeeksToSession(session)
-  res.redirect('/shared-parental-leave-planner/planner/key-dates')
+  res.redirect('/shared-parental-leave-planner/key-dates')
 })
 
-router.post('/shared-parental-leave-planner/planner/key-dates', function (req, res) {
+router.post('/shared-parental-leave-planner/key-dates', function (req, res) {
   addLeaveWeeksToSession(req.session)
-  res.redirect('/shared-parental-leave-planner/planner/key-dates')
+  res.redirect('/shared-parental-leave-planner/key-dates')
 })
 
 function parseSavedDataFromQuery(query) {
