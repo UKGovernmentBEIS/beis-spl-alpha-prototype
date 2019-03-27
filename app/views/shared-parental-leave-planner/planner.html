@@ -211,20 +211,22 @@
         <button type="submit" class="govuk-button">
           Next
         </button>
-        {{ govukInput({
-          label: {
-            classes: "govuk-!-font-weight-bold",
-            text: "Save / share link"
-          },
-          id: "save-share-link",
-          classes: "govuk-!-font-size-14",
-          hint: {
-            text: "Copy this link for later to return to the calendar with this leave plan."
-          },
-          attributes: {
-            readonly: "readonly"
-          }
-        }) }}
+        <div class="js-only">
+          {{ govukInput({
+            label: {
+              classes: "govuk-!-font-weight-bold",
+              text: "Save / share link"
+            },
+            id: "save-share-link",
+            classes: "govuk-!-font-size-14",
+            hint: {
+              text: "Copy this link for later to return to the calendar with this leave plan."
+            },
+            attributes: {
+              readonly: "readonly"
+            }
+          }) }}
+        </div>
       </div>
     </div>
   </form>
