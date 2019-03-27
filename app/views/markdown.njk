@@ -1,0 +1,19 @@
+{% from "textarea/macro.njk" import govukTextarea %}
+
+{% macro markdown() %}
+  <div class="govuk-body markdown-helper">
+    <div class="markdown">
+      {{ govukTextarea() }}
+      <button class="govuk-button">
+        Preview
+      </button>
+    </div>
+    <div class="preview" style="display: none;">
+      <div class="html">
+      </div>
+      <button class="govuk-button">
+        Edit
+      </button>
+    </div>
+  </div>
+{% endmacro %}

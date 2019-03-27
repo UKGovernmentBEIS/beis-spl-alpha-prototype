@@ -1,0 +1,63 @@
+{% from "accordion/macro.njk" import govukAccordion %}
+
+{% from "markdown.njk" import markdown %}
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  GOV.UK Prototype Kit
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Playground
+      </h1>
+      {{ govukAccordion({
+        id: "accordion-default",
+        items: [
+          {
+            heading: {
+              text: "Example one"
+            },
+            content: {
+              html: markdown()
+            }
+          },
+          {
+            heading: {
+              text: "Example two"
+            },
+            content: {
+              html: markdown()
+            }
+          },
+            {
+            heading: {
+              text: "Example three"
+            },
+            content: {
+              html: markdown()
+            }
+          },
+            {
+            heading: {
+              text: "Example four"
+            },
+            content: {
+              html: markdown()
+            }
+          }
+        ]
+      }) }}
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+  <script src="/public/javascripts/markdown.js"></script>
+{% endblock %}
