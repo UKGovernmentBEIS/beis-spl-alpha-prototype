@@ -151,6 +151,7 @@ function onLeaveUpdated() {
   const maternitySplRemainingWeeks = MATERNITY_WEEKS_ENTITLEMENT - maternityWeeks - mothersSplWeeks - partnersSplWeeks
   const paternityRemainingWeeks = PATERNITY_WEEKS_ENTITLEMENT - paternityWeeks
 
+  // Last leave week (for labelling gaps).
   $('.mother-leave').removeClass('last-mother-leave').last().addClass('last-mother-leave')
   $('.partner-leave').removeClass('last-partner-leave').last().addClass('last-partner-leave')
 
@@ -167,6 +168,9 @@ function onLeaveUpdated() {
   // Warnings.
   $('#maternity-maximum').toggle(maternitySplRemainingWeeks < 0)
   $('#no-more-shared').toggle(maternitySplRemainingWeeks <= 0)
+
+  // Save / share link.
+  $('#save-share-link').val(getSaveLink())
 }
 
 function toWeeksString(numberOfWeeks) {
