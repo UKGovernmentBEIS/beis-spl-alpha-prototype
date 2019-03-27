@@ -1,4 +1,5 @@
 {% from "back-link/macro.njk" import govukBackLink %}
+{% from "checkboxes/macro.njk" import govukCheckboxes %}
 {% from "input/macro.njk" import govukInput %}
 {% from "radios/macro.njk" import govukRadios %}
 {% from "summary-list/macro.njk" import govukSummaryList %}
@@ -37,6 +38,18 @@
           The leave weeks table tells you how much leave you have left at any given point.
         </span>
       </p>
+      {{ govukCheckboxes({
+        classes: "js-only",
+        hint: {
+          text: "Tick below to see an indication of stautory pay alongside leave."
+        },
+        items: [
+          {
+            id: "show-statutory-pay",
+            text: "Show indicative stautory pay"
+          }
+        ]
+      }) }}
     </div>
   </div>
   <form action="key-dates" method="POST">
@@ -73,7 +86,7 @@
               {% set firstTwoBirthWeeks = (i >= 0) and (i < 2) %}
               {% set firstEightBirthWeeks = (i >= 0) and (i < 8) %}
               <tr data-week="{{i}}"
-                class="govuk-table__row week {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}mother-leave{% endif %} {% if firstEightBirthWeeks %}paternity-eligible-week{% endif %}">
+                class="govuk-table__row week {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}mother-leave{% endif %} {{ 'last-mother-leave' if i === 1 }} {% if firstEightBirthWeeks %}paternity-eligible-week{% endif %}">
                 <td class="govuk-table__cell">
                   {{ date | formatDate("DD [<br>] MMM") | safe }}
                 </td>
@@ -82,22 +95,31 @@
                   <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
                     {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
                   <label {% if not firstTwoBirthWeeks %}for="{{ motherId }}"{% endif %}>
-                    <span class="work-or-other-leave">
+                    <div class="work-or-other-leave js-only">
                       Work or other leave
-                    </span>
-                    <span class="unassigned-leave">
+                    </div>
+                    <div class="unassigned-leave leave">
                       Leave
-                    </span>
-                    <span class="maternity-leave">
+                    </div>
+                    <div class="maternity-leave leave">
                       {% if firstTwoBirthWeeks %}
                         Compulsory maternity leave
                       {% else %}
                         Maternity leave
                       {% endif %}
-                    </span>
-                    <span class="shared-parental-leave">
+                    </div>
+                    <div class="shared-parental-leave leave">
                       Shared parental leave
-                    </span>
+                    </div>
+                    <div class="govuk-body-s initial-maternity-pay pay">
+                      90% of average weekly pay
+                    </div>
+                    <div class="govuk-body-s statutory-pay pay">
+                      Up to £148.68
+                    </div>
+                    <div class="govuk-body-s unpaid pay ">
+                      Unpaid
+                    </div>
                   </label>
                 </td>
                 {% set partnerId = "partner-" + date %}
@@ -106,18 +128,26 @@
                     <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
                       {% if data[partnerId] %}checked{% endif %}>
                     <label for="{{ partnerId }}">
-                      <span class="work-or-other-leave">
-                        Work or other leave
-                      </span>
-                      <span class="unassigned-leave">
-                        Leave
-                      </span>
-                      <span class="paternity-leave">
-                        Paternity leave
-                      </span>
-                      <span class="shared-parental-leave">
-                        Shared parental leave
-                      </span>
+                      <div>
+                        <div class="work-or-other-leave js-only">
+                          Work or other leave
+                        </div>
+                        <div class="unassigned-leave leave">
+                          Leave
+                        </div>
+                        <div class="paternity-leave leave">
+                          Paternity leave
+                        </div>
+                        <div class="shared-parental-leave leave">
+                          Shared parental leave
+                        </div>
+                        <div class="govuk-body-s statutory-pay pay">
+                          Up to £148.68
+                        </div>
+                        <div class="govuk-body-s unpaid pay">
+                          Unpaid
+                        </div>
+                      </div>
                     </label>
                   {% endif %}
                 </td>

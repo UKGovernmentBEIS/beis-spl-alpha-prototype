@@ -55,6 +55,8 @@ table#leave-calendar {
       visibility: hidden;
       + label {
         cursor: cell;
+        overflow: hidden;
+        padding: 10px 10px 10px 0;
         position: absolute;
         top: 0;
         right: 0;
@@ -75,13 +77,11 @@ table#leave-calendar {
     }
   }
 
-  .unassigned-leave, .maternity-leave, .paternity-leave, .shared-parental-leave {
-    padding: 10px 10px 10px 0;
+  .leave {
     display: none;
   }
 
   .work-or-other-leave {
-    padding: 10px 10px 10px 0;
     color: $govuk-secondary-text-colour;
     display: none;
   }
@@ -99,7 +99,7 @@ table#leave-calendar {
   @mixin leave($colour, $leave-type) {
     input:checked + label {
       background-color: $colour;
-      .unassigned-leave, .maternity-leave, .paternity-leave, .shared-parental-leave {
+      .leave {
         display: none;
       }
       .#{$leave-type} {
@@ -164,6 +164,24 @@ table#leave-calendar {
       .partner {
         @include sharedParentalLeave();
       }
+    }
+  }
+
+  .pay {
+    display: none;
+  }
+
+  &.show-pay {
+    .week {
+      height: 3.5em;
+    }
+    .with-initial-maternity-pay ~ .initial-maternity-pay,
+    .with-statutory-pay ~ .statutory-pay,
+    .with-unpaid ~ .unpaid {
+      display: block;
+    }
+    .unpaid {
+      color: $govuk-secondary-text-colour;
     }
   }
 }
