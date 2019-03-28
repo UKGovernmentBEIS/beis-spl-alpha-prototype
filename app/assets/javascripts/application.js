@@ -159,8 +159,9 @@ function onLeaveUpdated() {
   const paternityRemainingWeeks = PATERNITY_LEAVE_WEEKS - paternityWeeks
 
   // Last leave week (for labelling gaps).
-  $('.mother-leave').removeClass('last-mother-leave').last().addClass('last-mother-leave')
-  $('.partner-leave').removeClass('last-partner-leave').last().addClass('last-partner-leave')
+  $('.week').removeClass('last-mother-leave').removeClass('last-partner-leave')
+  $('.mother-leave').last().addClass('last-mother-leave')
+  $('.partner-leave').last().addClass('last-partner-leave')
 
   // Remaining weeks.
   $('#maternity-weeks').text(toWeeksString(maternityWeeks))
