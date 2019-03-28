@@ -7,6 +7,14 @@ const encoder = require('./assets/javascripts/utils')
 
 // Add your routes here - above the module.exports line
 
+router.get('/shared-parental-leave-and-pay/eligibility', function (req, res) {
+  res.redirect('/shared-parental-leave-and-pay')
+})
+
+router.get('/shared-parental-leave-and-pay/apply-for-shared-parental-leave', function (req, res) {
+  res.redirect('/shared-parental-leave-and-pay')
+})
+
 router.get('/shared-parental-leave-planner', function (req, res) {
   const dueDate = req.query['due']
   const dateParts = dueDate ? dueDate.match(/^(\d\d\d\d)-(\d\d)-(\d\d)$/) : null
