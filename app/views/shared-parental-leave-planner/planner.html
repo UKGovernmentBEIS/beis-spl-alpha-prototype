@@ -18,6 +18,92 @@
   {% endif -%}
 {% endset %}
 
+{% set example1 %}
+  <h3 class="govuk-heading-s">
+    Background
+  </h3>
+  <p>
+    Stella needs to go back to work for an important project in the middle of her maternity leave.
+    She decides to convert her unused maternity leave into shared parental leave so that her partner,
+    Michael, can take 3 months shared parental leave and shared parental pay while she attends to her project.
+    She will use the remaining shared parental leave to resume her time at home with their child after her project is over.
+  </p>
+  <p>
+    They also plan to overlap Michael’s first month of shared parental leave with Stella’s last month of maternity leave so they can travel as a family.
+  </p>
+  <h3 class="govuk-heading-s">
+    Leave pattern
+  </h3>
+  <ul class="govuk-body">
+    <li>
+      <strong>Stella's leave:</strong> 8 months maternity leave, 1 month shared parental leave after Michael’s leave
+    </li>
+    <li>
+      <strong>Michael's leave:</strong> 2 weeks paternity leave and 3 months shared parental leave
+    </li>
+  </ul>
+  <button class="govuk-button">
+    See the plan
+  </button>
+{% endset %}
+{% set example2 %}
+  <h3 class="govuk-heading-s">
+    Background
+  </h3>
+  <p>
+    Imran and Aisha are having their first child. Imran plans to take two weeks paternity leave
+    but he wants to spend more time at home with the child, supporting Aisha in those initial weeks.
+    Aisha originally planned to take a full year of maternity leave but decides to reduce it by 4 weeks,
+    so that Imran can take shared parental leave.
+  </p>
+  <p>
+    Imran can now stay at home with Aisha and the baby for a total of 6 weeks as soon as the baby is born
+    (2 weeks paternity leave and 4 weeks shared parental leave).
+  </p>
+  <h3 class="govuk-heading-s">
+    Leave pattern
+  </h3>
+  <ul class="govuk-body">
+    <li>
+      <strong>Aisha's leave:</strong> 48 weeks maternity leave
+    </li>
+    <li>
+      <strong>Imran's leave:</strong> 2 weeks paternity leave and 4 weeks shared parental leave
+    </li>
+  </ul>
+  <button class="govuk-button">
+    See the plan
+  </button>
+{% endset %}
+{% set example3 %}
+  <h3 class="govuk-heading-s">
+    Background
+  </h3>
+  <p>
+    Katie and Rosa want to have equal opportunities to develop a bond with their child and be its primary carer.
+    Katie reduces her maternity leave after 3 months to create 9 months of shared parental leave.
+  </p>
+  <p>
+    They spend the first 3 months at home together, leaving around 6 months of shared parental leave for either or both of them to take.
+    They alternate being at home with the child every 6 weeks for the remaining 6 months of shared parental leave.
+  </p>
+  <h3 class="govuk-heading-s">
+    Leave pattern
+  </h3>
+  <ul class="govuk-body">
+    <li>
+      <strong>Katie's leave:</strong> 3 months maternity leave, then alternating 6 week blocks of shared parental leave
+    </li>
+    <li>
+      <strong>Rosa's leave:</strong> An initial block of paternity and shared parental leave alongside Katie's maternity leave,
+      then alternating 6 week blocks of shared parental leave
+    </li>
+  </ul>
+  <button class="govuk-button">
+    See the plan
+  </button>
+{% endset %}
+
 {% block content %}
 
   <div class="govuk-grid-row">
@@ -38,6 +124,40 @@
           The leave weeks table tells you how much leave you have left at any given point.
         </span>
       </p>
+      <h2 class="govuk-heading-m">
+        Examples
+      </h2>
+      {{ govukAccordion({
+        items: [
+          {
+            heading: {
+              text: "Managing parenting and your career"
+            },
+            content: {
+              html: example1
+            }
+          },
+          {
+            heading: {
+              text: "Supporting the mother after birth"
+            },
+            content: {
+              html: example2
+            }
+          },
+          {
+            heading: {
+              text: "Sharing primary care responsibility"
+            },
+            content: {
+              html: example3
+            }
+          }
+        ]
+      }) }}
+      <h2 class="govuk-heading-m">
+        Calendar
+      </h2>
       {{ govukCheckboxes({
         classes: "js-only",
         hint: {
