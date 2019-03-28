@@ -152,11 +152,11 @@ table#leave-calendar {
           @include paternityLeave();
         }
         /* Shared parental leave after gap in partner's leave. */
-        + .week:not(.partner-leave) ~ .week.partner-leave .partner {
+        ~ .week:not(.partner-leave) ~ .week.partner-leave .partner {
           @include sharedParentalLeave();
         }
         /* Shared parental leave after two weeks of paternity leave. */
-        + .partner-leave ~ .partner-leave .partner {
+        ~ .partner-leave ~ .partner-leave .partner {
           @include sharedParentalLeave();
         }
       }
