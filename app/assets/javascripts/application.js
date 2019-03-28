@@ -90,7 +90,9 @@ $(document).ready(function () {
   })
 
   $('input#show-statutory-pay').on('change', function () {
-    $calendar.toggleClass('show-pay', $(this).prop('checked'))
+    const checked = $(this).prop('checked')
+    $calendar.toggleClass('show-pay', checked)
+    $('#statutory-pay-explanation').toggle(checked)
   }).change()
 })
 

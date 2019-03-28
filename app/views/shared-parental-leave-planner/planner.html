@@ -156,7 +156,7 @@
         ]
       }) }}
       <h2 class="govuk-heading-m">
-        Calendar
+        Planner
       </h2>
       {{ govukCheckboxes({
         classes: "js-only",
@@ -235,7 +235,7 @@
                       90% of average weekly pay
                     </div>
                     <div class="govuk-body-s statutory-pay pay">
-                      Up to £148.68
+                      Up to £148.68<sup>†</sup>
                     </div>
                     <div class="govuk-body-s unpaid pay ">
                       Unpaid
@@ -262,7 +262,7 @@
                           Shared parental leave
                         </div>
                         <div class="govuk-body-s statutory-pay pay">
-                          Up to £148.68
+                          Up to £148.68<sup>†</sup>
                         </div>
                         <div class="govuk-body-s unpaid pay">
                           Unpaid
@@ -275,6 +275,9 @@
             {% endfor %}
           </tbody>
         </table>
+        <p id="statutory-pay-explanation" class="govuk-body-s" >
+          <sup>†</sup> If you earn less than £165.20 per week, you will receive 90% of your average weekly earnings instead of £148.68.
+        </p>
       </div>
       <div class="govuk-grid-column-one-third planner-sidebar js-only">
         <h2 class="govuk-heading-m">
