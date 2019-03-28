@@ -330,9 +330,14 @@ app.post(/^\/([^.]+)$/, function (req, res) {
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  var err = new Error(`Page not found: ${req.path}`)
-  err.status = 404
-  next(err)
+  if (req.header('Referrer').indexOf('/shared-parental-leave-and-pay') !== -1) {
+    // If moving from a cloned page to somewhere unknown, redirect to same path on external GOV.UK site.
+    res.redirect('https://www.gov.uk' + req.path)
+  } else {
+    var err = new Error(`Page not found: ${req.path}`)
+    err.status = 404
+    next(err)
+  }
 })
 
 // Display error
