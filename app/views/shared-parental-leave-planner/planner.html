@@ -172,7 +172,10 @@
         items: [
           {
             id: "show-statutory-pay",
-            text: "Show indicative statutory pay"
+            text: "Show indicative statutory pay",
+            attributes: {
+              checked: true
+            }
           }
         ]
       }) }}
@@ -231,30 +234,30 @@
                   <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
                     {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
                   <label {% if not firstTwoBirthWeeks %}for="{{ motherId }}"{% endif %}>
+                    <div class="initial-maternity-pay pay">
+                      90% of average weekly pay
+                    </div>
+                    <div class="statutory-pay pay">
+                      Up to £148.68
+                    </div>
+                    <div class="unpaid pay">
+                      Unpaid
+                    </div>
                     <div class="work-or-other-leave js-only">
                       Work or other leave
                     </div>
-                    <div class="unassigned-leave leave">
+                    <div class="govuk-body-s unassigned-leave leave">
                       Leave
                     </div>
-                    <div class="maternity-leave leave">
+                    <div class="govuk-body-s maternity-leave leave">
                       {% if firstTwoBirthWeeks %}
                         Compulsory maternity leave
                       {% else %}
                         Maternity leave
                       {% endif %}
                     </div>
-                    <div class="shared-parental-leave leave">
-                      Shared parental leave
-                    </div>
-                    <div class="govuk-body-s initial-maternity-pay pay">
-                      90% of average weekly pay
-                    </div>
-                    <div class="govuk-body-s statutory-pay pay">
-                      Up to £148.68
-                    </div>
-                    <div class="govuk-body-s unpaid pay ">
-                      Unpaid
+                    <div class="govuk-body-s shared-parental-leave leave">
+                      Shared parental leave (mother)
                     </div>
                   </label>
                 </td>
@@ -265,23 +268,23 @@
                       {% if data[partnerId] %}checked{% endif %}>
                     <label for="{{ partnerId }}">
                       <div>
+                        <div class="statutory-pay pay">
+                          Up to £148.68
+                        </div>
+                        <div class="unpaid pay">
+                          Unpaid
+                        </div>
                         <div class="work-or-other-leave js-only">
                           Work or other leave
                         </div>
-                        <div class="unassigned-leave leave">
+                        <div class="govuk-body-s unassigned-leave leave">
                           Leave
                         </div>
-                        <div class="paternity-leave leave">
+                        <div class="govuk-body-s paternity-leave leave">
                           Paternity leave
                         </div>
-                        <div class="shared-parental-leave leave">
-                          Shared parental leave
-                        </div>
-                        <div class="govuk-body-s statutory-pay pay">
-                          Up to £148.68
-                        </div>
-                        <div class="govuk-body-s unpaid pay">
-                          Unpaid
+                        <div class="govuk-body-s shared-parental-leave leave">
+                          Shared parental leave (partner)
                         </div>
                       </div>
                     </label>

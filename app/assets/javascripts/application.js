@@ -214,18 +214,18 @@ function updatePay() {
   $('.with-unpaid').removeClass('with-unpaid')
 
   const $maternityWeeks = $('.maternity-leave:visible')
-  $maternityWeeks.slice(0, INITIAL_MATERNITY_PAY_WEEKS).addClass('with-initial-maternity-pay')
-  $maternityWeeks.slice(INITIAL_MATERNITY_PAY_WEEKS, MATERNITY_PAY_WEEKS).addClass('with-statutory-pay')
-  $maternityWeeks.slice(MATERNITY_PAY_WEEKS).addClass('with-unpaid')
+  $maternityWeeks.slice(0, INITIAL_MATERNITY_PAY_WEEKS).parent().addClass('with-initial-maternity-pay')
+  $maternityWeeks.slice(INITIAL_MATERNITY_PAY_WEEKS, MATERNITY_PAY_WEEKS).parent().addClass('with-statutory-pay')
+  $maternityWeeks.slice(MATERNITY_PAY_WEEKS).parent().addClass('with-unpaid')
 
   const remainingPayWeeks = Math.max(MATERNITY_PAY_WEEKS - $maternityWeeks.length, 0)
   const $splWeeks = $('.shared-parental-leave:visible')
-  $splWeeks.slice(0, remainingPayWeeks).addClass('with-statutory-pay')
-  $splWeeks.slice(remainingPayWeeks).addClass('with-unpaid')
+  $splWeeks.slice(0, remainingPayWeeks).parent().addClass('with-statutory-pay')
+  $splWeeks.slice(remainingPayWeeks).parent().addClass('with-unpaid')
 
   const $paternityWeeks = $('.paternity-leave:visible')
-  $paternityWeeks.slice(0, PATERNITY_PAY_WEEKS).addClass('with-statutory-pay')
-  $paternityWeeks.slice(PATERNITY_PAY_WEEKS).addClass('with-unpaid')
+  $paternityWeeks.slice(0, PATERNITY_PAY_WEEKS).parent().addClass('with-statutory-pay')
+  $paternityWeeks.slice(PATERNITY_PAY_WEEKS).parent().addClass('with-unpaid')
 }
 
 function toWeeksString(numberOfWeeks) {

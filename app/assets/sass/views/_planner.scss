@@ -175,13 +175,10 @@ table#leave-calendar {
     .week {
       height: 3.5em;
     }
-    .with-initial-maternity-pay ~ .initial-maternity-pay,
-    .with-statutory-pay ~ .statutory-pay,
-    .with-unpaid ~ .unpaid {
+    .with-initial-maternity-pay .initial-maternity-pay,
+    .with-statutory-pay .statutory-pay,
+    .with-unpaid .unpaid {
       display: block;
-    }
-    .unpaid {
-      color: $govuk-secondary-text-colour;
     }
   }
 }
