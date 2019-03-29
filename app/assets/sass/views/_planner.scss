@@ -6,6 +6,7 @@ $colour-paternity: lighten(govuk-colour('red'), 50%);
 $colour-shared: lighten(govuk-colour('light-green'), 25%);
 $colour-birth-week: govuk-colour('yellow');
 $colour-disabled: govuk-colour('grey-2');
+$cell-border: 1px solid govuk-colour('grey-3');
 
 table#leave-calendar {
   margin: 0;
@@ -20,6 +21,9 @@ table#leave-calendar {
 
   td {
     user-select: none;
+    &.govuk-table__cell {
+      border: $cell-border;
+    }
   }
 
   td:not(:first-child) {
@@ -27,8 +31,12 @@ table#leave-calendar {
   }
 
   .birth-week {
-    &, & + tr > td:first-child {
+    background-color: $colour-birth-week;
+    border-left: $cell-border;
+    border-right: $cell-border;
+    + tr > td:first-child {
       background-color: $colour-birth-week;
+      border-top: none;
     }
   }
 
