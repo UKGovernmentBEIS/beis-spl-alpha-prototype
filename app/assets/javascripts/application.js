@@ -92,7 +92,7 @@ $(document).ready(function () {
   $('input#show-statutory-pay').on('change', function () {
     const checked = $(this).prop('checked')
     $calendar.toggleClass('show-pay', checked)
-    $('#statutory-pay-explanation').toggle(checked)
+    $('.pay-only').toggle(checked)
   }).change()
 
   $('.leave-example').on('click', function () {

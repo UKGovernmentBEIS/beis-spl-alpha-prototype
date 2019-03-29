@@ -176,6 +176,15 @@
           }
         ]
       }) }}
+      <div class="pay-only">
+        <p>
+          The first 6 weeks of Maternity Pay is paid at 90% of the mother's average weekly earnings.
+        </p>
+        <p>
+          All other leave is paid at the statutory rate of up to £148.68.
+          If your average earning are less than £165.20 per week, you will receive 90% of your average weekly earnings instead of £148.68.
+        </p>
+      </div>
     </div>
   </div>
   <form action="key-dates" method="POST">
@@ -241,7 +250,7 @@
                       90% of average weekly pay
                     </div>
                     <div class="govuk-body-s statutory-pay pay">
-                      Up to £148.68<sup>†</sup>
+                      Up to £148.68
                     </div>
                     <div class="govuk-body-s unpaid pay ">
                       Unpaid
@@ -268,7 +277,7 @@
                           Shared parental leave
                         </div>
                         <div class="govuk-body-s statutory-pay pay">
-                          Up to £148.68<sup>†</sup>
+                          Up to £148.68
                         </div>
                         <div class="govuk-body-s unpaid pay">
                           Unpaid
@@ -281,9 +290,6 @@
             {% endfor %}
           </tbody>
         </table>
-        <p id="statutory-pay-explanation" class="govuk-body-s" >
-          <sup>†</sup> If you earn less than £165.20 per week, you will receive 90% of your average weekly earnings instead of £148.68.
-        </p>
       </div>
       <div class="govuk-grid-column-one-third planner-sidebar js-only">
         <h2 class="govuk-heading-m">
