@@ -94,6 +94,27 @@ $(document).ready(function () {
     $calendar.toggleClass('show-pay', checked)
     $('#statutory-pay-explanation').toggle(checked)
   }).change()
+
+  $('.leave-example').on('click', function () {
+    const $this = $(this)
+    const motherLeave = $this.data('mother-leave').split(',').map(function (n) { return parseInt(n) })
+    const partnerLeave = $this.data('partner-leave').split(',').map(function (n) { return parseInt(n) })
+    if ($('.mother-leave').length + $('.partner-leave').length > 2 && !confirm("This will overwrite any leave that you have already entered on the calendar.")) {
+      return
+    }
+    $('.mother').each(function () {
+      const $cell = $(this)
+      const weekNumber = getWeekNumber($cell)
+      toggleLeave($cell, motherLeave.indexOf(weekNumber) !== -1)
+    })
+    $('.partner').each(function () {
+      const $cell = $(this)
+      const weekNumber = getWeekNumber($cell)
+      toggleLeave($cell, partnerLeave.indexOf(weekNumber) !== -1)
+    })
+    onLeaveUpdated()
+    $calendar[0].scrollIntoView(true)
+  })
 })
 
 function scrollToBirthWeek() {
@@ -103,6 +124,7 @@ function scrollToBirthWeek() {
   const headerHeight = $calendar.find('.govuk-table__header').outerHeight()
   const rowHeight = $calendar.find('.govuk-table__row').outerHeight()
   $scrollContainer.scrollTop(birthWeekTop - calendarTop - headerHeight - rowHeight * 1.5)
+
 }
 
 function handleMaternityBeforeBirthWeek($cell) {
