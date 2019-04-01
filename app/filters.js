@@ -67,6 +67,10 @@ module.exports = function (env) {
     return line && line.trim() !== '' ? line + endOfLine : ''
   }
 
+  filters.pay = function (amount) {
+    return `£${parseFloat(amount).toFixed(2)}`
+  }
+
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */

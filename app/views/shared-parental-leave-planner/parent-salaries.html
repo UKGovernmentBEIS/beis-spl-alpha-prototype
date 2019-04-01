@@ -1,0 +1,115 @@
+{% from "back-link/macro.njk" import govukBackLink %}
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Plan leave and pay when you have a child
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukBackLink({
+        text: "Back",
+        href: "due-date"
+      }) }}
+      <h1 class="govuk-heading-xl">
+        What is your salary before tax?
+      </h1>
+      <p>
+        To help plan your leave and pay we take your salary and any enhanced leave packages that your employer offers into account.
+      </p>
+      <p>
+        Input your details here and the amount you will be paid will be plotted on the calendar.
+        If you choose to skip this step the the amount shown will only be the statutory rate.
+      </p>
+      <form action="planner" method="POST">
+        {% call govukFieldset({
+          legend: {
+            text: "Salary before tax",
+            classes: "govuk-fieldset__legend--m"
+          }
+        }) %}
+          <div class="salary-group">
+            {{ govukInput({
+              label: {
+                text: "Mother's salary (£)"
+              },
+              classes: "govuk-input--width-10",
+              id: "mother-salary-amount",
+              name: "mother-salary-amount",
+              value: data["mother-salary-amount"]
+            }) }}
+            {{ govukSelect({
+              id: "mother-salary-period",
+              name: "mother-salary-period",
+              label: {
+                text: "Per"
+              },
+              items: [
+                {
+                  value: "year",
+                  text: "Year",
+                  selected: data["mother-salary-period"] === "year"
+                },
+                {
+                  value: "month",
+                  text: "Month",
+                  selected: data["mother-salary-period"] === "month"
+                },
+                {
+                  value: "week",
+                  text: "Week",
+                  selected: data["mother-salary-period"] === "week"
+                }
+              ]
+            }) }}
+          </div>
+          <div class="salary-group">
+            {{ govukInput({
+              label: {
+                text: "Partner's salary (£)"
+              },
+              classes: "govuk-input--width-10",
+              id: "partner-salary-amount",
+              name: "partner-salary-amount",
+              value: data["partner-salary-amount"]
+            }) }}
+            {{ govukSelect({
+              id: "partner-salary-period",
+              name: "partner-salary-period",
+              label: {
+                text: "Per"
+              },
+              items: [
+                {
+                  value: "year",
+                  text: "Year",
+                  selected: data["partner-salary-period"] === "year"
+                },
+                {
+                  value: "month",
+                  text: "Month",
+                  selected: data["partner-salary-period"] === "month"
+                },
+                {
+                  value: "week",
+                  text: "Week",
+                  selected: data["partner-salary-period"] === "week"
+                }
+              ]
+            }) }}
+          </div>
+        {% endcall %}
+        <button type="submit" class="govuk-button">
+          Next
+        </button>
+        <button type="submit" class="govuk-button">
+          Skip
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

@@ -18,6 +18,10 @@
   {% endif -%}
 {% endset %}
 
+{% macro statutoryPay(weeklyPay) %}
+  {{ (((weeklyPay * 0.9) | pay) if (weeklyPay < 165.20) else "£148.68") if weeklyPay else "Up to £148.68" }}
+{% endmacro %}
+
 {% set example1 %}
   <h3 class="govuk-heading-s">
     Background
@@ -116,7 +120,7 @@
     <div class="govuk-grid-column-two-thirds">
       {{ govukBackLink({
         text: "Back",
-        href: "due-date"
+        href: "parent-salaries"
       }) }}
       <h1 class="govuk-heading-xl">
         Plan leave and pay when you have a child
@@ -230,15 +234,16 @@
                   {{ date | formatDate("DD [<br>] MMM") | safe }}
                 </td>
                 {% set motherId = "mother-" + date %}
+                {% set motherWeeklyPay = data["mother-weekly-pay"] %}
                 <td class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory disabled{% endif %}">
                   <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
                     {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
                   <label {% if not firstTwoBirthWeeks %}for="{{ motherId }}"{% endif %}>
                     <div class="initial-maternity-pay pay">
-                      90% of average weekly pay
+                      {{ ((motherWeeklyPay * 0.9) | pay) if motherWeeklyPay else "90% of average weekly pay" }}
                     </div>
                     <div class="statutory-pay pay">
-                      Up to £148.68
+                      {{ statutoryPay(motherWeeklyPay) }}
                     </div>
                     <div class="unpaid pay">
                       Unpaid
@@ -262,6 +267,7 @@
                   </label>
                 </td>
                 {% set partnerId = "partner-" + date %}
+                {% set partnerWeeklyPay = data["partner-weekly-pay"] %}
                 <td class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}">
                   {% if (not beforeBirthWeek) %}
                     <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
@@ -269,7 +275,7 @@
                     <label for="{{ partnerId }}">
                       <div>
                         <div class="statutory-pay pay">
-                          Up to £148.68
+                          {{ statutoryPay(partnerWeeklyPay) }}
                         </div>
                         <div class="unpaid pay">
                           Unpaid

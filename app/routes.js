@@ -33,6 +33,24 @@ router.get('/shared-parental-leave-planner/planner', function (req, res) {
   res.redirect('/shared-parental-leave-planner/planner')
 })
 
+router.post('/shared-parental-leave-planner/planner', function (req, res) {
+  const { data } = req.session
+  const {
+    'mother-salary-amount': motherSalaryAmount,
+    'mother-salary-period': motherSalaryPeriod,
+    'partner-salary-amount': partnerSalaryAmount,
+    'partner-salary-period': partnerSalaryPeriod
+  } = data
+
+  const motherWeeklyEarnings = getWeeklyEarnings(motherSalaryAmount, motherSalaryPeriod)
+  const partnerWeeklyEarnings = getWeeklyEarnings(partnerSalaryAmount, partnerSalaryPeriod)
+
+  data['mother-weekly-pay'] = motherWeeklyEarnings
+  data['partner-weekly-pay'] = partnerWeeklyEarnings
+
+  res.redirect('/shared-parental-leave-planner/planner')
+})
+
 router.get('/shared-parental-leave-planner/key-dates', function (req, res) {
   const { query, session } = req
   const savedData = parseSavedDataFromQuery(query)
@@ -134,6 +152,20 @@ function* getLeaveBlocks(leaveWeeks) {
 function isEligiblePaternityWeek(week, dueDate) {
   const birthWeek = moment(dueDate).startOf('week')
   return moment(week).diff(birthWeek, 'weeks') < 8
+}
+
+function getWeeklyEarnings(amount, period) {
+  amount = parseFloat(amount)
+  switch (period) {
+    case 'week':
+      return amount
+    case 'month':
+      return (amount * 12) / 52
+    case 'year':
+      return amount / 52
+    default:
+      return null
+  }
 }
 
 module.exports = router
