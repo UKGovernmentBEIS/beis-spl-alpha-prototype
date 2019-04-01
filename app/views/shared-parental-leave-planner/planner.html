@@ -19,7 +19,7 @@
 {% endset %}
 
 {% macro statutoryPay(weeklyPay) %}
-  {{ (((weeklyPay * 0.9) | pay) if (weeklyPay < 165.20) else "£148.68") if weeklyPay else "Up to £148.68" }}
+  {{- (((weeklyPay * 0.9) | pay) if (weeklyPay < 165.20) else "£148.68") if weeklyPay else "Up to £148.68" -}}
 {% endmacro %}
 
 {% set example1 %}
@@ -229,15 +229,16 @@
               {% set firstTwoBirthWeeks = (i >= 0) and (i < 2) %}
               {% set firstEightBirthWeeks = (i >= 0) and (i < 8) %}
               <tr data-week="{{i}}"
-                class="govuk-table__row week {% if beforeBirthWeek %}before-birth-week{% endif %} {% if firstTwoBirthWeeks %}mother-leave{% endif %} {{ 'last-mother-leave' if i === 1 }} {% if firstEightBirthWeeks %}paternity-eligible-week{% endif %}">
+                class="govuk-table__row week {{ 'before-birth-week' if beforeBirthWeek }} {{ 'mother-leave' if firstTwoBirthWeeks }} {{ 'last-mother-leave' if i === 1 }} {{ 'paternity-eligible-week' if firstEightBirthWeeks }}">
                 <td class="govuk-table__cell">
                   {{ date | formatDate("DD [<br>] MMM") | safe }}
                 </td>
                 {% set motherId = "mother-" + date %}
                 {% set motherWeeklyPay = data["mother-weekly-pay"] %}
-                <td class="govuk-table__cell mother {% if firstTwoBirthWeeks %}compulsory disabled{% endif %}">
+                <td class="govuk-table__cell mother {{ 'compulsory disabled' if firstTwoBirthWeeks }}}">
                   <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
                     {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
+                  <!-- Deliberately omit 'for' from label on compulsory maternity weeks, to prevent changing. -->
                   <label {% if not firstTwoBirthWeeks %}for="{{ motherId }}"{% endif %}>
                     <div class="initial-maternity-pay pay">
                       {{ ((motherWeeklyPay * 0.9) | pay) if motherWeeklyPay else "90% of average weekly pay" }}
@@ -255,11 +256,7 @@
                       Leave
                     </div>
                     <div class="govuk-body-s maternity-leave leave">
-                      {% if firstTwoBirthWeeks %}
-                        Compulsory maternity leave
-                      {% else %}
-                        Maternity leave
-                      {% endif %}
+                      {{ "Compulsory maternity leave" if firstTwoBirthWeeks else "Maternity leave" }}
                     </div>
                     <div class="govuk-body-s shared-parental-leave leave">
                       Shared parental leave (mother)
@@ -268,7 +265,7 @@
                 </td>
                 {% set partnerId = "partner-" + date %}
                 {% set partnerWeeklyPay = data["partner-weekly-pay"] %}
-                <td class="govuk-table__cell partner {% if beforeBirthWeek %}disabled{% endif %}">
+                <td class="govuk-table__cell partner {{ 'disabled' if beforeBirthWeek }}">
                   {% if (not beforeBirthWeek) %}
                     <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
                       {% if data[partnerId] %}checked{% endif %}>
@@ -350,9 +347,6 @@
           </p>
           <p id="no-more-shared" class="govuk-body-s info">
             You have no more shared parental leave, reduce your maternity leave to create more.
-          </p>
-          <p id="can-break-shared" class="govuk-body-s info">
-            Remember, you can break up shared parental leave with periods of work.
           </p>
         </div>
         <p>Paternity leave is a separate entitlement.</p>
