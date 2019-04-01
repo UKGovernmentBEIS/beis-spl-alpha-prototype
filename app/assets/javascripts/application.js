@@ -24,11 +24,8 @@ const $calendar = $('table#leave-calendar')
 $(document).ready(function () {
   window.GOVUKFrontend.initAll()
 
-  if ($calendar.length > 0) {
-    scrollToBirthWeek()
-  }
-
-  [MOTHER, PARTNER].forEach(function (parent) {
+  const parents = [MOTHER, PARTNER]
+  parents.forEach(function (parent) {
     $('.' + parent + '-leave-input').on('change', function () {
       const $this = $(this)
       const $row = $(this).closest('tr')
@@ -116,16 +113,6 @@ $(document).ready(function () {
     $calendar[0].scrollIntoView(true)
   })
 })
-
-function scrollToBirthWeek() {
-  const $scrollContainer = $('#leave-calendar-container')
-  const calendarTop = $calendar.position().top
-  const birthWeekTop = $calendar.find('.birth-week').position().top
-  const headerHeight = $calendar.find('.govuk-table__header').outerHeight()
-  const rowHeight = $calendar.find('.govuk-table__row').outerHeight()
-  $scrollContainer.scrollTop(birthWeekTop - calendarTop - headerHeight - rowHeight * 1.5)
-
-}
 
 function handleMaternityBeforeBirthWeek($cell) {
   const weekNumber = getWeekNumber($cell)
