@@ -1,0 +1,22 @@
+{% macro leaveExample(options) %}
+  <h3 class="govuk-heading-s">
+    Background
+  </h3>
+  {{ caller() }}
+  <h3 class="govuk-heading-s">
+    Leave pattern
+  </h3>
+  <ul class="govuk-body">
+    <li>
+      <strong>{{ options.mother }}'s leave:</strong> {{ options.mothersLeavePattern }}
+    </li>
+    <li>
+      <strong>{{ options.partner }}'s leave:</strong> {{ options.partnersLeavePattern }}
+    </li>
+  </ul>
+  <button class="govuk-button leave-example"
+    data-mother-leave="{{ options.mothersLeaveWeeks }}"
+    data-partner-leave="{{ options.partnersLeaveWeeks }}">
+    See the plan
+  </button>
+{% endmacro %}

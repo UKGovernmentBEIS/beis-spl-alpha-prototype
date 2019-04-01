@@ -4,6 +4,8 @@
 {% from "radios/macro.njk" import govukRadios %}
 {% from "summary-list/macro.njk" import govukSummaryList %}
 
+{% from "partials/leave-example.njk" import leaveExample %}
+
 {% extends "layout.html" %}
 
 {% block pageTitle %}
@@ -23,95 +25,66 @@
 {% endmacro %}
 
 {% set example1 %}
-  <h3 class="govuk-heading-s">
-    Background
-  </h3>
-  <p>
-    Stella needs to go back to work for an important project in the middle of her maternity leave.
-    She decides to convert her unused maternity leave into shared parental leave so that her partner,
-    Michael, can take 3 months shared parental leave and shared parental pay while she attends to her project.
-    She will use the remaining shared parental leave to resume her time at home with their child after her project is over.
-  </p>
-  <p>
-    They also plan to overlap Michael’s first month of shared parental leave with Stella’s last month of maternity leave so they can travel as a family.
-  </p>
-  <h3 class="govuk-heading-s">
-    Leave pattern
-  </h3>
-  <ul class="govuk-body">
-    <li>
-      <strong>Stella's leave:</strong> 8 months maternity leave, 1 month shared parental leave after Michael’s leave
-    </li>
-    <li>
-      <strong>Michael's leave:</strong> 2 weeks paternity leave and 3 months shared parental leave
-    </li>
-  </ul>
-  <button class="govuk-button leave-example"
-    data-mother-leave="-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,40,41,42,43"
-    data-partner-leave="0,1,27,28,29,30,31,32,33,34,35,36,37,38,39">
-    See the plan
-  </button>
+  {% call leaveExample({
+    mother: "Stella",
+    partner: "Michael",
+    mothersLeavePattern: "8 months maternity leave, 1 month shared parental leave after Michael’s leave",
+    partnersLeavePattern: "2 weeks paternity leave and 3 months shared parental leave",
+    mothersLeaveWeeks: "-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,40,41,42,43",
+    partnersLeaveWeeks: "0,1,27,28,29,30,31,32,33,34,35,36,37,38,39"
+  }) %}
+    <p>
+      Stella needs to go back to work for an important project in the middle of her maternity leave.
+      She decides to convert her unused maternity leave into shared parental leave so that her partner,
+      Michael, can take 3 months shared parental leave and shared parental pay while she attends to her project.
+      She will use the remaining shared parental leave to resume her time at home with their child after her project is over.
+    </p>
+    <p>
+      They also plan to overlap Michael’s first month of shared parental leave with Stella’s last month of maternity leave so they can travel as a family.
+    </p>
+  {% endcall %}
 {% endset %}
+
 {% set example2 %}
-  <h3 class="govuk-heading-s">
-    Background
-  </h3>
-  <p>
-    Imran and Aisha are having their first child. Imran plans to take two weeks paternity leave
-    but he wants to spend more time at home with the child, supporting Aisha in those initial weeks.
-    Aisha originally planned to take a full year of maternity leave but decides to reduce it by 4 weeks,
-    so that Imran can take shared parental leave.
-  </p>
-  <p>
-    Imran can now stay at home with Aisha and the baby for a total of 6 weeks as soon as the baby is born
-    (2 weeks paternity leave and 4 weeks shared parental leave).
-  </p>
-  <h3 class="govuk-heading-s">
-    Leave pattern
-  </h3>
-  <ul class="govuk-body">
-    <li>
-      <strong>Aisha's leave:</strong> 48 weeks maternity leave
-    </li>
-    <li>
-      <strong>Imran's leave:</strong> 2 weeks paternity leave and 4 weeks shared parental leave
-    </li>
-  </ul>
-  <button class="govuk-button leave-example"
-    data-mother-leave="-1,-2,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45"
-    data-partner-leave="0,1,2,3,4,5">
-    See the plan
-  </button>
+  {% call leaveExample({
+    mother: "Imran",
+    partner: "Aisha",
+    mothersLeavePattern: "48 weeks maternity leave",
+    partnersLeavePattern: "2 weeks paternity leave and 4 weeks shared parental leave",
+    mothersLeaveWeeks: "-1,-2,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45",
+    partnersLeaveWeeks: "0,1,2,3,4,5"
+  }) %}
+    <p>
+      Imran and Aisha are having their first child. Imran plans to take two weeks paternity leave
+      but he wants to spend more time at home with the child, supporting Aisha in those initial weeks.
+      Aisha originally planned to take a full year of maternity leave but decides to reduce it by 4 weeks,
+      so that Imran can take shared parental leave.
+    </p>
+    <p>
+      Imran can now stay at home with Aisha and the baby for a total of 6 weeks as soon as the baby is born
+      (2 weeks paternity leave and 4 weeks shared parental leave).
+    </p>
+  {% endcall %}
 {% endset %}
+
 {% set example3 %}
-  <h3 class="govuk-heading-s">
-    Background
-  </h3>
-  <p>
-    Katie and Rosa want to have equal opportunities to develop a bond with their child and be its primary carer.
-    Katie ends her maternity leave after 3 months to create 9 months of shared parental leave.
-  </p>
-  <p>
-    They spend the first 3 months at home together, leaving around 6 months of shared parental leave for either or both of them to take.
-    They alternate being at home with the child every 6 weeks for the remaining 6 months of shared parental leave.
-  </p>
-  <h3 class="govuk-heading-s">
-    Leave pattern
-  </h3>
-  <ul class="govuk-body">
-    <li>
-      <strong>Katie's leave:</strong> 3 months maternity leave, then alternating 6 week blocks of shared parental leave
-    </li>
-    <li>
-      <strong>Rosa's leave:</strong> An initial block of paternity and shared parental leave alongside Katie's maternity leave,
-      then alternating 6 week blocks of shared parental leave
-    </li>
-  </ul>
-  <button class="govuk-button leave-example"
-    data-mother-leave="-2,-1,0,1,2,3,4,5,6,7,8,9,10,17,18,19,20,21,22,29,30,31,32,33,34"
-    data-partner-leave="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,23,24,25,26,27,28,35,36,37,38,39,40">
-    See the plan
-  </button>
+  {% call leaveExample({
+    mother: "Katie",
+    partner: "Rosa",
+    mothersLeavePattern: "3 months maternity leave, then alternating 6 week blocks of shared parental leave",
+    partnersLeavePattern: "An initial block of paternity and shared parental leave alongside Katie's maternity leave, then alternating 6 week blocks of shared parental leave",
+    mothersLeaveWeeks: "-2,-1,0,1,2,3,4,5,6,7,8,9,10,17,18,19,20,21,22,29,30,31,32,33,34",
+    partnersLeaveWeeks: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,23,24,25,26,27,28,35,36,37,38,39,40"
+  }) %}
+    <p>
+      Katie and Rosa want to have equal opportunities to develop a bond with their child and be its primary carer.
+      Katie ends her maternity leave after 3 months to create 9 months of shared parental leave.
+    </p>
+    <p>
+      They spend the first 3 months at home together, leaving around 6 months of shared parental leave for either or both of them to take.
+      They alternate being at home with the child every 6 weeks for the remaining 6 months of shared parental leave.
+    </p>
+  {% endcall %}
 {% endset %}
 
 {% block content %}
