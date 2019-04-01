@@ -5,6 +5,8 @@ const moment = require('moment')
 
 const encoder = require('./assets/javascripts/utils')
 
+const { validateDueDate } = require('./validators')
+
 // Add your routes here - above the module.exports line
 
 router.get('/shared-parental-leave-and-pay/eligibility', function (req, res) {
@@ -22,16 +24,34 @@ router.get('/shared-parental-leave-planner', function (req, res) {
   res.render('shared-parental-leave-planner/index', { dueDateDay, dueDateMonth, dueDateYear })
 })
 
-router.get('/shared-parental-leave-planner/planner', function (req, res) {
-  const { query, session } = req
-  const savedData = parseSavedDataFromQuery(query)
-  if (!savedData) {
-    res.render('shared-parental-leave-planner/planner')
-    return
-  }
-  addSavedDataToSession(session, savedData)
-  res.redirect('/shared-parental-leave-planner/planner')
-})
+router.route('/shared-parental-leave-planner/planner')
+  .get(function (req, res) {
+    const { query, session } = req
+    const savedData = parseSavedDataFromQuery(query)
+    if (!savedData) {
+      res.render('shared-parental-leave-planner/planner')
+      return
+    }
+    addSavedDataToSession(session, savedData)
+    res.redirect('/shared-parental-leave-planner/planner')
+  })
+
+  .post(function (req, res) {
+    const { data } = req.session
+    delete data['due-date-errors']
+    const {
+      'due-date-day': day,
+      'due-date-month': month,
+      'due-date-year': year
+    } = data
+    const dueDateErrors = validateDueDate(year, month, day)
+    if (dueDateErrors.length > 0) {
+      data['due-date-errors'] = dueDateErrors
+      res.redirect('/shared-parental-leave-planner/due-date')
+    } else {
+      res.redirect('/shared-parental-leave-planner/planner')
+    }
+  })
 
 router.post('/shared-parental-leave-planner/planner', function (req, res) {
   const { data } = req.session
