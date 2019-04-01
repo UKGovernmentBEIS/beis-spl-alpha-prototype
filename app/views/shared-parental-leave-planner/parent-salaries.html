@@ -6,6 +6,46 @@
   Plan leave and pay when you have a child
 {% endblock %}
 
+{% macro salaryInput(options) %}
+  {% set salaryAmountId = options.idPrefix + "-salary-amount" %}
+  {% set salaryPeriodId = options.idPrefix + "-salary-period" %}
+  <div class="salary-group">
+    {{ govukInput({
+      label: {
+        text: options.labelText
+      },
+      classes: "govuk-input--width-10",
+      id: salaryAmountId,
+      name: salaryAmountId,
+      value: data[salaryAmountId]
+    }) }}
+    {{ govukSelect({
+      id: salaryPeriodId,
+      name: salaryPeriodId,
+      label: {
+        text: "Per"
+      },
+      items: [
+        {
+          value: "year",
+          text: "Year",
+          selected: data[salaryPeriodId] === "year"
+        },
+        {
+          value: "month",
+          text: "Month",
+          selected: data[salaryPeriodId] === "month"
+        },
+        {
+          value: "week",
+          text: "Week",
+          selected: data[salaryPeriodId] === "week"
+        }
+      ]
+    }) }}
+  </div>
+{% endmacro %}
+
 {% block content %}
 
   <div class="govuk-grid-row">
@@ -32,73 +72,15 @@
           }
         }) %}
           <div class="salary-group">
-            {{ govukInput({
-              label: {
-                text: "Mother's salary (£)"
-              },
-              classes: "govuk-input--width-10",
-              id: "mother-salary-amount",
-              name: "mother-salary-amount",
-              value: data["mother-salary-amount"]
-            }) }}
-            {{ govukSelect({
-              id: "mother-salary-period",
-              name: "mother-salary-period",
-              label: {
-                text: "Per"
-              },
-              items: [
-                {
-                  value: "year",
-                  text: "Year",
-                  selected: data["mother-salary-period"] === "year"
-                },
-                {
-                  value: "month",
-                  text: "Month",
-                  selected: data["mother-salary-period"] === "month"
-                },
-                {
-                  value: "week",
-                  text: "Week",
-                  selected: data["mother-salary-period"] === "week"
-                }
-              ]
+            {{ salaryInput({
+              idPrefix: "mother",
+              labelText: "Mother's salary (£)"
             }) }}
           </div>
           <div class="salary-group">
-            {{ govukInput({
-              label: {
-                text: "Partner's salary (£)"
-              },
-              classes: "govuk-input--width-10",
-              id: "partner-salary-amount",
-              name: "partner-salary-amount",
-              value: data["partner-salary-amount"]
-            }) }}
-            {{ govukSelect({
-              id: "partner-salary-period",
-              name: "partner-salary-period",
-              label: {
-                text: "Per"
-              },
-              items: [
-                {
-                  value: "year",
-                  text: "Year",
-                  selected: data["partner-salary-period"] === "year"
-                },
-                {
-                  value: "month",
-                  text: "Month",
-                  selected: data["partner-salary-period"] === "month"
-                },
-                {
-                  value: "week",
-                  text: "Week",
-                  selected: data["partner-salary-period"] === "week"
-                }
-              ]
+            {{ salaryInput({
+              idPrefix: "partner",
+              labelText: "Partner's salary (£)"
             }) }}
           </div>
         {% endcall %}
