@@ -35,7 +35,7 @@ router.route('/shared-parental-leave-planner/planner')
     addSavedDataToSession(session, savedData)
     res.redirect('/shared-parental-leave-planner/planner')
   })
-  
+
   .post(function (req, res) {
     const { data } = req.session
     delete data['due-date-errors']
@@ -46,7 +46,7 @@ router.route('/shared-parental-leave-planner/planner')
     } = data
     const dueDateErrors = validateDueDate(year, month, day)
     if (dueDateErrors.length > 0) {
-      data['due-date-errors'] = { text: dueDateErrors }
+      data['due-date-errors'] = dueDateErrors
       res.redirect('/shared-parental-leave-planner/due-date')
     } else {
       res.redirect('/shared-parental-leave-planner/planner')
