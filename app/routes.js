@@ -3,7 +3,7 @@ const router = express.Router()
 
 const moment = require('moment')
 
-const encoder = require('./assets/javascripts/utils')
+const utils = require('./assets/javascripts/utils')
 
 const { validateDueDate } = require('./validators')
 
@@ -99,7 +99,7 @@ function parseSavedDataFromQuery(query) {
 function addSavedDataToSession(session, savedData) {
   const { dueDate, encodedWeeks } = savedData
   const firstWeek = moment(dueDate).startOf('week').subtract(11, 'weeks')
-  const weeks = encoder.decodeWeeks(encodedWeeks, firstWeek, moment)
+  const weeks = utils.decodeWeeks(encodedWeeks, firstWeek, moment)
   Object.assign(session.data, { 'due-date': dueDate, ...weeks })
 }
 

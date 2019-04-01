@@ -96,7 +96,8 @@ $(document).ready(function () {
     const $this = $(this)
     const motherLeave = $this.data('mother-leave').split(',').map(function (n) { return parseInt(n) })
     const partnerLeave = $this.data('partner-leave').split(',').map(function (n) { return parseInt(n) })
-    if ($('.mother-leave').length + $('.partner-leave').length > 2 && !confirm("This will overwrite any leave that you have already entered on the calendar.")) {
+    const warning = 'This will overwrite any leave that you have already entered on the calendar.'
+    if ($('.mother-leave').length + $('.partner-leave').length > 2 && !confirm(warning)) {
       return
     }
     $('.mother').each(function () {
@@ -145,9 +146,9 @@ function removeLeave($cell) {
   toggleLeave($cell, false)
 }
 
-function toggleLeave($cell, checked) {
+function toggleLeave($cell, isLeave) {
   const $input = $cell.find('input')
-  $input.prop('checked', checked)
+  $input.prop('checked', isLeave)
   $input.change()
 }
 
