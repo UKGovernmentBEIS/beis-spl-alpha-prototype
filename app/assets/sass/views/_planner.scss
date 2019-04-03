@@ -200,11 +200,11 @@ table#leave-calendar {
       @media only screen and (min-width: 1020px) {
         height: 3.5em;
       }
-    }
-    .with-initial-maternity-pay .initial-maternity-pay,
-    .with-statutory-pay .statutory-pay,
-    .with-unpaid .unpaid {
-      display: block;
+      .with-initial-maternity-pay .initial-maternity-pay,
+      .with-statutory-pay .statutory-pay,
+      .with-unpaid .unpaid {
+        display: block;
+      }
     }
   }
 }
