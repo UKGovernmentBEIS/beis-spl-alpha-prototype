@@ -1,0 +1,76 @@
+{% from "back-link/macro.njk" import govukBackLink %}
+{% from "radios/macro.njk" import govukRadios %}
+
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Check eligibility for shared parental leave and pay
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "results"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  {% set headingCaption %}
+    {{ data['primary-name'] | capitalize }}’s eligibility
+  {% endset %}
+
+  {% set heading %}
+    What is the {{ data['primary-name'] }}’s employment status
+  {% endset %}
+
+  {% set questionText %}  {% endset %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-xl">{{ headingCaption }}</span>
+      <form action="pay-and-leave" method="POST">
+
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "employment-status",
+          name: "employment-status",
+          fieldset: {
+            legend: {
+              text: heading,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--xl"
+            }
+          },
+          hint: {
+            text: "XXXXXSome hint text? guidance on answering?"
+          },
+          items: [
+            {
+              value: "employee",
+              text: "Employee"
+            },
+            {
+              value: "worker",
+              text: "Worker"
+            },
+            {
+              value: "self-employed",
+              text: "Self-employed"
+            },
+            {
+              value: "unemployed",
+              text: "Unemployed"
+            }
+          ]
+        }) }}
+
+        <button type="submit" class="govuk-button govuk-button--start">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
