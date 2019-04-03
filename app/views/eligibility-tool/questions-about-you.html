@@ -1,0 +1,120 @@
+{% from "back-link/macro.njk" import govukBackLink %}
+{% from "radios/macro.njk" import govukRadios %}
+
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Check eligibility for shared parental leave and pay
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "index"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Questions about you
+      </h1>
+      <form action="questions-about-your-partner" method="POST">
+        
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "employment-status",
+          name: "employment-status",
+          fieldset: {
+            legend: {
+              text: "What is your current employment status?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: "XXXXXSome hint text? guidance on answering?"
+          },
+          items: [
+            {
+              value: "employee",
+              text: "Employee"
+            },
+            {
+              value: "worker",
+              text: "Worker"
+            },
+            {
+              value: "self-employed",
+              text: "Self-employed"
+            },
+            {
+              value: "unemployed",
+              text: "Unemployed"
+            }
+          ]
+        }) }}
+
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "continuous-work",
+          name: "continuous-work",
+          fieldset: {
+            legend: {
+              text: "Have you worked continuously since 26 weeks before 15 weeks to due date?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: "XXXXXXSome hint text? guidance on answering?"
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "pay-threshold",
+          name: "pay-threshold",
+          fieldset: {
+            legend: {
+              text: "Did you earn £116 per week for the 8 week period ending 15 weeks before due date?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: "XXXXXXSome hint text? guidance on answering?"
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        <button type="submit" class="govuk-button govuk-button--start">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

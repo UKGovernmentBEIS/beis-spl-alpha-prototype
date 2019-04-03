@@ -1,0 +1,86 @@
+{% from "back-link/macro.njk" import govukBackLink %}
+{% from "radios/macro.njk" import govukRadios %}
+
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Check eligibility for shared parental leave and pay
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "questions-about-you"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Questions about your partner
+      </h1>
+      <form action="results" method="POST">
+
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "partner-work",
+          name: "partner-work",
+          fieldset: {
+            legend: {
+              text: "In the 66 weeks before your due date, has your partner worked for at least 26 weeks?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: "The 26 weeks don't need to be in a row. They can be full or partial weeks."
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "partner-pay",
+          name: "partner-pay",
+          fieldset: {
+            legend: {
+              text: "In the 66 weeks before the due date, did your partner earn (or will they have earned) a total of £390 or more in any 13 weeks of this job?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: "The 13 weeks don't need to be in a row."
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        <button type="submit" class="govuk-button govuk-button--start">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

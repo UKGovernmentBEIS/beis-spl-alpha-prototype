@@ -1,0 +1,68 @@
+{% from "table/macro.njk" import govukTable %}
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Check eligibility for shared parental leave and pay
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Your eligibility
+      </h1>
+      
+      <p>Some results</p>
+
+      {{ govukTable({
+        caption: "Your eligibility",
+        firstCellIsHeader: true,
+        head: [
+          {
+            text: "Parent"
+          },
+          {
+            text: "Eligible for shared parental leave",
+            format: "numeric"
+          },
+          {
+            text: "Eligible for shared parental pay",
+            format: "numeric"
+          }
+        ],
+        rows: [
+          [
+            {
+              text: "You"
+            },
+            {
+              text: data['eligibility']['spl'],
+              format: "numeric"
+            },
+            {
+              text: data['eligibility']['shpp'],
+              format: "numeric"
+            }
+          ],
+          [
+            {
+              text: "Your partner"
+            },
+            {
+              text: "Unknown",
+              format: "numeric"
+            },
+            {
+              text: "Unkown",
+              format: "numeric"
+            }
+          ]
+        ]
+      }) }}
+
+    </div>
+  </div>
+
+{% endblock %}
