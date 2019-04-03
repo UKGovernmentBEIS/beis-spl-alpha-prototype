@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Check eligibility for shared parental leave and pay
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "index"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form action="start-date" method="POST">
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "adoption-or-birth",
+          name: "adoption-or-birth",
+          fieldset: {
+            legend: {
+              text: "Are you having a baby adopting a child?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--xl"
+            }
+          },
+          hint: {
+            text: "XXXXXXSome hint text? guidance on answering?"
+          },
+          items: [
+            {
+              value: "adoption",
+              text: "I am adopting"
+            },
+            {
+              value: "birth",
+              text: "I am having a baby"
+            }
+          ]
+        }) }}
+
+
+        <button type="submit" class="govuk-button govuk-button--start">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

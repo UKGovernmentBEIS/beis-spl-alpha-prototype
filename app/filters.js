@@ -71,6 +71,14 @@ module.exports = function (env) {
     return `£${parseFloat(amount).toFixed(2)}`
   }
 
+  filters.getStartDateTitle = function (adoptionOrBirth) {
+    if (adoptionOrBirth === 'birth') {
+      return "When is the baby due, or when was the baby born?"
+    } else if (adoptionOrBirth === 'adoption') {
+      return "When is or was your match date?"
+    }
+  }
+
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */
