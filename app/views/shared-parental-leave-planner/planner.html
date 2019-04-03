@@ -21,7 +21,7 @@
 {% endset %}
 
 {% macro statutoryPay(weeklyPay) %}
-  {{- (((weeklyPay * 0.9) | pay) if (weeklyPay < 165.20) else "£148.68") if weeklyPay else "Up to £148.68" -}}
+  {{- "Up to £148.68" if not weeklyPay else (((weeklyPay * 0.9) | pay) if weeklyPay < 165.20 else "£148.68") -}}
 {% endmacro %}
 
 {% set example1 %}
