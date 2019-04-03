@@ -53,39 +53,42 @@ table#leave-calendar {
           cursor: not-allowed !important;
         }
       }
-      &.mother, &.partner {
-        &:hover::after {
-          content: "";
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          background-color: rgba(0, 0, 0, 0.1);
-          pointer-events: none;
-        }
-      }
       @media only screen and (min-width: 1020px) {
         br {
           display: none;
         }
       }
-    }
-    input[type="checkbox"] {
-      visibility: hidden;
-      + label {
-        cursor: cell;
+      &.mother, &.partner {
+        /* Hidden overflow is needed to hide oversized background used for IE11 compatibility. */
         overflow: hidden;
-        padding: 10px 10px 10px 0;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-      }
-      &:checked {
-        + label .work-or-other-leave {
-          display: none
+        @mixin full-cell {
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          /* IE11 fix for full height cells. */
+          height: 200px;
+        }
+        &:hover::after {
+          content: "";
+          @include full-cell();
+          background-color: rgba(0, 0, 0, 0.1);
+          pointer-events: none;
+        }
+        input[type="checkbox"] {
+          visibility: hidden;
+          + label {
+            cursor: cell;
+            overflow: hidden;
+            padding: 10px 10px 10px 0;
+            @include full-cell();
+          }
+          &:checked {
+            + label .work-or-other-leave {
+              display: none
+            }
+          }
         }
       }
     }
@@ -193,7 +196,10 @@ table#leave-calendar {
 
   &.show-pay {
     .week {
-      height: 3.5em;
+      height: 4.5em;
+      @media only screen and (min-width: 1020px) {
+        height: 3.5em;
+      }
     }
     .with-initial-maternity-pay .initial-maternity-pay,
     .with-statutory-pay .statutory-pay,
