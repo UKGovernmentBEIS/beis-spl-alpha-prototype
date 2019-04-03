@@ -4,6 +4,14 @@ const router = express.Router()
 const { validateDueDate } = require('../validators')
 
 router.post('/birth-or-adoption', function(req, res) {
+  const { data } = req.session
+  if (data['birth-or-adoption'] === 'birth') {
+    data['primary-name'] = 'mother'
+    data['secondary-name'] = 'father'
+  } else if (data['birth-or-adoption'] === 'adoption') {
+    data['primary-name'] = 'primary adopter'
+    data['secondary-name'] = 'primary adopter’s partner'
+  }
   res.redirect('start-date')
 })
 
@@ -36,11 +44,10 @@ router.post('/results', function(req, res) {
   res.redirect('/eligibility-tool/results')
 })
 
-router.get('/check-eligibility/:youOrPartner', function (req, res) {
-  const { data } = req.session
-  if (data[''])
-  req.session.data.currentParent = req.params.youOrPartner
-  res.redirect('/eligibility-tool/questions-about-you')
+router.get('/check-eligibility/:primaryOrSecondary', function (req, res) {
+  req.session.data.currentParent = req.params.primaryOrSecondary
+  res.redirect('/eligibility-tool/employment-status')
+})
 })
 function getEligibility(eligibilityData) {
   const isYes = field => field === "yes"

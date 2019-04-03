@@ -15,11 +15,11 @@
       </h1>
 
       {% set primaryTableCaption %}
-        {{ data['birth-or-adoption'] | primaryPartner | capitalize }}’s eligibility
+        {{ data['primary-name'] | capitalize }}’s eligibility
       {% endset %}
 
       {% set secondaryTableCaption %}
-        {{ data['birth-or-adoption'] | secondaryPartner | capitalize }}’s eligibility
+        {{ data['secondary-name'] | capitalize }}’s eligibility
       {% endset %}
 
       {% set primaryCheckEligibilityButton %}
@@ -44,10 +44,10 @@
         rows: [
           [
             {
-              text: data['primary']['eligibility']['spl'] | getEligibilityForResults
+              text: data['primary-spl'] | getEligibilityForResults
             },
             {
-              text: data['primary']['eligibility']['shpp'] | getEligibilityForResults
+              text: data['primary-shpp'] | getEligibilityForResults
             },
             {
               html: primaryCheckEligibilityButton
@@ -70,10 +70,10 @@
         rows: [
           [
             {
-              text: data['secondary']['eligibility']['spl'] | getEligibilityForResults
+              text: data['secondary-spl'] | getEligibilityForResults
             },
             {
-              text: data['secondary']['eligibility']['shpp'] | getEligibilityForResults
+              text: data['secondary-shpp'] | getEligibilityForResults
             },
             {
               html: secondaryCheckEligibilityButton

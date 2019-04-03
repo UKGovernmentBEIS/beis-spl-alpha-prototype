@@ -95,24 +95,6 @@ module.exports = function (env) {
     }
   }
 
-  filters.primary = function (adoptionOrBirth) {
-    if (adoptionOrBirth === 'adoption') {
-      return "primary adopter"
-    } else if (adoptionOrBirth === "birth") {
-      return "mother"
-    }
-  }
-
-  filters.secondary = function (adoptionOrBirth) {
-    if (adoptionOrBirth === 'adoption') {
-      return "primary adopter’s partner"
-    } else if (adoptionOrBirth === "birth") {
-      return "mother's partner"
-    } else {
-      console.log("birth-or-adoption not recognised")
-    }
-  }
-
   filters.capitalize = function(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
