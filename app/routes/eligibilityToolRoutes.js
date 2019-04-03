@@ -3,7 +3,9 @@ const router = express.Router()
 
 const { validateDueDate } = require('../validators')
 
-router.post('/eligibility-tool/questions-about-your-partner', function (req, res) {
+router.post('/birth-or-adoption', function(req, res) {
+  res.redirect('start-date')
+})
   const data = req.session.data
   const eligibilityData = {
     employmentStatus: data['employment-status'],
@@ -17,6 +19,22 @@ router.post('/eligibility-tool/questions-about-your-partner', function (req, res
   res.redirect('results')
 })
 
+router.post('/start-date', function (req, res) {
+  const { data } = req.session
+  delete data['due-date-errors']
+  const {
+    'due-date-day': day,
+    'due-date-month': month,
+    'due-date-year': year
+  } = data
+  const dueDateErrors = validateDueDate(year, month, day)
+  if (dueDateErrors.length > 0) {
+    data['due-date-errors'] = dueDateErrors
+    res.redirect('/eligibility-tool/start-date')
+  } else {
+    res.redirect('/eligibility-tool/results')
+  }
+})
 
 function getEligibility(eligibilityData) {
   const isYes = field => field === "yes"
