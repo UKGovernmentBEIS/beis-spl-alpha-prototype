@@ -6,18 +6,6 @@ const { validateDueDate } = require('../validators')
 router.post('/birth-or-adoption', function(req, res) {
   res.redirect('start-date')
 })
-  const data = req.session.data
-  const eligibilityData = {
-    employmentStatus: data['employment-status'],
-    continuousWork: data['continuous-work'],
-    payThreshold: data['pay-threshold'],
-    partnerWork: data['partner-work'],
-    partnerPay: data['partner-pay']
-  }
-
-  data.eligibility = getEligibility(eligibilityData)
-  res.redirect('results')
-})
 
 router.post('/start-date', function (req, res) {
   const { data } = req.session
@@ -36,6 +24,24 @@ router.post('/start-date', function (req, res) {
   }
 })
 
+router.post('/results', function(req, res) {
+  const { data } = req.session
+  if (data['eligibility']['spl'] === undefined) {
+    data['eligibility']['spl'] === 'unknown'
+  }
+  if (data['eligibility']['shpp'] === undefined) {
+    data['eligibility']['shpp'] === 'unknown'
+  }
+
+  res.redirect('/eligibility-tool/results')
+})
+
+router.get('/check-eligibility/:youOrPartner', function (req, res) {
+  const { data } = req.session
+  if (data[''])
+  req.session.data.currentParent = req.params.youOrPartner
+  res.redirect('/eligibility-tool/questions-about-you')
+})
 function getEligibility(eligibilityData) {
   const isYes = field => field === "yes"
   const isNo = field => field === "no"

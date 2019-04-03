@@ -79,6 +79,44 @@ module.exports = function (env) {
     }
   }
 
+  filters.getEligibilityForResults = function (eligibility) {
+    switch (eligibility) {
+      case true:
+        return "Eligible"
+      break;
+      case false:
+        return "Not eligible"
+        break;
+      case undefined:
+        return "Eligibility unknown"
+        break;
+      default:
+        console.log('unknown eligibility')
+    }
+  }
+
+  filters.primary = function (adoptionOrBirth) {
+    if (adoptionOrBirth === 'adoption') {
+      return "primary adopter"
+    } else if (adoptionOrBirth === "birth") {
+      return "mother"
+    }
+  }
+
+  filters.secondary = function (adoptionOrBirth) {
+    if (adoptionOrBirth === 'adoption') {
+      return "primary adopter’s partner"
+    } else if (adoptionOrBirth === "birth") {
+      return "mother's partner"
+    } else {
+      console.log("birth-or-adoption not recognised")
+    }
+  }
+
+  filters.capitalize = function(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */

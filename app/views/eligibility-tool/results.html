@@ -11,52 +11,72 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">
-        Your eligibility
+        Eligibility
       </h1>
-      
-      <p>Some results</p>
+
+      {% set primaryTableCaption %}
+        {{ data['birth-or-adoption'] | primaryPartner | capitalize }}’s eligibility
+      {% endset %}
+
+      {% set secondaryTableCaption %}
+        {{ data['birth-or-adoption'] | secondaryPartner | capitalize }}’s eligibility
+      {% endset %}
+
+      {% set primaryCheckEligibilityButton %}
+        <a class="govuk-link" href="check-eligibility/primary">Check</a>
+      {% endset %}
+
+      {% set secondaryCheckEligibilityButton %}
+        <a class="govuk-link" href="check-eligibility/secondary">Check</a>
+      {% endset %}
 
       {{ govukTable({
-        caption: "Your eligibility",
-        firstCellIsHeader: true,
+        caption: primaryTableCaption,
         head: [
           {
-            text: "Parent"
+            text: "Shared parental leave"
           },
           {
-            text: "Eligible for shared parental leave",
-            format: "numeric"
+            text: "Statory shared parental pay"
           },
-          {
-            text: "Eligible for shared parental pay",
-            format: "numeric"
-          }
+          {}
         ],
         rows: [
           [
             {
-              text: "You"
+              text: data['primary']['eligibility']['spl'] | getEligibilityForResults
             },
             {
-              text: data['eligibility']['spl'],
-              format: "numeric"
+              text: data['primary']['eligibility']['shpp'] | getEligibilityForResults
             },
             {
-              text: data['eligibility']['shpp'],
-              format: "numeric"
+              html: primaryCheckEligibilityButton
             }
-          ],
+          ]
+        ]
+      }) }}
+
+      {{ govukTable({
+        caption: secondaryTableCaption,
+        head: [
+          {
+            text: "Shared parental leave"
+          },
+          {
+            text: "Statory shared parental pay"
+          },
+          {}
+        ],
+        rows: [
           [
             {
-              text: "Your partner"
+              text: data['secondary']['eligibility']['spl'] | getEligibilityForResults
             },
             {
-              text: "Unknown",
-              format: "numeric"
+              text: data['secondary']['eligibility']['shpp'] | getEligibilityForResults
             },
             {
-              text: "Unkown",
-              format: "numeric"
+              html: secondaryCheckEligibilityButton
             }
           ]
         ]
