@@ -208,7 +208,7 @@
                 </td>
                 {% set motherId = "mother-" + date %}
                 {% set motherWeeklyPay = data["mother-weekly-pay"] %}
-                <td class="govuk-table__cell mother {{ 'compulsory disabled' if firstTwoBirthWeeks }}}">
+                <td class="govuk-table__cell mother {{ 'compulsory disabled' if firstTwoBirthWeeks }}">
                   <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
                     {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
                   <!-- Deliberately omit 'for' from label on compulsory maternity weeks, to prevent changing. -->
