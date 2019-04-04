@@ -26,11 +26,21 @@
   {% endset %}
 
   {% set partnerWorkTitle %}
-    Since 26 September 2018 has the {{ data | otherParentName }} worked any combination of 26 weeks?
+    {% if data['birth-or-adoption'] == 'birth' %}
+      Since {{ data['sixty-six-weeks-before-due'] | formatDate('D MMMM YYYY') }} has the {{ data | otherParentName }} worked any combination of 26 weeks?
+    {% elif data['birth-or-adoption'] == 'adoption' %}
+      Did the {{ data | otherParentName }} work (or will they have worked) for at least 26 weeks during the 66 weeks ending with your placement date?
+    {% endif %}
   {% endset %}
 
   {% set partnerPayTitle %}
-    Since 26 September 2018 did the {{ data | otherParentName }}'s earn (or will they have earned) at least £390 in any 13 weeks?
+
+    {% if data['birth-or-adoption'] == 'birth' %}
+      Since {{ data['sixty-six-weeks-before-due'] | formatDate('D MMMM YYYY') }} did the {{ data | otherParentName }}'s earn (or will they have earned) at least £390 in any 13 weeks?
+    {% elif data['birth-or-adoption'] == 'adoption' %}
+      Did the {{ data | otherParentName }} earn (or will they have earned) a
+      total of £390 or more in any 13 weeks during the 66 weeks ending with your placement date?
+    {% endif %}
   {% endset %}
 
 

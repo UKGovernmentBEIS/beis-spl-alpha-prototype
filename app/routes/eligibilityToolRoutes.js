@@ -31,10 +31,15 @@ router.post('/start-date', function (req, res) {
     res.redirect('/eligibility-tool/start-date')
   } else {
     const isAdoption = data['birth-or-adoption'] === 'adoption'
-    data['provided-date'] = dates.providedDate(year, month, day)
-    data['twentysix-weeks-before-qualifying'] = dates.twentySixWeeksBeforeQualifying(year, month, day, isAdoption)
-    data['eight-weeks-before-qualifying'] = dates.eightWeeksBeforeQualifying(year, month, day, isAdoption)
-    data['qualifying-week'] = dates.qualifyingWeek(year, month, day, isAdoption)
+    Object.assign(data, {
+      'provided-date': dates.providedDate(year, month, day),
+      'twenty-six-weeks-before-qualifying': dates.twentySixWeeksBeforeQualifying(year, month, day, isAdoption),
+      'eight-weeks-before-qualifying': dates.eightWeeksBeforeQualifying(year, month, day, isAdoption),
+      'qualifying-week': dates.qualifyingWeek(year, month, day, isAdoption)
+    })
+    if (!isAdoption) {
+      data['sixty-six-weeks-before-due'] = dates.sixtySixWeeksBeforeDueDate(year, month, day)
+    }
     console.log(data)
     res.redirect('/eligibility-tool/results')
   }

@@ -25,5 +25,11 @@ module.exports = {
     const startOfQualifyingWeek = moment(this.qualifyingWeek(...arguments));
     const startOfEighthWeek = startOfQualifyingWeek.subtract(56, 'days')
     return startOfEighthWeek.format("YYYY-MM-DD")
+  },
+
+  sixtySixWeeksBeforeDueDate: function(year, month, day) {
+    const startOfDueWeek = moment(this.providedDate(...arguments));
+    const startOfSixtySixthWeek = startOfDueWeek.subtract(462, 'days')
+    return startOfSixtySixthWeek.format("YYYY-MM-DD")
   }
 }
