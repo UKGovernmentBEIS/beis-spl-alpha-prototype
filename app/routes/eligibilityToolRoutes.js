@@ -57,15 +57,7 @@ router.post('/start-date', function (req, res) {
 })
 
 router.post('/results', function(req, res) {
-  const { data } = req.session
-  if (data['eligibility']['spl'] === undefined) {
-    data['eligibility']['spl'] === 'unknown'
-  }
-  if (data['eligibility']['shpp'] === undefined) {
-    data['eligibility']['shpp'] === 'unknown'
-  }
-
-  res.redirect('/eligibility-tool/results')
+  res.redirect('/shared-parental-leave-planner')
 })
 
 router.post('/employment', function (req, res) {
