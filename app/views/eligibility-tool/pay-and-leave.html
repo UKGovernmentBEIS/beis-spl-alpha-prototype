@@ -18,11 +18,23 @@
 {% block content %}
 
   {% set headingCaption %}
-    {{ data['birth-or-adoption'] | primaryPartner | capitalize }}’s eligibility
+    {{ data | currentParentName | capitalize }}’s eligibility
   {% endset %}
 
   {% set heading %}
-    {{ data['birth-or-adoption'] | primaryPartner | capitalize }}’s work and pay
+    {{ data | currentParentName | capitalize }}’s work and pay
+  {% endset %}
+
+  {% set workStartTitle %}
+    Did the {{ data | currentParentName }} start their current or most recent job before 30 March 2019?
+  {% endset %}
+
+  {% set continuousWorkTitle %}
+    Was the {{ data | currentParentName }} (or will they be) still working in that job on 15 September 2019?
+  {% endset %}
+
+  {% set payThresholdTitle %}
+    Has the {{ data | currentParentName }} earned (or will they have earned) more than £118 per week in this job between 27 July 2019 and 21 September 2019?
   {% endset %}
 
   <div class="govuk-grid-row">
@@ -31,38 +43,30 @@
         <span class="govuk-caption-xl">{{ headingCaption }}</span>
         {{ heading }}
       </h1>
-      <form action="questions-about-your-partner" method="POST">
+      <form action="pay-and-leave" method="POST">
 
         {{ govukRadios({
           classes: "govuk-radios",
-          idPrefix: "employment-status",
-          name: "employment-status",
+          idPrefix: "work-start",
+          name: "work-start",
           fieldset: {
             legend: {
-              text: "What is your current employment status?",
+              text: workStartTitle ,
               isPageHeading: true,
               classes: "govuk-fieldset__legend--m"
             }
           },
           hint: {
-            text: "XXXXXSome hint text? guidance on answering?"
+            text: "XXXXXXSome hint text? guidance on answering?"
           },
           items: [
             {
-              value: "employee",
-              text: "Employee"
+              value: "yes",
+              text: "Yes"
             },
             {
-              value: "worker",
-              text: "Worker"
-            },
-            {
-              value: "self-employed",
-              text: "Self-employed"
-            },
-            {
-              value: "unemployed",
-              text: "Unemployed"
+              value: "no",
+              text: "No"
             }
           ]
         }) }}
@@ -73,7 +77,7 @@
           name: "continuous-work",
           fieldset: {
             legend: {
-              text: "Have you worked continuously since 26 weeks before 15 weeks to due date?",
+              text: continuousWorkTitle,
               isPageHeading: true,
               classes: "govuk-fieldset__legend--m"
             }
@@ -99,7 +103,7 @@
           name: "pay-threshold",
           fieldset: {
             legend: {
-              text: "Did you earn £116 per week for the 8 week period ending 15 weeks before due date?",
+              text: payThresholdTitle,
               isPageHeading: true,
               classes: "govuk-fieldset__legend--m"
             }

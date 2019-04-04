@@ -7,7 +7,7 @@ router.post('/birth-or-adoption', function(req, res) {
   const { data } = req.session
   if (data['birth-or-adoption'] === 'birth') {
     data['primary-name'] = 'mother'
-    data['secondary-name'] = 'father'
+    data['secondary-name'] = 'mother’s partner'
   } else if (data['birth-or-adoption'] === 'adoption') {
     data['primary-name'] = 'primary adopter'
     data['secondary-name'] = 'primary adopter’s partner'
@@ -44,10 +44,19 @@ router.post('/results', function(req, res) {
   res.redirect('/eligibility-tool/results')
 })
 
+router.post('/employment', function (req, res) {
+  res.redirect('/eligibility-tool/pay-and-leave')
+})
+
 router.get('/check-eligibility/:primaryOrSecondary', function (req, res) {
-  req.session.data.currentParent = req.params.primaryOrSecondary
+  const { data } = req.session
+  data['current-parent'] = req.params.primaryOrSecondary
   res.redirect('/eligibility-tool/employment-status')
 })
+
+router.post('/pay-and-leave', function (req, res) {
+  console.log('in here')
+  res.redirect('/eligibility-tool/partners-pay-and-leave')
 })
 function getEligibility(eligibilityData) {
   const isYes = field => field === "yes"
