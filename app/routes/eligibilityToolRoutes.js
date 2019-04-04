@@ -55,15 +55,32 @@ router.get('/check-eligibility/:primaryOrSecondary', function (req, res) {
 })
 
 router.post('/pay-and-leave', function (req, res) {
-  console.log('in here')
   res.redirect('/eligibility-tool/partners-pay-and-leave')
 })
+
+router.post('/partners-pay-and-leave', function (req, res) {
+  const { data } = req.session
+  const eligibilityData = {
+    employmentStatus: data['employment-status'],
+    workStart: data['work-start'],
+    continuousWork: data['continuous-work'],
+    payThreshold: data['pay-threshold'],
+    partnerWork: data['partner-work'],
+    partnerPay: data['partner-pay']
+  }
+  const eligibilityKey = `${data['current-parent']}-eligibility`
+  data[eligibilityKey] = getEligibility(eligibilityData)
+  console.log(data)
+  res.redirect('results')
+})
+
 function getEligibility(eligibilityData) {
   const isYes = field => field === "yes"
   const isNo = field => field === "no"
 
   const {
     employmentStatus,
+    workStart,
     continuousWork,
     payThreshold,
     partnerWork,
@@ -75,12 +92,12 @@ function getEligibility(eligibilityData) {
   if (isNo(partnerWork) || isNo(partnerPay)) { return eligibility }
 
   if (employmentStatus === "worker") {
-    eligibility.shpp = isYes(continuousWork) && isYes(payThreshold)
+    eligibility.shpp = isYes(workStart) && isYes(continuousWork) && isYes(payThreshold)
   }
 
   if (employmentStatus === "employee") {
-    eligibility.shpp = isYes(continuousWork) && isYes(payThreshold)
-    eligibility.spl = isYes(continuousWork)
+    eligibility.shpp = isYes(workStart) && isYes(continuousWork) && isYes(payThreshold)
+    eligibility.spl = isYes(workStart) && isYes(continuousWork)
   }
 
   return eligibility

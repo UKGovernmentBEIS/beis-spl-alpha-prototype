@@ -44,10 +44,10 @@
         rows: [
           [
             {
-              text: data['primary-spl'] | getEligibilityForResults
+              text: data['primary-eligibility']['spl'] | getEligibilityForResults
             },
             {
-              text: data['primary-shpp'] | getEligibilityForResults
+              text: data['primary-eligibility']['shpp'] | getEligibilityForResults
             },
             {
               html: primaryCheckEligibilityButton
@@ -70,10 +70,10 @@
         rows: [
           [
             {
-              text: data['secondary-spl'] | getEligibilityForResults
+              text: data['secondary-eligibility']['spl'] | getEligibilityForResults
             },
             {
-              text: data['secondary-shpp'] | getEligibilityForResults
+              text: data['secondary-eligibility']['shpp'] | getEligibilityForResults
             },
             {
               html: secondaryCheckEligibilityButton
