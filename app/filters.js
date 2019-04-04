@@ -103,6 +103,11 @@ module.exports = function (env) {
     return data[`${data['current-parent']}-name`]
   }
 
+  filters.otherParentName = function(data) {
+    const otherParent = data['current-parent'] === 'primary' ? 'secondary' : 'primary'
+    return data[`${otherParent}-name`]
+  }
+
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */
