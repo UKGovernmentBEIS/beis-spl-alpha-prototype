@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Get data out
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" class="form">
+        {% call govukFieldset({
+          legend: {
+            text: "What data are you after?",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--l"
+          }
+        }) %}
+
+        {{ govukInput({
+          idPrefix: "data-name",
+          name: "data-name",
+          value: data['data-name']
+        }) }}
+        {% endcall %}
+
+        <textarea rows="50" width="100%" class="govuk-grid-column-full">
+          {% if data['data-name'] %}
+{{ data[data['data-name']] | dump(4) }}
+          {% else %}
+{{ data | dump(4) }}
+          {% endif %}
+        </textarea>
+      </form>
+    </div>
+  </div>
+{% endblock %}
