@@ -25,6 +25,10 @@
     What is the {{ data['primary-name'] }}’s employment status
   {% endset %}
 
+  {% set helpText %}
+    Read about <a href="https://www.gov.uk/employment-status">employment statuses</a> if you aren’t sure which one applies.
+  {% endset %}
+
   {% set questionText %}  {% endset %}
 
   <div class="govuk-grid-row">
@@ -44,7 +48,7 @@
             }
           },
           hint: {
-            text: "XXXXXSome hint text? guidance on answering?"
+            html: helpText
           },
           items: [
             {
