@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
+const dates = require('../assets/javascripts/dates')
 const { validateDueDate } = require('../validators')
 
 router.post('/birth-or-adoption', function(req, res) {
@@ -24,10 +25,17 @@ router.post('/start-date', function (req, res) {
     'due-date-year': year
   } = data
   const dueDateErrors = validateDueDate(year, month, day)
+
   if (dueDateErrors.length > 0) {
     data['due-date-errors'] = dueDateErrors
     res.redirect('/eligibility-tool/start-date')
   } else {
+    const isAdoption = data['birth-or-adoption'] === 'adoption'
+    data['provided-date'] = dates.providedDate(year, month, day)
+    data['twentysix-weeks-before-qualifying'] = dates.twentySixWeeksBeforeQualifying(year, month, day, isAdoption)
+    data['eight-weeks-before-qualifying'] = dates.eightWeeksBeforeQualifying(year, month, day, isAdoption)
+    data['qualifying-week'] = dates.qualifyingWeek(year, month, day, isAdoption)
+    console.log(data)
     res.redirect('/eligibility-tool/results')
   }
 })
@@ -70,7 +78,6 @@ router.post('/partners-pay-and-leave', function (req, res) {
   }
   const eligibilityKey = `${data['current-parent']}-eligibility`
   data[eligibilityKey] = getEligibility(eligibilityData)
-  console.log(data)
   res.redirect('results')
 })
 
