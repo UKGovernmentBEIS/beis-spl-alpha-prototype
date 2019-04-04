@@ -13,7 +13,18 @@ router.post('/birth-or-adoption', function(req, res) {
     data['primary-name'] = 'primary adopter'
     data['secondary-name'] = 'primary adopter’s partner'
   }
-  res.redirect('start-date')
+  res.redirect('caring-with-partner')
+})
+
+router.post('/caring-with-partner', function (req, res) {
+  const { data } = req.session
+  if (data['caring-with-partner'] === "no") {
+    data['primary-eligibility'] = { spl: false, shpp: false }
+    data['secondary-eligibility'] = { spl: false, shpp: false }
+    res.redirect('/eligibility-tool/results')
+  } else {
+    res.redirect('/eligibility-tool/start-date')
+  }
 })
 
 router.post('/start-date', function (req, res) {

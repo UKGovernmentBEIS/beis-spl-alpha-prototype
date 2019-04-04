@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Check eligibility for shared parental leave and pay
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "birth-or-adoption"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  {% set questionText %}
+    Will the {{ data['primary-name'] }} care for the child with a partner?
+  {% endset %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form action="caring-with-partner" method="POST">
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "caring-with-partner",
+          name: "caring-with-partner",
+          fieldset: {
+            legend: {
+              text: questionText,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--xl"
+            }
+          },
+          hint: {
+            text: "XXXXXXSome hint text? guidance on answering?"
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+
+        <button type="submit" class="govuk-button govuk-button--start">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
