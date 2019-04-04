@@ -10,8 +10,12 @@ helpers.each(function () {
     $markdown.hide()
     $preview.show()
   })
-  $preview.find('button').on('click', function () {
-    $preview.hide()
-    $markdown.show()
-  })
+})
+
+const ESC = 27
+$(window).on('keydown', function (e) {
+  if (e.keyCode === ESC) {
+    $('.preview').hide()
+    $('.markdown').show()
+  }
 })
