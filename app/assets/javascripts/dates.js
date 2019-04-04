@@ -6,6 +6,7 @@ function convertToMoment (year, month, day) {
 
 module.exports = {
   providedDate: function (year, month, day) {
+    // if birth-parents => due date, if adopters => match date
     return convertToMoment(year, month, day).format("YYYY-MM-DD");
   },
 
