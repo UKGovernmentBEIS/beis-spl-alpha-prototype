@@ -1,0 +1,104 @@
+{% from "back-link/macro.njk" import govukBackLink %}
+{% from "radios/macro.njk" import govukRadios %}
+
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Check eligibility for shared parental leave and pay
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "pay-and-leave"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  {% set headingCaption %}
+    {{ data | currentParentName | capitalize }}’s eligibility
+  {% endset %}
+
+  {% set heading %}
+    {{ data | otherParentName | capitalize }}’s work and pay
+  {% endset %}
+
+  {% set partnerWorkTitle %}
+    Since 26 September 2018 has the {{ data | otherParentName }} worked any combination of 26 weeks?
+  {% endset %}
+
+  {% set partnerPayTitle %}
+    Since 26 September 2018 did the {{ data | otherParentName }}'s earn (or will they have earned) at least £390 in any 13 weeks?
+  {% endset %}
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        <span class="govuk-caption-xl">{{ headingCaption }}</span>
+        {{ heading }}
+      </h1>
+      <form action="partners-pay-and-leave" method="POST">
+
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "partner-work",
+          name: "partner-work",
+          fieldset: {
+            legend: {
+              text: partnerWorkTitle,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: "The 26 weeks don't need to be consecutive. They can be full or partial weeks."
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "partner-pay",
+          name: "partner-pay",
+          fieldset: {
+            legend: {
+              text: partnerPayTitle,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: "The 13 weeks don't need to be consecutive."
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        <button type="submit" class="govuk-button govuk-button--start">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

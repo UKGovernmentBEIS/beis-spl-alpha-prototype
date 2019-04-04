@@ -9,6 +9,8 @@ const { validateDueDate } = require('./validators')
 
 // Add your routes here - above the module.exports line
 
+router.use('/eligibility-tool', require("./routes/eligibilityToolRoutes"))
+
 router.get('/shared-parental-leave-and-pay/eligibility', function (req, res) {
   res.redirect('/shared-parental-leave-and-pay')
 })

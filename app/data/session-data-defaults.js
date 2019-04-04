@@ -21,5 +21,6 @@ module.exports = {
   // Insert values here
   "due-date-day": "05",
   "due-date-month": "09",
-  "due-date-year": "2019"
+  "due-date-year": "2019",
+  'birth-or-adoption': 'adoption'
 }

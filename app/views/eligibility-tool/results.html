@@ -1,0 +1,93 @@
+{% from "table/macro.njk" import govukTable %}
+{% from "components/markdown.njk" import markdown %}
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Check eligibility for shared parental leave and pay
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Eligibility
+      </h1>
+
+      {{ markdown() }}
+
+      {% set primaryTableCaption %}
+        {{ data['primary-name'] | capitalize }}’s eligibility
+      {% endset %}
+
+      {% set secondaryTableCaption %}
+        {{ data['secondary-name'] | capitalize }}’s eligibility
+      {% endset %}
+
+      {% set primaryCheckEligibilityButton %}
+        <a class="govuk-link" href="check-eligibility/primary">Check</a>
+      {% endset %}
+
+      {% set secondaryCheckEligibilityButton %}
+        <a class="govuk-link" href="check-eligibility/secondary">Check</a>
+      {% endset %}
+
+      {{ govukTable({
+        caption: primaryTableCaption,
+        head: [
+          {
+            text: "Shared parental leave"
+          },
+          {
+            text: "Statory shared parental pay"
+          },
+          {}
+        ],
+        rows: [
+          [
+            {
+              text: data['primary-eligibility']['spl'] | getEligibilityForResults
+            },
+            {
+              text: data['primary-eligibility']['shpp'] | getEligibilityForResults
+            },
+            {
+              html: primaryCheckEligibilityButton
+            }
+          ]
+        ]
+      }) }}
+
+      {{ govukTable({
+        caption: secondaryTableCaption,
+        head: [
+          {
+            text: "Shared parental leave"
+          },
+          {
+            text: "Statory shared parental pay"
+          },
+          {}
+        ],
+        rows: [
+          [
+            {
+              text: data['secondary-eligibility']['spl'] | getEligibilityForResults
+            },
+            {
+              text: data['secondary-eligibility']['shpp'] | getEligibilityForResults
+            },
+            {
+              html: secondaryCheckEligibilityButton
+            }
+          ]
+        ]
+      }) }}
+
+      {{ markdown() }}
+
+    </div>
+  </div>
+
+{% endblock %}

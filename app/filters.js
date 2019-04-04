@@ -71,6 +71,43 @@ module.exports = function (env) {
     return `£${parseFloat(amount).toFixed(2)}`
   }
 
+  filters.getStartDateTitle = function (adoptionOrBirth) {
+    if (adoptionOrBirth === 'birth') {
+      return "When is the baby due, or when was the baby born?"
+    } else if (adoptionOrBirth === 'adoption') {
+      return "When is or was your match date?"
+    }
+  }
+
+  filters.getEligibilityForResults = function (eligibility) {
+    switch (eligibility) {
+      case true:
+        return "Eligible"
+      break;
+      case false:
+        return "Not eligible"
+        break;
+      case undefined:
+        return "Eligibility unknown"
+        break;
+      default:
+        console.log('unknown eligibility')
+    }
+  }
+
+  filters.capitalize = function(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  filters.currentParentName= function(data) {
+    return data[`${data['current-parent']}-name`]
+  }
+
+  filters.otherParentName = function(data) {
+    const otherParent = data['current-parent'] === 'primary' ? 'secondary' : 'primary'
+    return data[`${otherParent}-name`]
+  }
+
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */

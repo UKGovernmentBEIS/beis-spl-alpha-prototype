@@ -1,0 +1,133 @@
+{% from "back-link/macro.njk" import govukBackLink %}
+{% from "radios/macro.njk" import govukRadios %}
+
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Check eligibility for shared parental leave and pay
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "results"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  {% set headingCaption %}
+    {{ data | currentParentName | capitalize }}’s eligibility
+  {% endset %}
+
+  {% set heading %}
+    {{ data | currentParentName | capitalize }}’s work and pay
+  {% endset %}
+
+  {% set workStartTitle %}
+    Did the {{ data | currentParentName }} start their current or most recent job before 30 March 2019?
+  {% endset %}
+
+  {% set continuousWorkTitle %}
+    Was the {{ data | currentParentName }} (or will they be) still working in that job on 15 September 2019?
+  {% endset %}
+
+  {% set payThresholdTitle %}
+    Has the {{ data | currentParentName }} earned (or will they have earned) more than £118 per week in this job between 27 July 2019 and 21 September 2019?
+  {% endset %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        <span class="govuk-caption-xl">{{ headingCaption }}</span>
+        {{ heading }}
+      </h1>
+      <form action="pay-and-leave" method="POST">
+
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "work-start",
+          name: "work-start",
+          fieldset: {
+            legend: {
+              text: workStartTitle ,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: "XXXXXXSome hint text? guidance on answering?"
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "continuous-work",
+          name: "continuous-work",
+          fieldset: {
+            legend: {
+              text: continuousWorkTitle,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: "XXXXXXSome hint text? guidance on answering?"
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        {{ govukRadios({
+          classes: "govuk-radios",
+          idPrefix: "pay-threshold",
+          name: "pay-threshold",
+          fieldset: {
+            legend: {
+              text: payThresholdTitle,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: "XXXXXXSome hint text? guidance on answering?"
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+
+        <button type="submit" class="govuk-button govuk-button--start">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
