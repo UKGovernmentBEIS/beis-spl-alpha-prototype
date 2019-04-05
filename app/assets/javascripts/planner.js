@@ -150,7 +150,7 @@ $(document).ready(function () {
       toggleLeave($cell, partnerLeave.indexOf(weekNumber) !== -1)
     })
     onLeaveUpdated()
-    $calendar[0].scrollIntoView(true)
+    $('.birth-week').prev().prev()[0].scrollIntoView(true)
     $('button#clear-example').removeAttr('disabled')
   })
 
