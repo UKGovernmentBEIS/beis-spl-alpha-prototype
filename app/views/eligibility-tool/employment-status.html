@@ -53,19 +53,23 @@
           items: [
             {
               value: "employee",
-              text: "Employee"
+              text: "Employee",
+              checked: checked("employment-status", "employee")
             },
             {
               value: "worker",
-              text: "Worker"
+              text: "Worker",
+              checked: checked("employment-status", "worker")
             },
             {
               value: "self-employed",
-              text: "Self-employed"
+              text: "Self-employed",
+              checked: checked("employment-status", "self-employed")
             },
             {
               value: "unemployed",
-              text: "Unemployed"
+              text: "Unemployed",
+              checked: checked("employment-status", "unemployed")
             }
           ]
         }) }}

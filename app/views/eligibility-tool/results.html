@@ -90,8 +90,10 @@
         ]
       }) }}
 
+    {% set allowContinue = data["primary-eligibility"] or data["secondary-eligibility"] %}
+
     <form method="POST" action="results">
-      <button type="submit" class="govuk-button">
+      <button {% if not allowContinue %}disabled{% endif %} type="submit" class="govuk-button">
         Continue to planner
       </button>
     </form>

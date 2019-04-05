@@ -51,7 +51,6 @@ router.post('/start-date', function (req, res) {
     if (!isAdoption) {
       data['sixty-six-weeks-before-due'] = dates.sixtySixWeeksBeforeDueDate(year, month, day)
     }
-    console.log(data)
     res.redirect('/eligibility-tool/results')
   }
 })

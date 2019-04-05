@@ -11,7 +11,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "results"
+    href: "employment-status"
   }) }}
 {% endblock %}
 
@@ -65,11 +65,13 @@
           items: [
             {
               value: "yes",
-              text: "Yes"
+              text: "Yes",
+              checked: checked("work-start", "yes")
             },
             {
               value: "no",
-              text: "No"
+              text: "No",
+              checked: checked("work-start", "no")
             }
           ]
         }) }}
@@ -88,11 +90,13 @@
           items: [
             {
               value: "yes",
-              text: "Yes"
+              text: "Yes",
+              checked: checked("continuous-work", "yes")
             },
             {
               value: "no",
-              text: "No"
+              text: "No",
+              checked: checked("continuous-work", "no")
             }
           ]
         }) }}
@@ -111,11 +115,13 @@
           items: [
             {
               value: "yes",
-              text: "Yes"
+              text: "Yes",
+              checked: checked("pay-threshold", "yes")
             },
             {
               value: "no",
-              text: "No"
+              text: "No",
+              checked: checked("pay-threshold", "no")
             }
           ]
         }) }}
