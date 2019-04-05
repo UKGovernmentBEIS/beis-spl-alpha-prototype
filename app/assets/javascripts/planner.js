@@ -120,7 +120,7 @@ function handleMaternityBeforeBirthWeek($cell) {
       }
     })
   } else {
-    // Add leave to week and all weeks up to birth week.
+    // Add leave to this week and all weeks up to birth week.
     $beforeBirthWeek.each(function () {
       const $this = $(this)
       if (getWeekNumber($this) >= weekNumber) {
