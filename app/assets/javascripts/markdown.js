@@ -1,4 +1,4 @@
-$(document).readdy(function () {
+$(document).ready(function () {
   const helpers = $('.markdown-helper')
   const converter = new showdown.Converter()
 
