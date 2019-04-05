@@ -105,6 +105,7 @@ $(document).ready(function () {
     })
     onLeaveUpdated()
     $calendar[0].scrollIntoView(true)
+    $('button#clear-example').removeAttr('disabled')
   })
 })
 
