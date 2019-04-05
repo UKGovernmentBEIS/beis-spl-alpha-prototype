@@ -4,7 +4,7 @@
 
 module.exports = {
   // Service name used in header. Eg: 'Renew your passport'
-  serviceName: 'Plan leave and pay when you have a child',
+  serviceName: 'Shared parental leave and pay',
 
   // Default port that prototype runs on
   port: '3000',

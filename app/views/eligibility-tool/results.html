@@ -1,5 +1,4 @@
 {% from "table/macro.njk" import govukTable %}
-{% from "components/markdown.njk" import markdown %}
 
 {% extends "layout.html" %}
 
@@ -12,25 +11,31 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">
-        Eligibility
+        Check eligibility for shared parental leave and pay
       </h1>
 
-      {{ markdown() }}
+     <p>
+      Choose which parent you want to check eligibility for below.
+    </p>
+    <p>
+      Once you know what each parent can get, you can
+      <a href="/shared-parental-leave-planner">plan how to take leave and pay</a> when you have a child.
+     </p>
 
       {% set primaryTableCaption %}
-        {{ data['primary-name'] | capitalize }}’s eligibility
+        {{ data['primary-name'] | capitalize }}
       {% endset %}
 
       {% set secondaryTableCaption %}
-        {{ data['secondary-name'] | capitalize }}’s eligibility
+        {{ data['secondary-name'] | capitalize }}
       {% endset %}
 
       {% set primaryCheckEligibilityButton %}
-        <a class="govuk-link" href="check-eligibility/primary">Check</a>
+        <a class="govuk-link" href="check-eligibility/primary">Check eligibility</a>
       {% endset %}
 
       {% set secondaryCheckEligibilityButton %}
-        <a class="govuk-link" href="check-eligibility/secondary">Check</a>
+        <a class="govuk-link" href="check-eligibility/secondary">Check eligibility</a>
       {% endset %}
 
       {{ govukTable({
@@ -90,8 +95,6 @@
         Continue to planner
       </button>
     </form>
-
-    {{ markdown() }}
 
     </div>
   </div>

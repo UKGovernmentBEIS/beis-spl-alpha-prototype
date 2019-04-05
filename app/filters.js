@@ -82,10 +82,10 @@ module.exports = function (env) {
   filters.getEligibilityForResults = function (eligibility) {
     switch (eligibility) {
       case true:
-        return "Eligible"
+        return "Eligible ✔"
       break;
       case false:
-        return "Not eligible"
+        return "Not eligible ✘"
         break;
       case undefined:
         return "Eligibility unknown"
