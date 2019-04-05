@@ -18,11 +18,11 @@
 {% block content %}
 
   {% set headingCaption %}
-    {{ data['primary-name'] | capitalize }}’s eligibility
+    {{ data | currentParentName | capitalize }}’s eligibility
   {% endset %}
 
   {% set heading %}
-    What is the {{ data['primary-name'] }}’s employment status
+    What is the {{ data | currentParentName }}’s employment status
   {% endset %}
 
   {% set helpText %}
@@ -70,7 +70,7 @@
           ]
         }) }}
 
-        <button type="submit" class="govuk-button govuk-button--start">
+        <button type="submit" class="govuk-button">
           Continue
         </button>
       </form>

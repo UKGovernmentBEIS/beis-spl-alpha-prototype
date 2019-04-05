@@ -26,15 +26,21 @@
   {% endset %}
 
   {% set workStartTitle %}
-    Did the {{ data | currentParentName }} start their current or most recent job before 30 March 2019?
+    Did the {{ data | currentParentName }} start their current or most recent job before
+    {{ data['twenty-six-weeks-before-qualifying'] | formatDate('D MMMM YYYY') }}?
   {% endset %}
 
   {% set continuousWorkTitle %}
-    Was the {{ data | currentParentName }} (or will they be) still working in that job on 15 September 2019?
+    Was the {{ data | currentParentName }} (or will they be) still working in that job on
+    {{ data['qualifying-week'] | formatDate('D MMMM YYYY') }}?
   {% endset %}
 
   {% set payThresholdTitle %}
-    Has the {{ data | currentParentName }} earned (or will they have earned) more than £118 per week in this job between 27 July 2019 and 21 September 2019?
+    Has the {{ data | currentParentName }} earned (or will they have earned)
+    more than £118 per week in this job between
+    {{ data['eight-weeks-before-qualifying'] | formatDate('D MMMM YYYY') }}
+    and
+    {{ data['qualifying-week'] | formatDate('D MMMM YYYY') }}?
   {% endset %}
 
   <div class="govuk-grid-row">
@@ -123,7 +129,7 @@
           ]
         }) }}
 
-        <button type="submit" class="govuk-button govuk-button--start">
+        <button type="submit" class="govuk-button">
           Continue
         </button>
       </form>

@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
+const dates = require('../assets/javascripts/dates')
 const { validateDueDate } = require('../validators')
 
 router.post('/birth-or-adoption', function(req, res) {
@@ -12,7 +13,18 @@ router.post('/birth-or-adoption', function(req, res) {
     data['primary-name'] = 'primary adopter'
     data['secondary-name'] = 'primary adopter’s partner'
   }
-  res.redirect('start-date')
+  res.redirect('caring-with-partner')
+})
+
+router.post('/caring-with-partner', function (req, res) {
+  const { data } = req.session
+  if (data['caring-with-partner'] === "no") {
+    data['primary-eligibility'] = { spl: false, shpp: false }
+    data['secondary-eligibility'] = { spl: false, shpp: false }
+    res.redirect('/eligibility-tool/results')
+  } else {
+    res.redirect('/eligibility-tool/start-date')
+  }
 })
 
 router.post('/start-date', function (req, res) {
@@ -24,24 +36,28 @@ router.post('/start-date', function (req, res) {
     'due-date-year': year
   } = data
   const dueDateErrors = validateDueDate(year, month, day)
+
   if (dueDateErrors.length > 0) {
     data['due-date-errors'] = dueDateErrors
     res.redirect('/eligibility-tool/start-date')
   } else {
+    const isAdoption = data['birth-or-adoption'] === 'adoption'
+    Object.assign(data, {
+      'provided-date': dates.providedDate(year, month, day),
+      'twenty-six-weeks-before-qualifying': dates.twentySixWeeksBeforeQualifying(year, month, day, isAdoption),
+      'eight-weeks-before-qualifying': dates.eightWeeksBeforeQualifying(year, month, day, isAdoption),
+      'qualifying-week': dates.qualifyingWeek(year, month, day, isAdoption)
+    })
+    if (!isAdoption) {
+      data['sixty-six-weeks-before-due'] = dates.sixtySixWeeksBeforeDueDate(year, month, day)
+    }
+    console.log(data)
     res.redirect('/eligibility-tool/results')
   }
 })
 
 router.post('/results', function(req, res) {
-  const { data } = req.session
-  if (data['eligibility']['spl'] === undefined) {
-    data['eligibility']['spl'] === 'unknown'
-  }
-  if (data['eligibility']['shpp'] === undefined) {
-    data['eligibility']['shpp'] === 'unknown'
-  }
-
-  res.redirect('/eligibility-tool/results')
+  res.redirect('/shared-parental-leave-planner')
 })
 
 router.post('/employment', function (req, res) {
@@ -70,7 +86,6 @@ router.post('/partners-pay-and-leave', function (req, res) {
   }
   const eligibilityKey = `${data['current-parent']}-eligibility`
   data[eligibilityKey] = getEligibility(eligibilityData)
-  console.log(data)
   res.redirect('results')
 })
 

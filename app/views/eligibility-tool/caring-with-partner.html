@@ -7,22 +7,25 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "index"
+    href: "birth-or-adoption"
   }) }}
 {% endblock %}
 
 {% block content %}
+  {% set questionText %}
+    Will the {{ data['primary-name'] }} care for the child with a partner?
+  {% endset %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <form action="birth-or-adoption" method="POST">
+      <form action="caring-with-partner" method="POST">
         {{ govukRadios({
           classes: "govuk-radios",
-          idPrefix: "birth-or-adoption",
-          name: "birth-or-adoption",
+          idPrefix: "caring-with-partner",
+          name: "caring-with-partner",
           fieldset: {
             legend: {
-              text: "Are you adoptive parents or birth parents?",
+              text: questionText,
               isPageHeading: true,
               classes: "govuk-fieldset__legend--xl"
             }
@@ -32,12 +35,12 @@
           },
           items: [
             {
-              value: "birth",
-              text: "Birth parents"
+              value: "yes",
+              text: "Yes"
             },
             {
-              value: "adoption",
-              text: "Adoptive parents"
+              value: "no",
+              text: "No"
             }
           ]
         }) }}

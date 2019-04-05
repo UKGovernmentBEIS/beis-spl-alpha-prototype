@@ -22,5 +22,7 @@ module.exports = {
   "due-date-day": "05",
   "due-date-month": "09",
   "due-date-year": "2019",
-  'birth-or-adoption': 'adoption'
+  'birth-or-adoption': 'adoption',
+  'primary-name': 'primary adopter',
+  'secondary-name': 'primary adopter’s partner'
 }
