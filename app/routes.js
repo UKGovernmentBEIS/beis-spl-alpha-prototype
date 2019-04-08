@@ -101,19 +101,8 @@ router.post('/shared-parental-leave-planner/planner', function (req, res) {
 
 function addPayBlocksToSession(data) {
   const payData = data.pay
-  const cleanedData = stripWhiteSpace(payData)
-  const weeklyPay = getWeeklyPayData(cleanedData)
+  const weeklyPay = getWeeklyPayData(payData)
   data.payBlocks = getPayBlocks(weeklyPay)
-}
-
-function stripWhiteSpace(payData) {
-  Object.keys(payData.mother).forEach(key => {
-    payData.mother[key] = payData.mother[key].trim()
-  })
-  Object.keys(payData.partner).forEach(key => {
-    payData.partner[key] = payData.partner[key].trim()
-  })
-  return payData
 }
 
 function getWeeklyPayData (payData) {
@@ -122,8 +111,8 @@ function getWeeklyPayData (payData) {
     const partnerPay = payData.partner[dateKey] || "£0"
     const currentWeek = {
       date: dateKey,
-      mother: payData.mother[dateKey],
-      partner: partnerPay
+      mother: payData.mother[dateKey].trim(),
+      partner: partnerPay.trim()
     }
     weeksAccumulator.push(currentWeek)
     return weeksAccumulator
@@ -144,11 +133,12 @@ function getPayBlocks(weeklyPay) {
     if(weekBelongsToBlock(week, lastBlock)) {
       lastBlock.end = week.date
     } else {
+      const { date, mother, partner } = week
       payBlocks.push({
-        start: week.date,
-        end: week.date,
-        mother: week.mother,
-        partner: week.partner
+        start: date,
+        end: date,
+        mother,
+        partner
       })
     }
   })
