@@ -44,6 +44,10 @@ module.exports = function (env) {
     return moment(date).startOf('week')
   }
 
+  filters.endOfWeek = function (date) {
+    return moment(date).endOf('week')
+  }
+
   filters.offsetWeeks = function (date, weekOffset) {
     return moment(date).add(weekOffset, 'weeks')
   }
