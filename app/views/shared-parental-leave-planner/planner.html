@@ -171,7 +171,7 @@
       </div>
     </div>
   </div>
-  <form action="key-dates" method="POST">
+  <form action="key-dates" method="POST" id="planner-form">
     <input name="due-date" type="hidden" value="{{ dueDate }}">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
@@ -210,12 +210,14 @@
                   {{ date | formatDate("DD [<br>] MMM") | safe }}
                 </td>
                 {% set motherId = "mother-" + date %}
+                {% set motherPayId = "[pay][mother][" + date +"]" %}
                 {% set motherWeeklyPay = data["mother-weekly-pay"] %}
                 <td class="govuk-table__cell mother {{ 'compulsory disabled' if firstTwoBirthWeeks }}">
                   <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
                     {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
                   <!-- Deliberately omit 'for' from label on compulsory maternity weeks, to prevent changing. -->
                   <label {% if not firstTwoBirthWeeks %}for="{{ motherId }}"{% endif %}>
+                    <input type="text" id="{{ motherPayId }}" name="{{ motherPayId }}" class="pay-amount-input"/>
                     <div class="initial-maternity-pay pay">
                       {{ ((motherWeeklyPay * 0.9) | pay) if motherWeeklyPay else "90% of average weekly pay" }}
                     </div>
@@ -240,6 +242,7 @@
                   </label>
                 </td>
                 {% set partnerId = "partner-" + date %}
+                {% set partnerPayId = "[pay][partner][" + date +"]"%}
                 {% set partnerWeeklyPay = data["partner-weekly-pay"] %}
                 <td class="govuk-table__cell partner {{ 'disabled' if beforeBirthWeek }}">
                   {% if (not beforeBirthWeek) %}
@@ -247,6 +250,7 @@
                       {% if data[partnerId] %}checked{% endif %}>
                     <label for="{{ partnerId }}">
                       <div>
+                        <input type="text" id="{{ partnerPayId }}" name="{{ partnerPayId }}" class="pay-amount-input"/>
                         <div class="statutory-pay pay">
                           {{ statutoryPay(partnerWeeklyPay) }}
                         </div>

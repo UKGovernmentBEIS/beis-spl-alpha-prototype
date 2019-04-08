@@ -19,6 +19,27 @@ router.get('/shared-parental-leave-and-pay/apply-for-shared-parental-leave', fun
   res.redirect('/shared-parental-leave-and-pay')
 })
 
+router.post("/shared-parental-leave-planner/index", function (req, res) {
+  res.redirect('/shared-parental-leave-planner/due-date')
+})
+
+router.post("/shared-parental-leave-planner/due-date", function (req, res) {
+  const { data } = req.session
+  delete data['due-date-errors']
+  const {
+    'due-date-day': day,
+    'due-date-month': month,
+    'due-date-year': year
+  } = data
+  const dueDateErrors = validateDueDate(year, month, day)
+  if (dueDateErrors.length > 0) {
+    data['due-date-errors'] = dueDateErrors
+    res.redirect('/shared-parental-leave-planner/due-date')
+  } else {
+    res.redirect('/shared-parental-leave-planner/parent-salaries')
+  }
+})
+
 router.get('/shared-parental-leave-planner', function (req, res) {
   const dueDate = req.query['due']
   const dateParts = dueDate ? dueDate.match(/^(\d\d\d\d)-(\d\d)-(\d\d)$/) : null
@@ -39,23 +60,6 @@ router.route('/shared-parental-leave-planner/planner').get(function (req, res) {
 
 router.route('/shared-parental-leave-planner/parent-salaries').post(function (req, res) {
   const { data } = req.session
-  delete data['due-date-errors']
-  const {
-    'due-date-day': day,
-    'due-date-month': month,
-    'due-date-year': year
-  } = data
-  const dueDateErrors = validateDueDate(year, month, day)
-  if (dueDateErrors.length > 0) {
-    data['due-date-errors'] = dueDateErrors
-    res.redirect('/shared-parental-leave-planner/due-date')
-  } else {
-    res.redirect('/shared-parental-leave-planner/parent-salaries')
-  }
-})
-
-router.post('/shared-parental-leave-planner/planner', function (req, res) {
-  const { data } = req.session
   const {
     'mother-salary-amount': motherSalaryAmount,
     'mother-salary-period': motherSalaryPeriod,
@@ -68,6 +72,11 @@ router.post('/shared-parental-leave-planner/planner', function (req, res) {
 
   data['mother-weekly-pay'] = motherWeeklyEarnings
   data['partner-weekly-pay'] = partnerWeeklyEarnings
+
+  res.redirect('/shared-parental-leave-planner/planner')
+})
+
+router.post('/shared-parental-leave-planner/planner', function (req, res) {
 
   res.redirect('/shared-parental-leave-planner/planner')
 })

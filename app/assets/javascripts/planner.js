@@ -107,6 +107,23 @@ $(document).ready(function () {
     $calendar[0].scrollIntoView(true)
     $('button#clear-example').removeAttr('disabled')
   })
+
+  $("#planner-form").on('submit', function () {
+    // store mother pay amount in hidden text field
+    $('.pay-amount-input').each(function(_, payInput) {
+      let amount
+      $payInput = $(payInput)
+      $payInputParent = $payInput.parent()
+      if($payInputParent.hasClass("with-initial-maternity-pay")) {
+        amount = $payInputParent.children(".initial-maternity-pay").text()
+      } else if ($payInputParent.hasClass("with-statutory-pay")) {
+        amount = $payInputParent.children(".statutory-pay").text()
+      } else {
+        amount = '£0'
+      }
+      $payInput.val(amount)
+    })
+  })
 })
 
 function handleMaternityBeforeBirthWeek($cell) {
