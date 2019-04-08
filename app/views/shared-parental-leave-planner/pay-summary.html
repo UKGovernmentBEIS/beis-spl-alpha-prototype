@@ -15,6 +15,53 @@
       <h1 class="govuk-heading-xl">
         Pay summary
       </h1>
+
+      {% set totalRowHeading %}
+        <strong>Total pay (before tax) </strong>
+      {% endset %}
+
+      {% for payBlock in data['payBlocks'] %}
+        {% set tableCaption %}
+          {{ payBlock['start'] | formatDate('D MMMM YYYY')}} to {{ payBlock['end'] | formatDate('D MMMM YYYY')}}
+        {% endset %}
+
+        {% set motherPay %}
+          {{ payBlock['mother'] }} per week
+        {% endset %}
+
+        {% set partnerPay %}
+          {{ payBlock['partner'] }} per week
+        {% endset %}
+
+        {% set totalPay %}
+          <strong>{{ payBlock | getTotalWeeklyPay }} per week</strong>
+        {% endset %}
+
+
+
+        {{ govukTable({
+          classes: "app-table--fixed",
+          caption: tableCaption,
+          head: [
+            { text: "Parent" },
+            { text: "Amount" }
+          ],
+          rows: [
+            [
+              { text: "Mother" },
+              { text: motherPay }
+            ],
+            [
+              { text: "Partner" },
+              { text: partnerPay }
+            ],
+            [
+              { html: totalRowHeading },
+              { html: totalPay }
+            ]
+          ]
+        }) }}
+      {% endfor %}
     </div>
   </div>
 {% endblock %}

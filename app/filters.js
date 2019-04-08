@@ -108,6 +108,12 @@ module.exports = function (env) {
     return data[`${otherParent}-name`]
   }
 
+  filters.getTotalWeeklyPay = function (payBlock) {
+    const motherPay = parseFloat(payBlock.mother.substring(1))
+    const partnerPay = parseFloat(payBlock.partner.substring(1))
+    return '£' + (motherPay + partnerPay).toFixed(2)
+  }
+
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */
