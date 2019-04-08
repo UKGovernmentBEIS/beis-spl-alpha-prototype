@@ -76,11 +76,6 @@ router.route('/shared-parental-leave-planner/parent-salaries').post(function (re
   res.redirect('/shared-parental-leave-planner/planner')
 })
 
-router.post('/shared-parental-leave-planner/planner', function (req, res) {
-
-  res.redirect('/shared-parental-leave-planner/planner')
-})
-
 router.get('/shared-parental-leave-planner/key-dates', function (req, res) {
   const { query, session } = req
   const savedData = parseSavedDataFromQuery(query)
@@ -97,6 +92,69 @@ router.post('/shared-parental-leave-planner/key-dates', function (req, res) {
   addLeaveWeeksToSession(req.session)
   res.redirect('/shared-parental-leave-planner/key-dates')
 })
+
+router.post('/shared-parental-leave-planner/planner', function (req, res) {
+  addPayBlocksToSession(req.session.data)
+
+  res.redirect('/shared-parental-leave-planner/pay-summary')
+})
+
+function addPayBlocksToSession(data) {
+  const payData = data.pay
+  const cleanedData = stripWhiteSpace(payData)
+  const weeklyPay = getWeeklyPayData(cleanedData)
+  data.payBlocks = getPayBlocks(weeklyPay)
+}
+
+function stripWhiteSpace(payData) {
+  Object.keys(payData.mother).forEach(key => {
+    payData.mother[key] = payData.mother[key].trim()
+  })
+  Object.keys(payData.partner).forEach(key => {
+    payData.partner[key] = payData.partner[key].trim()
+  })
+  return payData
+}
+
+function getWeeklyPayData (payData) {
+  const weeks = Object.keys(payData.mother).reduce((weeksAccumulator, dateKey) => {
+    // handle disabled partner weeks at start of planner
+    const partnerPay = payData.partner[dateKey] || "£0"
+    const currentWeek = {
+      date: dateKey,
+      mother: payData.mother[dateKey],
+      partner: partnerPay
+    }
+    weeksAccumulator.push(currentWeek)
+    return weeksAccumulator
+  }, [])
+  return weeks
+}
+
+function getPayBlocks(weeklyPay) {
+  const lastElement = array => array[array.length - 1]
+  const weekBelongsToBlock = (week, block) => {
+    return block && week.mother == block.mother && week.partner === block.partner
+  }
+
+  weeklyPay.sort((week1, week2) => { return week1.date < week2.date ? -1 : 1 })
+  const payBlocks = []
+  weeklyPay.forEach(week => {
+    const lastBlock = lastElement(payBlocks)
+    if(weekBelongsToBlock(week, lastBlock)) {
+      lastBlock.end = week.date
+    } else {
+      payBlocks.push({
+        start: week.date,
+        end: week.date,
+        mother: week.mother,
+        partner: week.partner
+      })
+    }
+  })
+
+  return payBlocks
+}
 
 function parseSavedDataFromQuery(query) {
   const savedData = query['s']
