@@ -88,21 +88,18 @@ router.get('/shared-parental-leave-planner/key-dates', function (req, res) {
   res.redirect('/shared-parental-leave-planner/key-dates')
 })
 
-router.post('/shared-parental-leave-planner/key-dates', function (req, res) {
+router.post('/shared-parental-leave-planner/summary', function (req, res) {
   addLeaveWeeksToSession(req.session)
-  res.redirect('/shared-parental-leave-planner/key-dates')
-})
-
-router.post('/shared-parental-leave-planner/planner', function (req, res) {
+  addLeaveBookendsToSession(req.session)
   addPayBlocksToSession(req.session.data)
 
-  res.redirect('/shared-parental-leave-planner/pay-summary')
+  res.redirect('/shared-parental-leave-planner/summary')
 })
 
 function addPayBlocksToSession(data) {
   const payData = data.pay
   const weeklyPay = getWeeklyPayData(payData)
-  data.payBlocks = getPayBlocks(weeklyPay)
+  data.payBlocks = getPayBlocks(weeklyPay, data['first-leave-start-date'], data['last-leave-start-date'])
 }
 
 function getWeeklyPayData (payData) {
@@ -120,7 +117,22 @@ function getWeeklyPayData (payData) {
   return weeks
 }
 
-function getPayBlocks(weeklyPay) {
+function addLeaveBookendsToSession (session) {
+  const { data } = session
+  const allLeaveBlocks = [
+    data['maternity-leave'],
+    data['paternity-leave'],
+    ...data['mothers-spl-blocks'],
+    ...data['partners-spl-blocks'],
+  ]
+
+  const firstLeaveWeekMoment = moment.min(allLeaveBlocks.map(block => moment(block['start'])))
+  const lastLeaveWeekMoment = moment.max(allLeaveBlocks.map(block => moment(block['end'])))
+  data['first-leave-start-date'] = firstLeaveWeekMoment.format('YYYY-MM-DD')
+  data['last-leave-start-date'] = lastLeaveWeekMoment.format('YYYY-MM-DD')
+}
+
+function getPayBlocks(weeklyPay, earliestDate, latestDate) {
   const lastElement = array => array[array.length - 1]
   const weekBelongsToBlock = (week, block) => {
     return block && week.mother == block.mother && week.partner === block.partner
@@ -130,7 +142,11 @@ function getPayBlocks(weeklyPay) {
   const payBlocks = []
   weeklyPay.forEach(week => {
     const lastBlock = lastElement(payBlocks)
-    if(weekBelongsToBlock(week, lastBlock)) {
+    if (moment(week.date).isBefore(moment(earliestDate)) || moment(week.date).isAfter(moment(latestDate))) {
+      // payblocks should start at first week with leave recorded.
+      // payBlocks should end at last week with leave recorded.
+      return
+    } else if(weekBelongsToBlock(week, lastBlock)) {
       lastBlock.end = week.date
     } else {
       const { date, mother, partner } = week
