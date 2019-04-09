@@ -143,18 +143,16 @@ function getPayBlocks(weeklyPay, earliestDate, latestDate) {
   weeklyPay.forEach(week => {
     const lastBlock = lastElement(payBlocks)
     if (moment(week.date).isBefore(moment(earliestDate)) || moment(week.date).isAfter(moment(latestDate))) {
-      // payblocks should start at first week with leave recorded.
-      // payBlocks should end at last week with leave recorded.
+      // payblocks should start at first week with leave recorded and end at last week with leave recorded.
       return
     } else if(weekBelongsToBlock(week, lastBlock)) {
       lastBlock.end = week.date
     } else {
-      const { date, mother, partner } = week
       payBlocks.push({
-        start: date,
-        end: date,
-        mother,
-        partner
+        start: week.date,
+        end: week.date,
+        mother: week.mother,
+        partner: week.partner
       })
     }
   })

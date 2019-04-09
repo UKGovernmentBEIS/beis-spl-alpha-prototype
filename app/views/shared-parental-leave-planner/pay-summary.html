@@ -2,9 +2,8 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-xl">
-        Pay summary
-      </h1>
+      <p>This is a summary of what you'll be paid per week while on leave.</p>
+
       {% set totalRowHeading %}
         <strong>Total pay (before tax) </strong>
       {% endset %}
@@ -51,6 +50,10 @@
           ]
         }) }}
       {% endfor %}
+
+      <button class="govuk-button" onclick="alert('Printing is coming soon.')">Print this plan</button>
+      <button class="govuk-button" onclick="alert('Share links will be available soon.')">Share this page</button>
+
     </div>
   </div>
 {% endblock %}
