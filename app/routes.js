@@ -121,10 +121,10 @@ function addLeaveBookendsToSession (session) {
   const { data } = session
   const allLeaveBlocks = [
     data['maternity-leave'],
-    data['paternity-leave'],
     ...data['mothers-spl-blocks'],
     ...data['partners-spl-blocks'],
   ]
+  if (data['paternity-leave']) { allLeaveBlocks.push(data['paternity-leave']) }
 
   const firstLeaveWeekMoment = moment.min(allLeaveBlocks.map(block => moment(block['start'])))
   const lastLeaveWeekMoment = moment.max(allLeaveBlocks.map(block => moment(block['end'])))
