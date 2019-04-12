@@ -118,6 +118,10 @@ module.exports = function (env) {
     return '£' + (motherPay + partnerPay).toFixed(2)
   }
 
+  filters.isInPast = function (date) {
+    return moment(date).isBefore(moment(), 'day')
+  }
+
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */

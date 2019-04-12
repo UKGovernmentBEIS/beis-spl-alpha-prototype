@@ -31,13 +31,25 @@
   {% endset %}
 
   {% set continuousWorkTitle %}
-    Was the {{ data | currentParentName }} (or will they be) still working in that job on
-    {{ data['qualifying-week'] | formatDate('D MMMM YYYY') }}?
+    {% set didOrWill %}
+      {% if data['qualifying-week'] | isInPast %}
+        Was the {{ data | currentParentName }} still working
+      {% else %}
+        Will the {{ data | currentParentName }} still be working
+      {% endif %}
+    {% endset %}
+    {{ didOrWill }} in that job on {{ data['qualifying-week'] | formatDate('D MMMM YYYY') }}?
   {% endset %}
 
   {% set payThresholdTitle %}
-    Has the {{ data | currentParentName }} earned (or will they have earned)
-    more than £118 per week in this job between
+    {% set didOrWill %}
+     {% if data['qualifying-week'] | isInPast %}
+        Did the {{ data | currentParentName }} earn
+      {% else %}
+        Will the {{ data | currentParentName }} have earned
+      {% endif %}
+    {% endset %}
+    {{ didOrWill }} more than £118 per week in this job between
     {{ data['eight-weeks-before-qualifying'] | formatDate('D MMMM YYYY') }}
     and
     {{ data['qualifying-week'] | formatDate('D MMMM YYYY') }}?
