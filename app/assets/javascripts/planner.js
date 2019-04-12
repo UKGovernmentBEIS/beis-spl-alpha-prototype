@@ -243,3 +243,52 @@ function getSaveLink() {
   const encodedWeeks = utils.encodeWeeks(weeks.toArray())
   return location.protocol + '//' + location.host + location.pathname + '?s=' + dueDate + '-' + encodedWeeks
 }
+
+let scrollingUpInterval;
+let scrollingDownInterval;
+$calendar.mousedown(function(downEvent) {
+  $(document).mouseup(function() {
+    stopScrollingUp()
+    stopScrollingDown()
+  })
+
+  let prevYCoord = downEvent.pageY
+  $(this).bind('mousemove', function(moveEvent) {
+    const currentYCoord = moveEvent.pageY
+    if (prevYCoord < currentYCoord) {
+      if (scrollingDownInterval) { return }
+      if (moveEvent.clientY > 0.8 * $(window).height()) {
+        stopScrollingUp()
+        scrollingDownInterval = setInterval(() => scrollDownBy(5), 5)
+      }
+    } else if ( prevYCoord > currentYCoord) {
+      if (scrollingUpInterval) { return }
+      if (moveEvent.clientY < 0.2 * $(window).height()) {
+        stopScrollingDown()
+        scrollingUpInterval = setInterval(() => scrollUpBy(5), 5)
+      }
+    } else {
+    }
+    prevYCoord = currentYCoord
+  })
+})
+.mouseup(function() {
+  $(this).unbind('mousemove')
+})
+
+
+function stopScrollingDown() {
+  clearInterval(scrollingDownInterval)
+  scrollingDownInterval = null
+}
+
+function stopScrollingUp() {
+  clearInterval(scrollingUpInterval)
+  scrollingUpInterval = null
+}
+
+function stopScrolling () {
+}
+
+function scrollDownBy(px) { $(window).scrollTop($(window).scrollTop() + px) }
+function scrollUpBy(px) { $(window).scrollTop($(window).scrollTop() - px) }
