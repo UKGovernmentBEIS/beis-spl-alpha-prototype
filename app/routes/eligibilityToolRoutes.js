@@ -23,6 +23,8 @@ router.post('/caring-with-partner', function (req, res) {
     data['secondary-eligibility'] = { spl: false, shpp: false }
     res.redirect('/eligibility-tool/results')
   } else {
+    data['primary-eligibility'] = { spl: undefined, shpp: undefined }
+    data['secondary-eligibility'] = { spl: undefined, shpp: undefined }
     res.redirect('/eligibility-tool/start-date')
   }
 })
