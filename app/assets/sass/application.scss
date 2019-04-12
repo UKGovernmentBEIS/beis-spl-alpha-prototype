@@ -16,7 +16,6 @@ $govuk-global-styles: true;
 // Add extra styles here, or re-organise the Sass files in whichever way makes most sense to you
 
 @import "views/planner";
-@import "views/planner-summary";
 @import "views/parent-salaries";
 
 body:not(.has-js) .js-only {
