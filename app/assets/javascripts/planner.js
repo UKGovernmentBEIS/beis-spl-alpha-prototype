@@ -244,51 +244,49 @@ function getSaveLink() {
   return location.protocol + '//' + location.host + location.pathname + '?s=' + dueDate + '-' + encodedWeeks
 }
 
-let scrollingUpInterval;
-let scrollingDownInterval;
-$calendar.mousedown(function(downEvent) {
-  $(document).mouseup(function() {
-    stopScrollingUp()
-    stopScrollingDown()
-  })
+$(document).ready(function () {
+  let scrolling = { up: null, down: null }
 
-  let prevYCoord = downEvent.pageY
-  $(this).bind('mousemove', function(moveEvent) {
-    const currentYCoord = moveEvent.pageY
-    if (prevYCoord < currentYCoord) {
-      if (scrollingDownInterval) { return }
-      if (moveEvent.clientY > 0.8 * $(window).height()) {
-        stopScrollingUp()
-        scrollingDownInterval = setInterval(() => scrollDownBy(5), 5)
-      }
-    } else if ( prevYCoord > currentYCoord) {
-      if (scrollingUpInterval) { return }
-      if (moveEvent.clientY < 0.2 * $(window).height()) {
-        stopScrollingDown()
-        scrollingUpInterval = setInterval(() => scrollUpBy(5), 5)
-      }
-    } else {
+  function scroll(direction) {
+    const scrollPx = 5
+    if (direction === 'up') {
+      $(window).scrollTop($(window).scrollTop() - scrollPx)
+    } else if (direction === 'down') {
+      $(window).scrollTop($(window).scrollTop() + scrollPx)
     }
-    prevYCoord = currentYCoord
+  }
+
+  function startScrolling(direction) {
+    scrolling[direction] = setInterval(() => scroll(direction), 5)
+  }
+
+  function stopScrolling(direction) {
+    clearInterval(scrolling[direction])
+    scrolling[direction] = null
+  }
+
+  $('input[class$="-leave-input"] + label').mousedown(function(mouseDownEvent) {
+    $(document).mouseup(function() {
+      stopScrolling('up')
+      stopScrolling('down')
+      $calendar.off('mousemove')
+    })
+
+    let prevYCoord = mouseDownEvent.pageY
+    $calendar.bind('mousemove', function(moveEvent) {
+      const currentYCoord = moveEvent.pageY
+      if (!scrolling['down'] && prevYCoord < currentYCoord) {
+        if (moveEvent.clientY > 0.8 * $(window).height()) {
+          stopScrolling('up')
+          startScrolling('down')
+        }
+      } else if (!scrolling['up'] && prevYCoord > currentYCoord) {
+        if (moveEvent.clientY < 0.2 * $(window).height()) {
+          stopScrolling('down')
+          startScrolling('up')
+        }
+      }
+      prevYCoord = currentYCoord
+    })
   })
 })
-.mouseup(function() {
-  $(this).unbind('mousemove')
-})
-
-
-function stopScrollingDown() {
-  clearInterval(scrollingDownInterval)
-  scrollingDownInterval = null
-}
-
-function stopScrollingUp() {
-  clearInterval(scrollingUpInterval)
-  scrollingUpInterval = null
-}
-
-function stopScrolling () {
-}
-
-function scrollDownBy(px) { $(window).scrollTop($(window).scrollTop() + px) }
-function scrollUpBy(px) { $(window).scrollTop($(window).scrollTop() - px) }
