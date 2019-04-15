@@ -31,8 +31,8 @@ $(document).ready(function () {
 
   $('input[class$="-leave-input"] + label').on('click', function (event) {
     event.preventDefault()
-  }).on('mousedown', function (event) {
-    if (event.which !== 1) {
+  }).on('mousedown', function (mouseDownEvent) {
+    if (mouseDownEvent.which !== 1) {
       // Only respond to primary mouse button.
       return
     }
@@ -42,7 +42,7 @@ $(document).ready(function () {
       return
     }
 
-    event.preventDefault()
+    mouseDownEvent.preventDefault()
 
     if ($originalCell.hasClass(MOTHER) && getWeekNumber($originalCell) < 0) {
       handleMaternityBeforeBirthWeek($originalCell)
@@ -76,6 +76,52 @@ $(document).ready(function () {
     $calendar.one('mouseup mouseleave', function () {
       $weeks.off('mouseover', onRowMouseOver)
       $calendar.removeClass(DRAGGING)
+    })
+
+
+    // Scrollling
+    const scrolling = { up: null, down: null }
+
+    function scroll(direction) {
+      const scrollPx = 15
+      if (direction === 'up') {
+        $(window).scrollTop($(window).scrollTop() - scrollPx)
+      } else if (direction === 'down') {
+        $(window).scrollTop($(window).scrollTop() + scrollPx)
+      }
+    }
+
+    function startScrolling(direction) {
+      const scrollTime = 15
+      scrolling[direction] = setInterval(() => scroll(direction), scrollTime)
+    }
+
+    function stopScrolling(direction) {
+      clearInterval(scrolling[direction])
+      scrolling[direction] = null
+    }
+
+    $(document).mouseup(function() {
+      stopScrolling('up')
+      stopScrolling('down')
+      $calendar.off('mousemove')
+    })
+
+    let prevYCoord = mouseDownEvent.pageY
+    $calendar.bind('mousemove', function(mouseMoveEvent) {
+      const currentYCoord = mouseMoveEvent.pageY
+      if (!scrolling['down'] && prevYCoord < currentYCoord) {
+        if (mouseMoveEvent.clientY > 0.8 * $(window).height()) {
+          stopScrolling('up')
+          startScrolling('down')
+        }
+      } else if (!scrolling['up'] && prevYCoord > currentYCoord) {
+        if (mouseMoveEvent.clientY < 0.2 * $(window).height()) {
+          stopScrolling('down')
+          startScrolling('up')
+        }
+      }
+      prevYCoord = currentYCoord
     })
   })
 
@@ -243,50 +289,3 @@ function getSaveLink() {
   const encodedWeeks = utils.encodeWeeks(weeks.toArray())
   return location.protocol + '//' + location.host + location.pathname + '?s=' + dueDate + '-' + encodedWeeks
 }
-
-$(document).ready(function () {
-  let scrolling = { up: null, down: null }
-
-  function scroll(direction) {
-    const scrollPx = 5
-    if (direction === 'up') {
-      $(window).scrollTop($(window).scrollTop() - scrollPx)
-    } else if (direction === 'down') {
-      $(window).scrollTop($(window).scrollTop() + scrollPx)
-    }
-  }
-
-  function startScrolling(direction) {
-    scrolling[direction] = setInterval(() => scroll(direction), 5)
-  }
-
-  function stopScrolling(direction) {
-    clearInterval(scrolling[direction])
-    scrolling[direction] = null
-  }
-
-  $('input[class$="-leave-input"] + label').mousedown(function(mouseDownEvent) {
-    $(document).mouseup(function() {
-      stopScrolling('up')
-      stopScrolling('down')
-      $calendar.off('mousemove')
-    })
-
-    let prevYCoord = mouseDownEvent.pageY
-    $calendar.bind('mousemove', function(moveEvent) {
-      const currentYCoord = moveEvent.pageY
-      if (!scrolling['down'] && prevYCoord < currentYCoord) {
-        if (moveEvent.clientY > 0.8 * $(window).height()) {
-          stopScrolling('up')
-          startScrolling('down')
-        }
-      } else if (!scrolling['up'] && prevYCoord > currentYCoord) {
-        if (moveEvent.clientY < 0.2 * $(window).height()) {
-          stopScrolling('down')
-          startScrolling('up')
-        }
-      }
-      prevYCoord = currentYCoord
-    })
-  })
-})
