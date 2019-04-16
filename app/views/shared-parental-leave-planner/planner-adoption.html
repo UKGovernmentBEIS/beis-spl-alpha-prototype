@@ -24,21 +24,22 @@
   {{- "Up to £148.68" if not weeklyPay else (((weeklyPay * 0.9) | pay) if weeklyPay < 165.20 else "£148.68") -}}
 {% endmacro %}
 
-{# {% set example1 %}
+{% set example1 %}
   {% call leaveExample({
-    mothersLeavePattern: "8 months maternity leave, 1 month shared parental leave after her partner's shared parental leave ends",
+    mothersLeavePattern: "8 months adoption leave, 1 month shared parental leave after her partner's shared parental leave ends",
     partnersLeavePattern: "2 weeks paternity leave and 3 months shared parental leave",
     mothersLeaveWeeks: "-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,40,41,42,43",
-    partnersLeaveWeeks: "0,1,27,28,29,30,31,32,33,34,35,36,37,38,39"
+    partnersLeaveWeeks: "0,1,27,28,29,30,31,32,33,34,35,36,37,38,39",
+    isAdoption: true
   }) %}
     <p>
-      The mother needs to go back to work for a project in the middle of her maternity leave.
-      She decides to convert her unused maternity leave into shared parental leave so that her partner can take 3 months off work while she attends to her project.
-      She will use the remaining shared parental leave to resume her time at home with their child after her project is over.
+      The primary adopter needs to go back to work for a project in the middle of their adoption leave.
+      They decide to convert their unused adoption leave into shared parental leave so that their partner can take 3 months off work while they attends to their project.
+      The primary adopter will use the remaining shared parental leave to resume their time at home with their child after their project is over.
     </p>
     <p>
       They would like to take some leave together.
-      The first month of the partner’s shared parental leave will be taken at the same time as the last month of the mother’s maternity leave.
+      The first month of the partner’s shared parental leave will be taken at the same time as the last month of the parimary adopter's adoption leave.
     </p>
   {% endcall %}
 {% endset %}
@@ -50,16 +51,17 @@
     mothersLeavePattern: "48 weeks maternity leave",
     partnersLeavePattern: "2 weeks paternity leave and 4 weeks shared parental leave",
     mothersLeaveWeeks: "-1,-2,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45",
-    partnersLeaveWeeks: "0,1,2,3,4,5"
+    partnersLeaveWeeks: "0,1,2,3,4,5",
+    isAdoption: true
   }) %}
     <p>
-      A couple is having their first child through birth.
-      The partner plans to take two weeks paternity leave but he wants to spend more time at home with the child.
-      He also wants to support the mother in the first few weeks after she’s given birth.
+      A couple is having their first child through adoption.
+      The primary adopter’s partner plans to take two weeks paternity leave but they want to spend more time at home with the child in the first few weeks of placement.
     </p>
     <p>
-      The mother originally planned to take a full 52 weeks of maternity leave but decides to reduce it by 4 weeks, so that her partner can take shared parental leave.
-      The partner can now stay at home with the mother and the baby for a total of 6 weeks as soon as the baby is born (2 weeks paternity leave and 4 weeks shared parental leave).
+      The primary adopter originally planned to take a full 52 weeks of adoption leave but decides to reduce it by 4 weeks,
+      so that the partner can take shared parental leave.
+      The partner can now stay at home with the primary adopter and the child for a total of 6 weeks as soon as the child is placed (2 weeks paternity leave and 4 weeks shared parental leave).
     </p>
   {% endcall %}
 {% endset %}
@@ -68,21 +70,22 @@
   {% call leaveExample({
     mother: "Katie",
     partner: "Rosa",
-    mothersLeavePattern: "3 months maternity leave, then alternating 6 week blocks of shared parental leave",
-    partnersLeavePattern: "An initial block of paternity and shared parental leave alongside the mother's maternity leave, then alternating 6 week blocks of shared parental leave",
+    mothersLeavePattern: "3 months adoption leave, then alternating 6 week blocks of shared parental leave",
+    partnersLeavePattern: "An initial block of paternity and shared parental leave alongside the primary adopter's adoption leave, then alternating 6 week blocks of shared parental leave",
     mothersLeaveWeeks: "-2,-1,0,1,2,3,4,5,6,7,8,9,10,17,18,19,20,21,22,29,30,31,32,33,34",
-    partnersLeaveWeeks: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,23,24,25,26,27,28,35,36,37,38,39,40"
+    partnersLeaveWeeks: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,23,24,25,26,27,28,35,36,37,38,39,40",
+    isAdoption: true
   }) %}
     <p>
-      A mother and her partner want to have equal opportunities to develop a bond with their child and be its primary carer.
-      The mother ends her maternity leave after 3 months to create 9 months of shared parental leave.
+      A couple who are adopting want to have equal opportunities to develop a bond with their child and be its primary carer.
+      The primary adopter ends their adoption leave after 3 months to create 9 months of shared parental leave.
     </p>
     <p>
       The couple spend the first 3 months at home together, leaving around 6 months of shared parental leave for either or both of them to take.
       They alternate being at home with the child every 6 weeks for the remaining 6 months of shared parental leave.
     </p>
   {% endcall %}
-{% endset %} #}
+{% endset %}
 
 {% block content %}
 
@@ -101,7 +104,7 @@
       </p>
       <p>Shared parental leave and pay is created from unused adoption leave and pay.</p>
 
-      {# <h2 class="govuk-heading-m">
+      <h2 class="govuk-heading-m">
         Examples of shared parental leave
       </h2>
       {{ govukAccordion({
@@ -116,7 +119,7 @@
           },
           {
             heading: {
-              text: "Supporting the mother after birth"
+              text: "Extending paternity leave"
             },
             content: {
               html: example2
@@ -131,7 +134,7 @@
             }
           }
         ]
-      }) }} #}
+      }) }}
       <button id="clear-example" class="govuk-button leave-example" data-mother-leave="0,1" data-partner-leave="" disabled>
         Clear example and plan your own leave
       </button>

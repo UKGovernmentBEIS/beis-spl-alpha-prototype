@@ -7,12 +7,21 @@
     Leave pattern
   </h3>
   <ul class="govuk-body">
-    <li>
-      <strong>Mother's leave:</strong> {{ options.mothersLeavePattern }}
-    </li>
-    <li>
-      <strong>Partner's leave:</strong> {{ options.partnersLeavePattern }}
-    </li>
+    {% if options.isAdoption %}
+      <li>
+        <strong>Primary adopter's leave:</strong> {{ options.mothersLeavePattern }}
+      </li>
+      <li>
+        <strong>Primary adopter's partner's leave:</strong> {{ options.partnersLeavePattern }}
+      </li>
+    {% else %}
+      <li>
+        <strong>Mother's leave:</strong> {{ options.mothersLeavePattern }}
+      </li>
+      <li>
+        <strong>Partner's leave:</strong> {{ options.partnersLeavePattern }}
+      </li>
+    {% endif %}
   </ul>
   <button class="govuk-button leave-example"
     data-mother-leave="{{ options.mothersLeaveWeeks }}"
