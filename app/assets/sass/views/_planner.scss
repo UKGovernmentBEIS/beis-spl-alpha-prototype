@@ -45,6 +45,12 @@ table#leave-calendar {
   }
 
   .week {
+    &.adoption {
+      height: 4em;
+      @media only screen and (min-width: 1020px) {
+        height:3em;
+      }
+    }
     td {
       position: relative;
       &.disabled {
