@@ -6,7 +6,7 @@ const dataUtils = require('../assets/javascripts/dataUtils')
 const { validateDueDate } = require('../validators')
 
 router.post('/birth-or-adoption', function(req, res) {
-  dataUtils.setParentNames(req.session.data)
+  dataUtils.setBirthOrAdoptionInformation(req.session.data)
   res.redirect('caring-with-partner')
 })
 

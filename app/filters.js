@@ -122,6 +122,13 @@ module.exports = function (env) {
     return moment(date).isBefore(moment(), 'day')
   }
 
+  filters.isBirth = function (data) {
+    return data['birth-or-adoption'] === 'birth'
+  }
+
+  filters.isAdoption = function (data) {
+    return data['birth-or-adoption'] === 'adoption'
+  }
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */

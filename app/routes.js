@@ -32,7 +32,7 @@ router.post("/shared-parental-leave-planner/index", function (req, res) {
 })
 
 router.post("/shared-parental-leave-planner/birth-or-adoption", function (req, res) {
-  dataUtils.setParentNames(req.session.data)
+  dataUtils.setBirthOrAdoptionInformation(req.session.data)
 
   res.redirect('/shared-parental-leave-planner/due-date')
 })
