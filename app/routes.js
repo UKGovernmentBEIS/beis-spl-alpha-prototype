@@ -75,19 +75,26 @@ router.route('/shared-parental-leave-planner/planner').get(function (req, res) {
 router.route('/shared-parental-leave-planner/parent-salaries').post(function (req, res) {
   const { data } = req.session
   const {
-    'mother-salary-amount': motherSalaryAmount,
-    'mother-salary-period': motherSalaryPeriod,
-    'partner-salary-amount': partnerSalaryAmount,
-    'partner-salary-period': partnerSalaryPeriod
+    'primary-salary-amount': primarySalaryAmount,
+    'primary-salary-period': primarySalaryPeriod,
+    'secondary-salary-amount': secondarySalaryAmount,
+    'secondary-salary-period': secondarySalaryPeriod
   } = data
 
-  const motherWeeklyEarnings = getWeeklyEarnings(motherSalaryAmount, motherSalaryPeriod)
-  const partnerWeeklyEarnings = getWeeklyEarnings(partnerSalaryAmount, partnerSalaryPeriod)
+  const primaryWeeklyEarnings = getWeeklyEarnings(primarySalaryAmount, primarySalaryPeriod)
+  const secondaryWeeklyEarnings = getWeeklyEarnings(secondarySalaryAmount, secondarySalaryPeriod)
 
-  data['mother-weekly-pay'] = motherWeeklyEarnings
-  data['partner-weekly-pay'] = partnerWeeklyEarnings
+  if (data['birth-or-adoption'] === 'birth') {
+    data['mother-weekly-pay'] = primaryWeeklyEarnings
+    data['partner-weekly-pay'] = secondaryWeeklyEarnings
 
-  res.redirect('/shared-parental-leave-planner/planner')
+    res.redirect('/shared-parental-leave-planner/planner-birth')
+  } else if (data['birth-or-adoption'] === 'adoption') {
+    data['primary-weekly-pay'] = primaryWeeklyEarnings
+    data['secondary-weekly-pay'] = secondaryWeeklyEarnings
+
+    res.redirect('/shared-parental-leave-planner/planner-adoption')
+  }
 })
 
 router.get('/shared-parental-leave-planner/key-dates', function (req, res) {

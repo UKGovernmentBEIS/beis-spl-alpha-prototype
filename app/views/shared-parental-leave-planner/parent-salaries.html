@@ -9,44 +9,50 @@
 {% macro salaryInput(options) %}
   {% set salaryAmountId = options.idPrefix + "-salary-amount" %}
   {% set salaryPeriodId = options.idPrefix + "-salary-period" %}
-  <div class="salary-group">
-    {{ govukInput({
-      label: {
-        text: options.labelText
+  {{ govukInput({
+    label: {
+      text: options.labelText
+    },
+    classes: "govuk-input--width-20",
+    id: salaryAmountId,
+    name: salaryAmountId,
+    value: data[salaryAmountId]
+  }) }}
+  {{ govukSelect({
+    id: salaryPeriodId,
+    name: salaryPeriodId,
+    label: {
+      text: "Per"
+    },
+    items: [
+      {
+        value: "year",
+        text: "Year",
+        selected: data[salaryPeriodId] === "year"
       },
-      classes: "govuk-input--width-10",
-      id: salaryAmountId,
-      name: salaryAmountId,
-      value: data[salaryAmountId]
-    }) }}
-    {{ govukSelect({
-      id: salaryPeriodId,
-      name: salaryPeriodId,
-      label: {
-        text: "Per"
+      {
+        value: "month",
+        text: "Month",
+        selected: data[salaryPeriodId] === "month"
       },
-      items: [
-        {
-          value: "year",
-          text: "Year",
-          selected: data[salaryPeriodId] === "year"
-        },
-        {
-          value: "month",
-          text: "Month",
-          selected: data[salaryPeriodId] === "month"
-        },
-        {
-          value: "week",
-          text: "Week",
-          selected: data[salaryPeriodId] === "week"
-        }
-      ]
-    }) }}
-  </div>
+      {
+        value: "week",
+        text: "Week",
+        selected: data[salaryPeriodId] === "week"
+      }
+    ]
+  }) }}
 {% endmacro %}
 
 {% block content %}
+
+  {% set primarySalaryLabel %}
+    {{ data['primary-name'] | capitalize }}'s salary (£)
+  {% endset %}
+
+  {% set secondarySalaryLabel %}
+    {{ data['secondary-name'] | capitalize }}'s salary (£)
+  {% endset %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -69,14 +75,14 @@
         }) %}
           <div class="salary-group">
             {{ salaryInput({
-              idPrefix: "mother",
-              labelText: "Mother's salary (£)"
+              idPrefix: "primary",
+              labelText: primarySalaryLabel
             }) }}
           </div>
           <div class="salary-group">
             {{ salaryInput({
-              idPrefix: "partner",
-              labelText: "Partner's salary (£)"
+              idPrefix: "secondary",
+              labelText: secondarySalaryLabel
             }) }}
           </div>
         {% endcall %}
