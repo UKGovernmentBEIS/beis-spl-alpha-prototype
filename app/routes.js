@@ -4,6 +4,7 @@ const router = express.Router()
 const moment = require('moment')
 
 const utils = require('./assets/javascripts/utils')
+const dataUtils = require('./assets/javascripts/dataUtils')
 
 const { validateDueDate } = require('./validators')
 
@@ -31,6 +32,8 @@ router.post("/shared-parental-leave-planner/index", function (req, res) {
 })
 
 router.post("/shared-parental-leave-planner/birth-or-adoption", function (req, res) {
+  dataUtils.setParentNames(req.session.data)
+
   res.redirect('/shared-parental-leave-planner/due-date')
 })
 

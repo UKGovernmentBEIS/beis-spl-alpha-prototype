@@ -2,17 +2,11 @@ const express = require('express')
 const router = express.Router()
 
 const dates = require('../assets/javascripts/dates')
+const dataUtils = require('../assets/javascripts/dataUtils')
 const { validateDueDate } = require('../validators')
 
 router.post('/birth-or-adoption', function(req, res) {
-  const { data } = req.session
-  if (data['birth-or-adoption'] === 'birth') {
-    data['primary-name'] = 'mother'
-    data['secondary-name'] = 'mother’s partner'
-  } else if (data['birth-or-adoption'] === 'adoption') {
-    data['primary-name'] = 'primary adopter'
-    data['secondary-name'] = 'primary adopter’s partner'
-  }
+  dataUtils.setParentNames(req.session.data)
   res.redirect('caring-with-partner')
 })
 
