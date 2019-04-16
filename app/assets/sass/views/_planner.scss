@@ -203,6 +203,12 @@ table#leave-calendar {
       @media only screen and (min-width: 1020px) {
         height: 3.5em;
       }
+      &.adoption {
+        height: 5em;
+        @media only screen and (min-width: 1020px) {
+          height:4em;
+        }
+      }
       .with-initial-maternity-pay .initial-maternity-pay,
       .with-statutory-pay .statutory-pay,
       .with-unpaid .unpaid {

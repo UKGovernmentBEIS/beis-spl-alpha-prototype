@@ -24,7 +24,7 @@
   {{- "Up to £148.68" if not weeklyPay else (((weeklyPay * 0.9) | pay) if weeklyPay < 165.20 else "£148.68") -}}
 {% endmacro %}
 
-{% set example1 %}
+{# {% set example1 %}
   {% call leaveExample({
     mothersLeavePattern: "8 months maternity leave, 1 month shared parental leave after her partner's shared parental leave ends",
     partnersLeavePattern: "2 weeks paternity leave and 3 months shared parental leave",
@@ -82,7 +82,7 @@
       They alternate being at home with the child every 6 weeks for the remaining 6 months of shared parental leave.
     </p>
   {% endcall %}
-{% endset %}
+{% endset %} #}
 
 {% block content %}
 
@@ -97,11 +97,11 @@
       </h1>
 
       <p>
-        Shared parental leave and pay is available for up to 50 weeks, minus any maternity leave taken by the mother. Eligible mothers and their partners can take up to three blocks (more if their employer allows), either at the same time as their partner, or one after the other.
+        Shared parental leave and pay is available for up to 50 weeks, minus any adoption leave taken by the primary adopter. Eligible primary adopters and their partners can take up to three blocks (more if their employer allows), either at the same time as their partner, or one after the other.
       </p>
-      <p>Shared parental leave and pay is created from unused maternity leave and pay.</p>
+      <p>Shared parental leave and pay is created from unused adoption leave and pay.</p>
 
-      <h2 class="govuk-heading-m">
+      {# <h2 class="govuk-heading-m">
         Examples of shared parental leave
       </h2>
       {{ govukAccordion({
@@ -131,7 +131,7 @@
             }
           }
         ]
-      }) }}
+      }) }} #}
       <button id="clear-example" class="govuk-button leave-example" data-mother-leave="0,1" data-partner-leave="" disabled>
         Clear example and plan your own leave
       </button>
@@ -164,7 +164,7 @@
       }) }}
       <div class="pay-only">
         <p>
-          Maternity pay is available for 39 weeks.
+          Adoption pay is available for 39 weeks.
           You'll get 90% of your average weekly earnings for the first 6 weeks of leave and statutory pay for the remaining 33 weeks.
           Shared parental pay and paternity pay is paid at the statutory rate all the way through.
         </p>
@@ -182,14 +182,14 @@
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
               <th class="govuk-table__header" scope="col"></th>
-              <th class="govuk-table__header" scope="col">Mother</th>
-              <th class="govuk-table__header" scope="col">Partner</th>
+              <th class="govuk-table__header" scope="col">Primary adopter</th>
+              <th class="govuk-table__header" scope="col">Primary adopter's partner</th>
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-            {% for i in range(-11, 52) %}
+            {% for i in range(-2, 52) %}
               {% set date = (dueDate | startOfWeek | offsetWeeks(i) | formatDate("YYYY-MM-DD")) %}
-              {% if (i === -11) or ((date | formatDate("DD") | int) <= 7) %}
+              {% if (i === -2) or ((date | formatDate("DD") | int) <= 7) %}
                 <tr class="month govuk-table__row govuk-!-font-weight-bold">
                   <td class="govuk-table__cell" colspan="3">
                     {{ date | formatDate("MMMM YYYY") }}
@@ -200,7 +200,7 @@
                 <tr class="birth-week govuk-!-font-weight-bold govuk-!-font-size-16">
                   <td></td>
                   <td colspan="2">
-                    Birth week
+                    First week the child lives with you
                   </td>
                 </tr>
               {% endif %}
@@ -208,7 +208,7 @@
               {% set firstTwoBirthWeeks = (i >= 0) and (i < 2) %}
               {% set firstEightBirthWeeks = (i >= 0) and (i < 8) %}
               <tr data-week="{{i}}"
-                class="govuk-table__row week {{ 'before-birth-week' if beforeBirthWeek }} {{ 'mother-leave' if firstTwoBirthWeeks }} {{ 'last-mother-leave' if i === 1 }} {{ 'paternity-eligible-week' if firstEightBirthWeeks }}">
+                class="govuk-table__row adoption week {{ 'before-birth-week' if beforeBirthWeek }} {{ 'mother-leave' if firstTwoBirthWeeks }} {{ 'last-mother-leave' if i === 1 }} {{ 'paternity-eligible-week' if firstEightBirthWeeks }}">
                 <td class="govuk-table__cell">
                   {{ date | formatDate("DD [<br>] MMM") | safe }}
                 </td>
@@ -237,10 +237,10 @@
                       Leave
                     </div>
                     <div class="govuk-body-s maternity-leave leave">
-                      {{ "Compulsory maternity leave" if firstTwoBirthWeeks else "Maternity leave" }}
+                      {{ "Compulsory adoption leave" if firstTwoBirthWeeks else "Adoption leave" }}
                     </div>
                     <div class="govuk-body-s shared-parental-leave leave">
-                      Shared parental leave (mother)
+                      Shared parental leave (primary adopter)
                     </div>
                   </label>
                 </td>
@@ -270,7 +270,7 @@
                           Paternity leave
                         </div>
                         <div class="govuk-body-s shared-parental-leave leave">
-                          Shared parental leave (partner)
+                          Shared parental leave (primary adopter's partner)
                         </div>
                       </div>
                     </label>
@@ -285,12 +285,12 @@
         <h2 class="govuk-heading-m">
           Leave weeks
         </h2>
-        <p>Any unused maternity leave can be taken as shared parental leave.</p>
+        <p>Any unused adoption leave can be taken as shared parental leave.</p>
         {{ govukSummaryList({
           rows: [
             {
               key: {
-                text: "Maternity"
+                text: "Adoption"
               },
               value: {
                 html: '<span id="maternity-weeks"></span>'
@@ -298,7 +298,7 @@
             },
             {
               key: {
-                text: "Mother's SPL"
+                text: "Primary adopter's SPL"
               },
               value: {
                 html: '<span id="mothers-spl-weeks"></span>'
@@ -306,7 +306,7 @@
             },
             {
               key: {
-                text: "Partner's SPL"
+                text: "Primary adopter's partner's SPL"
               },
               value: {
                 html: '<span id="partners-spl-weeks"></span>'
@@ -326,10 +326,10 @@
         }) }}
         <div class="leave-messages">
           <p id="maternity-maximum" class="govuk-body-s warning">
-            You have taken more than the maximum of 52 weeks maternity or shared parental leave.
+            You have taken more than the maximum of 52 weeks adoption or shared parental leave.
           </p>
           <p id="no-more-shared" class="govuk-body-s info">
-            You have no more shared parental leave, reduce your maternity leave to create more.
+            You have no more shared parental leave, reduce your adoption leave to create more.
           </p>
         </div>
         <p>Paternity leave is a separate entitlement.</p>
