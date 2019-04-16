@@ -21,7 +21,7 @@
         rows: [
           {
             key: {
-              text: "Baby is due"
+              text: "Baby is due" if data | isBirth else "Placement date"
             },
             value: {
               text: data["due-date"] | formatDate("DD MMMM YYYY")
@@ -30,13 +30,14 @@
         ]
       }) }}
       <h2 class="govuk-heading-l">
-        Mother's leave dates
+        {{ data['primary-name'] | capitalize }}'s leave dates
       </h2>
       <h3 class="govuk-heading-m">
-        Maternity leave
+        {{ data['primary-leave-type'] | capitalize }} leave
       </h3>
+      {% set primaryLeaveBlockName = data['primary-leave-type'] | capitalize + ' leave' %}
       {{ leaveBlockSummary({
-        name: "Maternity leave",
+        name: primaryLeaveBlockName,
         block: data["maternity-leave"],
         notify: {
           date: data["due-date"] | offsetWeeks(-15),
@@ -47,7 +48,7 @@
         How to apply
       </h4>
       <p>
-        Tell your employer when the baby is due and when you want to start your maternity leave.
+        Tell your employer when the {{ "baby is due" if data | isBirth else "child will be placed with you" }} and when you want to start your {{ data['primary-leave-type'] }} leave.
         Your employer can ask for this in writing.
         Your employer must write to you within 28 days confirming your start and end dates.
       </p>
@@ -55,11 +56,11 @@
         Changing your plans
       </h4>
       <p>
-        You must give 28 days notice to your employer if you want to change your maternity leave dates.
+        You must give 28 days notice to your employer if you want to change your {{ data['primary-leave-type'] }}  leave dates.
       </p>
       {% if motherHasSpl %}
         <h3 class="govuk-heading-m">
-          Mother's shared parental leave
+          {{ data['primary-name'] | capitalize }}'s shared parental leave
         </h3>
         {% for block in data["mothers-spl-blocks"] %}
           {{ leaveBlockSummary({
@@ -76,8 +77,15 @@
         <h4 class="govuk-heading-s">
           How to apply
         </h4>
+        {% set primaryNoticeFormLink %}
+          {% if data | isBirth%}
+            <a href="/spl-forms/Mother_s_notice_form.pdf" target="_blank">Mother’s SPL and ShPP notice form</a>
+          {% else %}
+            <a href="/spl-forms/primary_adopter_s_notice_form.pdf" target="_blank">Primary adopter’s SPL and ShPP notice form</a>
+          {% endif %}
+        {% endset %}
         <p>
-          To take SPL you can complete the <a href="/spl-forms/Mother_s_notice_form.pdf" target="_blank">Mother’s SPL and ShPP notice form</a> and submit it to the mother’s employer by the notice dates above.
+          To take SPL you can complete the {{ primaryNoticeFormLink | safe }} and submit it to the {{ data['primary-name']}}’s employer by the notice dates above.
         </p>
         <p>
           If the employer has their own forms, they can be used instead as long as the relevant notices and declarations are included.
@@ -95,7 +103,7 @@
       </h2>
       {% if (not partnerHasPaternityLeave) and (not partnerHasSpl) %}
         <p>
-          The mother's partner is not planning to take any paternity leave or shared parental leave.
+          The {{ data['secondary-name'] }} is not planning to take any paternity leave or shared parental leave.
         </p>
       {% endif %}
       {% if partnerHasPaternityLeave %}
@@ -142,8 +150,15 @@
         <h4 class="govuk-heading-s">
           How to apply
         </h4>
+        {% set secondaryNoticeFormLink %}
+          {% if data | isBirth %}
+            <a href="/spl-forms/Father_s___Partner_s_notice_form.pdf" target="_blank">Father or Partner’s SPL and ShPP notice form</a>
+          {% else %}
+            <a href="/spl-forms/Father_s___Partner_s_adoption_notice_form.pdf" target="_blank">Father or Partner’s SPL and ShPP notice form</a>
+          {% endif %}
+        {% endset %}
         <p>
-          To take SPL you can complete the <a href="/spl-forms/Father_s___Partner_s_notice_form.pdf" target="_blank">Father or Partner’s SPL and ShPP notice form</a> and submit it to the father / partner’s employer by the notice dates above.
+          To take SPL you can complete the {{ secondaryNoticeFormLink | safe }} and submit it to the {{ data['secondary-name'] }}’s employer by the notice dates above.
         </p>
         <p>
           If the employer has their own forms, they can be used instead as long as the relevant notices and declarations are included.
