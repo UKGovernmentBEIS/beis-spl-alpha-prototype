@@ -1,0 +1,393 @@
+{% from "back-link/macro.njk" import govukBackLink %}
+{% from "checkboxes/macro.njk" import govukCheckboxes %}
+{% from "input/macro.njk" import govukInput %}
+{% from "radios/macro.njk" import govukRadios %}
+{% from "summary-list/macro.njk" import govukSummaryList %}
+
+{% from "components/leave-example.njk" import leaveExample %}
+
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Plan leave and pay when you have a child
+{% endblock %}
+
+{% set dueDate %}
+  {%- if data["due-date"] %}
+    {{- data["due-date"] -}}
+  {% else %}
+    {{- data["due-date-year"] }}-{{ data["due-date-month"] | twoDigit }}-{{ data["due-date-day"] | twoDigit -}}
+  {% endif -%}
+{% endset %}
+
+{% macro statutoryPay(weeklyPay) %}
+  {{- "Up to £148.68" if not weeklyPay else (((weeklyPay * 0.9) | pay) if weeklyPay < 165.20 else "£148.68") -}}
+{% endmacro %}
+
+{% set example1 %}
+  {% call leaveExample({
+    mothersLeavePattern: "8 months maternity leave, 1 month shared parental leave after her partner's shared parental leave ends",
+    partnersLeavePattern: "2 weeks paternity leave and 3 months shared parental leave",
+    mothersLeaveWeeks: "-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,40,41,42,43",
+    partnersLeaveWeeks: "0,1,27,28,29,30,31,32,33,34,35,36,37,38,39"
+  }) %}
+    <p>
+      The mother needs to go back to work for a project in the middle of her maternity leave.
+      She decides to convert her unused maternity leave into shared parental leave so that her partner can take 3 months off work while she attends to her project.
+      She will use the remaining shared parental leave to resume her time at home with their child after her project is over.
+    </p>
+    <p>
+      They would like to take some leave together.
+      The first month of the partner’s shared parental leave will be taken at the same time as the last month of the mother’s maternity leave.
+    </p>
+  {% endcall %}
+{% endset %}
+
+{% set example2 %}
+  {% call leaveExample({
+    mother: "Imran",
+    partner: "Aisha",
+    mothersLeavePattern: "48 weeks maternity leave",
+    partnersLeavePattern: "2 weeks paternity leave and 4 weeks shared parental leave",
+    mothersLeaveWeeks: "-1,-2,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45",
+    partnersLeaveWeeks: "0,1,2,3,4,5"
+  }) %}
+    <p>
+      A couple is having their first child through birth.
+      The partner plans to take two weeks paternity leave but he wants to spend more time at home with the child.
+      He also wants to support the mother in the first few weeks after she’s given birth.
+    </p>
+    <p>
+      The mother originally planned to take a full 52 weeks of maternity leave but decides to reduce it by 4 weeks, so that her partner can take shared parental leave.
+      The partner can now stay at home with the mother and the baby for a total of 6 weeks as soon as the baby is born (2 weeks paternity leave and 4 weeks shared parental leave).
+    </p>
+  {% endcall %}
+{% endset %}
+
+{% set example3 %}
+  {% call leaveExample({
+    mother: "Katie",
+    partner: "Rosa",
+    mothersLeavePattern: "3 months maternity leave, then alternating 6 week blocks of shared parental leave",
+    partnersLeavePattern: "An initial block of paternity and shared parental leave alongside the mother's maternity leave, then alternating 6 week blocks of shared parental leave",
+    mothersLeaveWeeks: "-2,-1,0,1,2,3,4,5,6,7,8,9,10,17,18,19,20,21,22,29,30,31,32,33,34",
+    partnersLeaveWeeks: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,23,24,25,26,27,28,35,36,37,38,39,40"
+  }) %}
+    <p>
+      A mother and her partner want to have equal opportunities to develop a bond with their child and be its primary carer.
+      The mother ends her maternity leave after 3 months to create 9 months of shared parental leave.
+    </p>
+    <p>
+      The couple spend the first 3 months at home together, leaving around 6 months of shared parental leave for either or both of them to take.
+      They alternate being at home with the child every 6 weeks for the remaining 6 months of shared parental leave.
+    </p>
+  {% endcall %}
+{% endset %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukBackLink({
+        text: "Back",
+        href: "parent-salaries"
+      }) }}
+      <h1 class="govuk-heading-xl">
+        Plan leave and pay when you have a child
+      </h1>
+
+      <p>
+        Shared parental leave and pay is available for up to 50 weeks, minus any maternity leave taken by the mother. Eligible mothers and their partners can take up to three blocks (more if their employer allows), either at the same time as their partner, or one after the other.
+      </p>
+      <p>Shared parental leave and pay is created from unused maternity leave and pay.</p>
+
+      <h2 class="govuk-heading-m">
+        Examples of shared parental leave
+      </h2>
+      {{ govukAccordion({
+        items: [
+          {
+            heading: {
+              text: "Managing parenting and your career"
+            },
+            content: {
+              html: example1
+            }
+          },
+          {
+            heading: {
+              text: "Supporting the mother after birth"
+            },
+            content: {
+              html: example2
+            }
+          },
+          {
+            heading: {
+              text: "Sharing primary care responsibility"
+            },
+            content: {
+              html: example3
+            }
+          }
+        ]
+      }) }}
+      <button id="clear-example" class="govuk-button leave-example" data-mother-leave="0,1" data-partner-leave="" disabled>
+        Clear example and plan your own leave
+      </button>
+      <h2 class="govuk-heading-m">
+        Plan your leave
+      </h2>
+      <p>
+        Click in the calendar below to select the weeks you and your partner would like to take off work when you're having a child.
+      </p>
+      <p>
+        The planner will work out the most suitable type of leave based on who's taking time off, when, and for how long.
+        <span class="js-only">
+          The leave weeks table tells you how much leave you have left at any given point.
+        </span>
+      </p>
+      {{ govukCheckboxes({
+        classes: "js-only",
+        hint: {
+          text: "Tick below to see an indication of statutory pay alongside leave."
+        },
+        items: [
+          {
+            id: "show-statutory-pay",
+            text: "Show indicative pay",
+            attributes: {
+              checked: true
+            }
+          }
+        ]
+      }) }}
+      <div class="pay-only">
+        <p>
+          Maternity pay is available for 39 weeks.
+          You'll get 90% of your average weekly earnings for the first 6 weeks of leave and statutory pay for the remaining 33 weeks.
+          Shared parental pay and paternity pay is paid at the statutory rate all the way through.
+        </p>
+        <p>
+          The statutory amount is always £148.68, or 90% of your average weekly earnings if you earn less than £165.20.
+        </p>
+      </div>
+    </div>
+  </div>
+  <form action="summary" method="POST" id="planner-form">
+    <input name="due-date" type="hidden" value="{{ dueDate }}">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
+        <table id="leave-calendar" class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col"></th>
+              <th class="govuk-table__header" scope="col">Mother</th>
+              <th class="govuk-table__header" scope="col">Partner</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% for i in range(-11, 52) %}
+              {% set date = (dueDate | startOfWeek | offsetWeeks(i) | formatDate("YYYY-MM-DD")) %}
+              {% if (i === -11) or ((date | formatDate("DD") | int) <= 7) %}
+                <tr class="month govuk-table__row govuk-!-font-weight-bold">
+                  <td class="govuk-table__cell" colspan="3">
+                    {{ date | formatDate("MMMM YYYY") }}
+                  </td>
+                </tr>
+              {% endif %}
+              {% if (i === 0) %}
+                <tr class="birth-week govuk-!-font-weight-bold govuk-!-font-size-16">
+                  <td></td>
+                  <td colspan="2">
+                    Birth week
+                  </td>
+                </tr>
+              {% endif %}
+              {% set beforeBirthWeek = i < 0 %}
+              {% set firstTwoBirthWeeks = (i >= 0) and (i < 2) %}
+              {% set firstEightBirthWeeks = (i >= 0) and (i < 8) %}
+              <tr data-week="{{i}}"
+                class="govuk-table__row week {{ 'before-birth-week' if beforeBirthWeek }} {{ 'mother-leave' if firstTwoBirthWeeks }} {{ 'last-mother-leave' if i === 1 }} {{ 'paternity-eligible-week' if firstEightBirthWeeks }}">
+                <td class="govuk-table__cell">
+                  {{ date | formatDate("DD [<br>] MMM") | safe }}
+                </td>
+                {% set motherId = "mother-" + date %}
+                {% set motherPayId = "[pay][mother][" + date +"]" %}
+                {% set motherWeeklyPay = data["primary-weekly-pay"] %}
+                <td class="govuk-table__cell mother {{ 'compulsory disabled' if firstTwoBirthWeeks }}">
+                  <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
+                    {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
+                  <!-- Deliberately omit 'for' from label on compulsory maternity weeks, to prevent changing. -->
+                  <label {% if not firstTwoBirthWeeks %}for="{{ motherId }}"{% endif %}>
+                    <input type="text" id="{{ motherPayId }}" name="{{ motherPayId }}" class="pay-amount-input"/>
+                    <div class="initial-maternity-pay pay">
+                      {{ ((motherWeeklyPay * 0.9) | pay) if motherWeeklyPay else "90% of average weekly pay" }}
+                    </div>
+                    <div class="statutory-pay pay">
+                      {{ statutoryPay(motherWeeklyPay) }}
+                    </div>
+                    <div class="unpaid pay">
+                      Unpaid
+                    </div>
+                    <div class="govuk-body-s work-or-other-leave js-only">
+                      Work or other leave
+                    </div>
+                    <div class="govuk-body-s unassigned-leave leave">
+                      Leave
+                    </div>
+                    <div class="govuk-body-s maternity-leave leave">
+                      {{ "Compulsory maternity leave" if firstTwoBirthWeeks else "Maternity leave" }}
+                    </div>
+                    <div class="govuk-body-s shared-parental-leave leave">
+                      Shared parental leave (mother)
+                    </div>
+                  </label>
+                </td>
+                {% set partnerId = "partner-" + date %}
+                {% set partnerPayId = "[pay][partner][" + date +"]"%}
+                {% set partnerWeeklyPay = data["secondary-weekly-pay"] %}
+                <td class="govuk-table__cell partner {{ 'disabled' if beforeBirthWeek }}">
+                  {% if (not beforeBirthWeek) %}
+                    <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
+                      {% if data[partnerId] %}checked{% endif %}>
+                    <label for="{{ partnerId }}">
+                      <div>
+                        <input type="text" id="{{ partnerPayId }}" name="{{ partnerPayId }}" class="pay-amount-input"/>
+                        <div class="statutory-pay pay">
+                          {{ statutoryPay(partnerWeeklyPay) }}
+                        </div>
+                        <div class="unpaid pay">
+                          Unpaid
+                        </div>
+                        <div class="govuk-body-s work-or-other-leave js-only">
+                          Work or other leave
+                        </div>
+                        <div class="govuk-body-s unassigned-leave leave">
+                          Leave
+                        </div>
+                        <div class="govuk-body-s paternity-leave leave">
+                          Paternity leave
+                        </div>
+                        <div class="govuk-body-s shared-parental-leave leave">
+                          Shared parental leave (partner)
+                        </div>
+                      </div>
+                    </label>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="govuk-grid-column-one-third planner-sidebar js-only">
+        <h2 class="govuk-heading-m">
+          Leave weeks
+        </h2>
+        <p>Any unused maternity leave can be taken as shared parental leave.</p>
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Maternity"
+              },
+              value: {
+                html: '<span id="maternity-weeks"></span>'
+              }
+            },
+            {
+              key: {
+                text: "Mother's SPL"
+              },
+              value: {
+                html: '<span id="mothers-spl-weeks"></span>'
+              }
+            },
+            {
+              key: {
+                text: "Partner's SPL"
+              },
+              value: {
+                html: '<span id="partners-spl-weeks"></span>'
+              }
+            },
+            {
+              key: {
+                classes: "maternity-spl-remaining-total",
+                text: "Remaining"
+              },
+              value: {
+                classes: "maternity-spl-remaining-total",
+                html: '<span id="maternity-spl-remaining-weeks"></span>'
+              }
+            }
+          ]
+        }) }}
+        <div class="leave-messages">
+          <p id="maternity-maximum" class="govuk-body-s warning">
+            You have taken more than the maximum of 52 weeks maternity or shared parental leave.
+          </p>
+          <p id="no-more-shared" class="govuk-body-s info">
+            You have no more shared parental leave, reduce your maternity leave to create more.
+          </p>
+        </div>
+        <p>Paternity leave is a separate entitlement.</p>
+        {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Paternity"
+              },
+              value: {
+                html: '<span id="paternity-weeks"></span>'
+              }
+            },
+            {
+              key: {
+                text: "Remaining"
+              },
+              value: {
+                html: '<span id="paternity-remaining-weeks"></span>'
+              }
+            }
+          ]
+        }) }}
+        <button type="button" class="govuk-button leave-example" data-mother-leave="0,1" data-partner-leave="">
+          Reset
+        </button>
+      </div>
+
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <p>
+          Press next for a summary of key dates.
+        </p>
+        <button type="submit" class="govuk-button">
+          Next
+        </button>
+        <div class="js-only">
+          {{ govukInput({
+            label: {
+              classes: "govuk-!-font-weight-bold",
+              text: "Save / share link"
+            },
+            id: "save-share-link",
+            classes: "govuk-!-font-size-14",
+            hint: {
+              text: "Copy this link for later to return to the calendar with this leave plan."
+            },
+            attributes: {
+              readonly: "readonly"
+            }
+          }) }}
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/public/javascripts/planner.js"></script>
+{% endblock %}
