@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 
+{% from "../includes/birth-or-adoption-form.html" import birthOrAdoptionForm %}
+
 {% block pageTitle %}
   Check if you can get shared parental leave and pay
 {% endblock %}
@@ -15,39 +17,9 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <form action="birth-or-adoption" method="POST">
-        {{ govukRadios({
-          classes: "govuk-radios",
-          idPrefix: "birth-or-adoption",
-          name: "birth-or-adoption",
-          fieldset: {
-            legend: {
-              text: "Are you having a child through birth or adoption?",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--xl"
-            }
-          },
-          hint: {
-            text: "Shared parental leave and pay is available for birth and adoptive parents."
-          },
-          items: [
-            {
-              value: "birth",
-              text: "Birth",
-              checked: checked("birth-or-adoption", "birth")
-            },
-            {
-              value: "adoption",
-              text: "Adoption",
-              checked: checked("birth-or-adoption", "adoption")
-            }
-          ]
-        }) }}
-
-
-        <button type="submit" class="govuk-button">
-          Continue
-        </button>
+        {{ birthOrAdoptionForm({
+          action: "birth-or-adoption"})
+        }}
       </form>
     </div>
   </div>
