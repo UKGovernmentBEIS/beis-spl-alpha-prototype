@@ -9,6 +9,14 @@
 {% endblock %}
 
 {% block content %}
+  {% set questionText %}
+    {% if data['birth-or-adoption'] == 'birth' %}
+      When is the baby due, or when was the baby born?
+    {% elif data['birth-or-adoption'] == 'adoption' %}
+      When is, or when was your placement date?
+    {% endif %}
+  {% endset %}
+
   {% if data["due-date-errors"] %}
     {{govukErrorSummary({
       titleText: "There is a problem",
@@ -36,7 +44,7 @@
           namePrefix: "due-date",
           fieldset: {
             legend: {
-              text: "When is the baby due, or when was the baby born?",
+              text: questionText,
               isPageHeading: true,
               classes: "govuk-fieldset__legend--xl"
             }

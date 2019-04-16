@@ -20,6 +20,17 @@ router.get('/shared-parental-leave-and-pay/apply-for-shared-parental-leave', fun
 })
 
 router.post("/shared-parental-leave-planner/index", function (req, res) {
+  const { data } = req.session
+  if (data['birth-or-adoption'] === 'birth' && data['provided-date']) {
+    res.redirect("/shared-parental-leave-planner/parent-salaries")
+  } else if (data['birth-or-adoption']) {
+    res.redirect('/shared-parental-leave-planner/due-date')
+  } else {
+    res.redirect("/shared-parental-leave-planner/birth-or-adoption")
+  }
+})
+
+router.post("/shared-parental-leave-planner/birth-or-adoption", function (req, res) {
   res.redirect('/shared-parental-leave-planner/due-date')
 })
 
