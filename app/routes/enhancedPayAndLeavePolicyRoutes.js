@@ -13,4 +13,22 @@ router.post('/multiple-blocks-of-leave', function (req, res) {
   res.redirect('/enhanced-pay-and-leave-policy/which-weeks-are-paid')
 })
 
+router.get('/which-weeks-are-paid', function (req, res) {
+  const { data } = req.session
+  if (!data['leave-blocks']) {
+    data['leave-blocks'] = [newLeaveBlock()]
+  }
+  res.render('enhanced-pay-and-leave-policy/which-weeks-are-paid', { data })
+})
+
+router.post('/which-weeks-are-paid/:action', function (req, res) {
+  const { data } = req.session
+  if (req.params.action === 'add-another') {
+    data['leave-blocks'].push(newLeaveBlock())
+    res.redirect('/enhanced-pay-and-leave-policy/which-weeks-are-paid')
+  }
+})
+
+const newLeaveBlock = () => { return { weeks: "", percentOfSalary: "" }}
+
 module.exports = router
