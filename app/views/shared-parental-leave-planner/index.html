@@ -28,9 +28,9 @@
         <li>salary information for you and your partner</li>
       </ul>
       <form action="/shared-parental-leave-planner/index" method="POST">
-        <input type="hidden" name="due-date-day" value="{{ dueDateDay }}">
-        <input type="hidden" name="due-date-month" value="{{ dueDateMonth }}">
-        <input type="hidden" name="due-date-year" value="{{ dueDateYear }}">
+        <input type="hidden" name="due-date-day" value="{{ data['due-date-day'] }}">
+        <input type="hidden" name="due-date-month" value="{{ data['due-date-month'] }}">
+        <input type="hidden" name="due-date-year" value="{{ data['due-date-year'] }}">
         <button type="submit" class="govuk-button govuk-button--start">
           Start now
         </button>
