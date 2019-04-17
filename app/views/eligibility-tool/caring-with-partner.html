@@ -16,6 +16,23 @@
     Will the {{ data['primary-name'] }} care for the child with a partner?
   {% endset %}
 
+  {% set hintText %}
+    <p class="govuk-hint">
+      The partner is one of the following:
+    </p>
+    <ul>
+      {% if data | isBirth %}
+        <li>the mother’s husband, wife or civil partner</li>
+        <li>the child’s other parent</li>
+        <li>the mother’s partner (if they live with the mother and the child)</li>
+      {% else %}
+        <li>the primary adopter's husband, wife or civil partner</li>
+        <li>the secondary adopter</li>
+        <li>the primary adopter's partner (if they live with the primary adopter and the child)</li>
+      {% endif %}
+    </ul>
+  {% endset %}
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <form action="caring-with-partner" method="POST">
@@ -31,7 +48,7 @@
             }
           },
           hint: {
-            html: "<p class=\"govuk-hint\">The partner is one of the following:</p><ul><li>the mother’s husband, wife or civil partner</li><li>the child’s other parent</li><li>the mother’s partner (if they live with the mother and the child)</li></ul>"
+            html: hintText
           },
           items: [
             {
