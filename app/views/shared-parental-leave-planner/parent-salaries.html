@@ -13,7 +13,7 @@
     label: {
       text: options.labelText
     },
-    classes: "govuk-input--width-20",
+    classes: "govuk-input--width-20 app-salary-input",
     id: salaryAmountId,
     name: salaryAmountId,
     value: data[salaryAmountId]
@@ -51,7 +51,7 @@
   {% endset %}
 
   {% set secondarySalaryLabel %}
-    {{ data['secondary-name'] | capitalize }}'s salary (£)
+    Partner's salary (£)
   {% endset %}
 
   <div class="govuk-grid-row">
