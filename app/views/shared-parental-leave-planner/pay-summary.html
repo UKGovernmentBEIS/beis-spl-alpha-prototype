@@ -54,6 +54,21 @@
         }) }}
       {% endfor %}
 
+      {% set primaryNoticeFormLink %}
+        {% if data | isBirth%}
+          <a href="/spl-forms/Mother_s_notice_form.pdf" target="_blank">Mother’s SPL and ShPP notice form</a>
+        {% else %}
+          <a href="/spl-forms/Adopters_notice_form.pdf" target="_blank">Primary adopter’s SPL and ShPP notice form</a>
+        {% endif %}
+      {% endset %}
+      {% set secondaryNoticeFormLink %}
+        {% if data | isBirth %}
+          <a href="/spl-forms/Father_s___Partner_s_notice_form.pdf" target="_blank">Father or Partner’s SPL and ShPP notice form</a>
+        {% else %}
+          <a href="/spl-forms/Adopter_s_partner_s_notice_form.pdf" target="_blank">Partner’s SPL and ShPP notice form</a>
+        {% endif %}
+      {% endset %}
+
       <h3 class="govuk-heading-m">
         How to apply
       </h3>
@@ -75,7 +90,7 @@
         Statutory shared parental pay (ShPP)
       </h4>
       <p>
-        To apply for shared parental pay, the mother can fill out the <a href="/spl-forms/Mother_s_notice_form.pdf" target="_blank">Mother’s SPL and ShPP notice form</a> and the mother’s partner can fill out the <a href="/spl-forms/Father_s___Partner_s_notice_form.pdf" target="_blank">Father / Partner’s SPL and ShPP notice form</a>.
+        To apply for shared parental pay, the mother can fill out the {{ primaryNoticeFormLink | safe }} and the mother’s partner can fill out the {{ secondaryNoticeFormLink | safe }}.
       </p>
       <p>
         You must give your employer 8 weeks written notice of the dates you want to receive shared parental pay.
