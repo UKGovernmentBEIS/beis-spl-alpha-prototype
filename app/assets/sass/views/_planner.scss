@@ -6,6 +6,7 @@ $colour-paternity: lighten(govuk-colour('red'), 50%);
 $colour-shared: lighten(govuk-colour('light-green'), 25%);
 $colour-birth-week: govuk-colour('yellow');
 $colour-disabled: govuk-colour('grey-2');
+$colour-unpaid: lighten(govuk-colour('yellow'), 25%);
 $cell-border: 1px solid govuk-colour('grey-3');
 
 table#leave-calendar {
@@ -13,10 +14,31 @@ table#leave-calendar {
 
   th {
     position: sticky;
-    top: 0;
     background-color: $colour-header;
     z-index: 1;
     text-align: center;
+    &.th-row-1 {
+      top: 0;
+    }
+    &.th-row-2 {
+      top: 44px;
+    }
+  }
+
+  &.show-pay {
+    td {
+      &:nth-child(1), &:nth-child(3), &:nth-child(5) {
+        width: 9%;
+      }
+      &:nth-child(2), &:nth-child(4) {
+        width: 36%;
+      }
+    }
+  }
+  &:not(.show-pay) {
+    td:not(:first-child) {
+      width: 42%;
+    }
   }
 
   td {
@@ -26,9 +48,6 @@ table#leave-calendar {
     }
   }
 
-  td:not(:first-child) {
-    width: 42%;
-  }
 
   .birth-week {
     background-color: $colour-birth-week;
@@ -64,9 +83,10 @@ table#leave-calendar {
           display: none;
         }
       }
-      &.mother, &.partner {
-        /* Hidden overflow is needed to hide oversized background used for IE11 compatibility. */
-        overflow: hidden;
+      &.pay-indicator {
+        cursor: cell;
+      }
+      &.mother, &.partner, &.pay-indicator {
         @mixin full-cell {
           position: absolute;
           top: 0;
@@ -76,11 +96,21 @@ table#leave-calendar {
           /* IE11 fix for full height cells. */
           height: 200px;
         }
-        &:hover::after {
-          content: "";
-          @include full-cell();
-          background-color: rgba(0, 0, 0, 0.1);
-          pointer-events: none;
+        /* Hidden overflow is needed to hide oversized background used for IE11 compatibility. */
+        overflow: hidden;
+        &:hover {
+          &::after {
+            content: "";
+            @include full-cell();
+            background-color: rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+          }
+          + td.pay-indicator::after {
+            content: "";
+            @include full-cell();
+            background-color: rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+          }
         }
         input[type="checkbox"] {
           visibility: hidden;
@@ -128,6 +158,12 @@ table#leave-calendar {
     display: none;
   }
 
+  .is-paid, .is-unpaid {
+    display: none;
+    margin: 0;
+    text-align: center;
+  }
+
   @mixin leave($colour, $leave-type) {
     input:checked + label {
       background-color: $colour;
@@ -135,6 +171,20 @@ table#leave-calendar {
         display: none;
       }
       .#{$leave-type} {
+        display: block;
+      }
+    }
+    &:not(.with-pay) + td {
+      background-color: $colour-unpaid;
+      padding: 0;
+      .is-unpaid {
+        display: block;
+      }
+    }
+    &.with-pay + td {
+      background-color: $colour;
+      padding: 0;
+      .is-paid {
         display: block;
       }
     }
@@ -238,7 +288,8 @@ table#leave-calendar {
     padding-right: 10px;
   }
 
-  .maternity-spl-remaining-total {
+  .maternity-spl-remaining-total,
+  .total {
     color: $govuk-secondary-text-colour;
     &.negative {
       color: $govuk-error-colour;

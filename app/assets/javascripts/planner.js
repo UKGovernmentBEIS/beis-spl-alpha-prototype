@@ -125,10 +125,23 @@ $(document).ready(function () {
     })
   })
 
+  $('.pay-indicator').on('click', function() {
+    const $cell = $(this).prev()
+    if (!hasLeave($cell)) {
+      addLeave($cell)
+    } else if ($cell.hasClass('with-pay')) {
+      $cell.removeClass('with-pay')
+    } else {
+      $cell.addClass('with-pay')
+    }
+    updatePay()
+  })
+
   $('input#show-statutory-pay').on('change', function () {
     const checked = $(this).prop('checked')
     $calendar.toggleClass('show-pay', checked)
     $('.pay-only').toggle(checked)
+    $('.not-pay').toggle(!checked)
   }).change()
 
   $('.leave-example').on('click', function () {
@@ -159,11 +172,11 @@ $(document).ready(function () {
     $('.pay-amount-input').each(function(_, payInput) {
       let amount
       $payInput = $(payInput)
-      $payInputParent = $payInput.parent()
-      if($payInputParent.hasClass("with-initial-maternity-pay")) {
-        amount = $payInputParent.children(".initial-maternity-pay").text()
-      } else if ($payInputParent.hasClass("with-statutory-pay")) {
-        amount = $payInputParent.children(".statutory-pay").text()
+      const $cell = $payInput.closest('td')
+      if($cell.hasClass("with-initial-maternity-pay")) {
+        amount = $cell.find(".initial-maternity-pay").text()
+      } else if ($cell.hasClass("with-statutory-pay")) {
+        amount = $cell.find(".statutory-pay").text()
       } else {
         amount = '£0'
       }
@@ -197,10 +210,14 @@ function handleMaternityBeforeBirthWeek($cell) {
 
 function addLeave($cell) {
   toggleLeave($cell, true)
+  if (hasRemainingSharedPayWeeks()) {
+    $cell.addClass('with-pay')
+  }
 }
 
 function removeLeave($cell) {
   toggleLeave($cell, false)
+  $cell.removeClass('with-pay')
 }
 
 function toggleLeave($cell, isLeave) {
@@ -237,7 +254,7 @@ function onLeaveUpdated() {
   $('#mothers-spl-weeks').text(toWeeksString(mothersSplWeeks))
   $('#partners-spl-weeks').text(toWeeksString(partnersSplWeeks))
   $('#maternity-spl-remaining-weeks').text(toWeeksString(maternitySplRemainingWeeks))
-  $('.maternity-spl-remaining-total').toggleClass(NEGATIVE, maternitySplRemainingWeeks < 0)
+  $('.maternity-spl-remaining.total').toggleClass(NEGATIVE, maternitySplRemainingWeeks < 0)
 
   $('#paternity-weeks').text(toWeeksString(paternityWeeks))
   $('#paternity-remaining-weeks').text(toWeeksString(paternityRemainingWeeks))
@@ -253,24 +270,38 @@ function onLeaveUpdated() {
   updatePay()
 }
 
+function hasRemainingSharedPayWeeks() {
+  return $('.with-pay .maternity-leave:visible, .with-pay .shared-parental-leave:visible').length < MATERNITY_PAY_WEEKS
+}
+
 function updatePay() {
   $('.with-initial-maternity-pay').removeClass('with-initial-maternity-pay')
   $('.with-statutory-pay').removeClass('with-statutory-pay')
   $('.with-unpaid').removeClass('with-unpaid')
 
-  const $maternityWeeks = $('.maternity-leave:visible')
-  $maternityWeeks.slice(0, INITIAL_MATERNITY_PAY_WEEKS).parent().addClass('with-initial-maternity-pay')
-  $maternityWeeks.slice(INITIAL_MATERNITY_PAY_WEEKS, MATERNITY_PAY_WEEKS).parent().addClass('with-statutory-pay')
-  $maternityWeeks.slice(MATERNITY_PAY_WEEKS).parent().addClass('with-unpaid')
+  const $maternityWeeks = $('.with-pay .maternity-leave:visible')
+  $maternityWeeks.slice(0, INITIAL_MATERNITY_PAY_WEEKS).parent().parent().addClass('with-initial-maternity-pay')
+  $maternityWeeks.slice(INITIAL_MATERNITY_PAY_WEEKS).parent().parent().addClass('with-statutory-pay')
+  $('td:not(.with-pay) .maternity-leave:visible').parent().parent().addClass('with-unpaid')
 
-  const remainingPayWeeks = Math.max(MATERNITY_PAY_WEEKS - $maternityWeeks.length, 0)
-  const $splWeeks = $('.shared-parental-leave:visible')
-  $splWeeks.slice(0, remainingPayWeeks).parent().addClass('with-statutory-pay')
-  $splWeeks.slice(remainingPayWeeks).parent().addClass('with-unpaid')
+  const $splWeeks = $('.with-pay .shared-parental-leave:visible')
+  $splWeeks.parent().parent().addClass('with-statutory-pay')
+  $('td:not(.with-pay) .shared-parental-leave:visible').parent().parent().addClass('with-unpaid')
 
   const $paternityWeeks = $('.paternity-leave:visible')
-  $paternityWeeks.slice(0, PATERNITY_PAY_WEEKS).parent().addClass('with-statutory-pay')
-  $paternityWeeks.slice(PATERNITY_PAY_WEEKS).parent().addClass('with-unpaid')
+  $paternityWeeks.slice(0, PATERNITY_PAY_WEEKS).parent().parent().addClass('with-pay').addClass('with-statutory-pay')
+  $paternityWeeks.slice(PATERNITY_PAY_WEEKS).parent().parent().addClass('with-unpaid')
+
+  const maternityOrSharedPaidWeeks = $('.with-pay .maternity-leave:visible, .with-pay .shared-parental-leave:visible').length
+  const maternityOrSharedRemainingPaidWeeks = MATERNITY_PAY_WEEKS - maternityOrSharedPaidWeeks
+
+  // Remaining pay.
+  $('#mother-shared-paid-weeks').text(toWeeksString(maternityOrSharedPaidWeeks))
+  $('#mother-shared-remaining-paid-weeks').text(toWeeksString(maternityOrSharedRemainingPaidWeeks))
+  $('.paid-weeks-remaining.total').toggleClass(NEGATIVE, maternityOrSharedRemainingPaidWeeks < 0)
+
+  // Warnings
+  $('#maternity-or-shared-pay-maximum').toggle(maternityOrSharedRemainingPaidWeeks < 0)
 }
 
 function toWeeksString(numberOfWeeks) {

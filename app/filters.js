@@ -141,6 +141,30 @@ module.exports = function (env) {
       ]
     )
   }
+
+  filters.toWeekItems = function (range, dueDate, parent) {
+    const birthWeek = filters.startOfWeek(dueDate)
+    return range.map(i => {
+      const date = filters.offsetWeeks(birthWeek, parseInt(i))
+      const value = filters.formatDate(date, 'YYYY-MM-DD')
+      return {
+        text: `${filters.formatDate(date, 'D MMMM YYYY')} to ${filters.formatDate(moment(date).endOf('week'), 'D MMMM YYYY')}`,
+        value: value,
+        conditional: {
+          html:
+          `<div class="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+              <input class="govuk-checkboxes__input" id="${parent}-pay-v2-${i}" name="[pay-v2][${parent}]" type="checkbox" value="${value}">
+              <label class="govuk-label govuk-checkboxes__label" for="${parent}-pay-v2-${i}">
+                Paid
+              </label>
+            </div>
+          </div>`
+        }
+      }
+    })
+  }
+
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */
