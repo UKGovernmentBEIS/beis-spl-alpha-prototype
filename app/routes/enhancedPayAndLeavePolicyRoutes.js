@@ -33,6 +33,8 @@ router.post('/which-weeks-are-paid/:action', function (req, res) {
   if (req.params.action === 'add-another') {
     data['leave-blocks'].push(newLeaveBlock())
     res.redirect('/enhanced-pay-and-leave-policy/which-weeks-are-paid')
+  } else {
+    res.redirect('/enhanced-pay-and-leave-policy/statutory-pay')
   }
 })
 
