@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Help your employees plan their leave and pay
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-xl">
+        Help your employees plan their leave and pay
+      </h1>
+      <h2 class="govuk-heading-m">
+        Create your policy
+      </h2>
+      <p>
+        This tool will create and store your policy within a unique token.
+        You will be able to share this policy token with your employees.
+        By generating the policy token it will allow your employees to plan their leave and pay without having to input details of the policy themselves.
+      </p>
+
+      {# {% from "button/macro.njk" import govukButton %} #}
+
+      {{ govukButton({
+        text: "Start now",
+        href: "/enhanced-pay-and-leave-policy/type-of-leave",
+        classes: "govuk-button--start"
+      }) }}
+    </div>
+  </div>
+
+{% endblock %}

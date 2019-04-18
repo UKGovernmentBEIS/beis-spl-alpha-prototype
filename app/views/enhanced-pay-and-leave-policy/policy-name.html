@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Help your employees plan their leave and pay
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "statutory-pay"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-xl">
+        Help your employees plan their leave and pay
+      </h1>
+
+      <form action="policy-name" method="POST">
+        {{ govukInput({
+          label: {
+            text: "What do you want to call this policy?",
+            classes: "govuk-label--m"
+          },
+          id: 'policy-name',
+          name: "policy-name"
+        }) }}
+        <button type="submit" class="govuk-button">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
