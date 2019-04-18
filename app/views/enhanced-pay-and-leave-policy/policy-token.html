@@ -13,19 +13,16 @@
 {% endblock %}
 
 {% block content %}
+  {{ govukPanel({
+    titleText: data['policy-name'],
+    html: 'Your policy token<br><strong>6de45c47-bbfd-42d8-a3f6</strong>'
+  }) }}
+  <p class="govuk-body govuk-!-margin-bottom-8">
+    Keep this page safe. Copy this token and share it with your employees to help them plan their leave and pay.
+  </p>
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <h1 class="govuk-heading-xl">
-        Help your employees plan their leave and pay
-      </h1>
-
-      {{ govukPanel({
-        titleText: data['policy-name'],
-        html: 'Your policy token is:<br><strong>6de45c47-bbfd-42d8-a3f6</strong>'
-      }) }}
-      <p class="govuk-body govuk-!-margin-bottom-6">
-        Keep this page safe. Copy this token and share it with your employees to help them plan their leave and pay.
-      </p>
       <h2 class="govuk-heading-l">
         What to do next
       </h2>
@@ -44,7 +41,7 @@
       <h3 class="govuk-heading-m">
         Update it if your policy changes
       </h3>
-      <p class="govuk-body govuk-!-margin-bottom-6">
+      <p class="govuk-body govuk-!-margin-bottom-8">
         Keep this page safe. Copy this token and share it with your employees to help them plan their leave and pay.
       </p>
       <h2 class="govuk-heading-l">

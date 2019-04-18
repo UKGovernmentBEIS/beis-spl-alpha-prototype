@@ -22,22 +22,19 @@ router.route('/which-weeks-are-paid')
     res.render('enhanced-pay-and-leave-policy/which-weeks-are-paid', { data })
   })
   .post(function (req, res) {
+    const { data } = req.session
+    data['leave-blocks'] = data['leave-blocks'].filter(block => block.weeks || block['percent-of-salary'])
     res.redirect('/enhanced-pay-and-leave-policy/statutory-pay')
   })
 
-router.post('/which-weeks-are-paid/:action', function (req, res) {
-  const { data } = req.session
-  if (req.params.action === 'add-another') {
-    data['leave-blocks'].push(newLeaveBlock())
-    res.redirect('/enhanced-pay-and-leave-policy/which-weeks-are-paid')
-  } else {
-  }
+router.post('/which-weeks-are-paid/add-another', function (req, res) {
+  req.session.data['leave-blocks'].push(newLeaveBlock())
+  res.redirect('/enhanced-pay-and-leave-policy/which-weeks-are-paid')
 })
 
 router.get('/remove-block/:blockId', function (req, res) {
-  const { data } = req.session
   const { blockId } = req.params
-  data['leave-blocks'].splice(blockId, 1)
+  req.session.data['leave-blocks'].splice(blockId, 1)
   res.redirect('/enhanced-pay-and-leave-policy/which-weeks-are-paid')
 })
 
