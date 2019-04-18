@@ -45,6 +45,10 @@ router.post('/statutory-pay', function (req, res) {
   res.redirect('/enhanced-pay-and-leave-policy/policy-name')
 })
 
+router.post("/policy-name", function (req, res) {
+  res.redirect('/enhanced-pay-and-leave-policy/policy-token')
+})
+
 const newLeaveBlock = () => { return { weeks: "", percentOfSalary: "" }}
 
 module.exports = router
