@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Apply for shared parental leave and pay
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-xl">
+      {{ data | currentParentName | capitalize }}'s Notices and Declarations
+    </h1>
+      {% set currentParent = data['secondary-name'] if data['primary-complete'] else data['primary-name'] %}
+      <form action="notices-and-declarations" method="POST">
+
+        <button type="submit" class="govuk-button">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

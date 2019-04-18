@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Apply for shared parental leave and pay
+{% endblock %}
+
+{% block content %}
+  {% set hintHtml %}
+    If you're unsure you can
+    <a href="/shared-parental-leave-and-pay/index" class="govuk-link">
+      plan how to take shared parental leave and pay
+    </a>
+  {% endset %}
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <form action="which-entitlement" method="POST">
+        {{ govukRadios({
+          idPrefix: "relation-to-child",
+          name: "relation-to-child",
+          fieldset: {
+            legend: {
+              text: "Which entitlement is the " + (data | currentParentName) + " intending to take?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--xl"
+            }
+          },
+          hint: {
+            html: hintHtml
+          },
+          items: [
+            {
+              value: "leave",
+              text: "Shared parental leave"
+            },
+            {
+              value: "pay",
+              text: "Shared parental pay"
+            },
+            {
+              value: "both",
+              text: "Both"
+            }
+          ]
+        }) }}
+        <button type="submit" class="govuk-button">
+          Continue
+        </button>
+    </div>
+  </div>
+
+{% endblock %}
