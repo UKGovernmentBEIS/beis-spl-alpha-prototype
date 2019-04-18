@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% from "panel/macro.njk" import govukPanel %}
+
+{% block pageTitle %}
+  Help your employees plan their leave and pay
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "which-weeks-are-paid"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-xl">
+        Help your employees plan their leave and pay
+      </h1>
+
+      {{ govukPanel({
+        titleText: data['policy-name'],
+        html: 'Your policy token is:<br><strong>6de45c47-bbfd-42d8-a3f6</strong>'
+      }) }}
+      <p class="govuk-body govuk-!-margin-bottom-6">
+        Keep this page safe. Copy this token and share it with your employees to help them plan their leave and pay.
+      </p>
+      <h2 class="govuk-heading-l">
+        What to do next
+      </h2>
+      <h3 class="govuk-heading-m">
+        Keep this code safe
+      </h3>
+      <p>
+        Keep this page safe. Copy this token and share it with your employees to help them plan their leave and pay.
+      </p>
+      <h3 class="govuk-heading-m">
+        Share with your employees
+      </h3>
+      <p>
+        Keep this page safe. Copy this token and share it with your employees to help them plan their leave and pay.
+      </p>
+      <h3 class="govuk-heading-m">
+        Update it if your policy changes
+      </h3>
+      <p class="govuk-body govuk-!-margin-bottom-6">
+        Keep this page safe. Copy this token and share it with your employees to help them plan their leave and pay.
+      </p>
+      <h2 class="govuk-heading-l">
+        Your policy details
+      </h2>
+      <h3 class="govuk-heading-m">
+        Policy name
+      </h3>
+      <p>{{ data['policy-name'] }}</p>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+      <h3 class="govuk-heading-m">
+        What type of leave are you enhancing?
+      </h3>
+      <p>{{ data['leave-type'] | capitalize }}</p>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      {% if data['leave-type'] == 'shared' %}
+        <h3 class="govuk-heading-m">
+          Will leave policy allow for multiple blocks of leave?
+        </h3>
+        <p>{{ data['multiple-blocks'] }}</p>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      {% endif %}
+      <h3 class="govuk-heading-m">
+        How many blocks?
+      </h3>
+      <p>{{ data['leave-blocks'] | length }}</p>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      <h3 class="govuk-heading-m">
+        What weeks are paid/unpaid?
+      </h3>
+      {{ govukTable({
+        head: [
+          {
+            text: "Number of weeks"
+          },
+          {
+            text: "Payed at"
+          }
+        ],
+        rows: data['leave-blocks'] | getLeaveBlockTableRows
+      }) }}
+      <h3 class="govuk-heading-m">
+        Are statutory rates paid in addition to the enhanced leave scheme?
+      </h3>
+      <p>{{ data['statutory-pay'] | capitalize }}</p>
+    </div>
+  </div>
+{% endblock %}

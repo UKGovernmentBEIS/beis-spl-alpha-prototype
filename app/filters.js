@@ -129,6 +129,18 @@ module.exports = function (env) {
   filters.isAdoption = function (data) {
     return data['birth-or-adoption'] === 'adoption'
   }
+
+  filters.getLeaveBlockTableRows = function (leaveBlocks) {
+    return leaveBlocks.map(block => [
+        {
+          text: block.weeks + ' weeks'
+        },
+        {
+          text: block['percent-of-salary'] + '% of salary'
+        }
+      ]
+    )
+  }
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */
