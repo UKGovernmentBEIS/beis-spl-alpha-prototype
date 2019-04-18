@@ -152,15 +152,23 @@ $(document).ready(function () {
     if ($('.mother-leave').length + $('.partner-leave').length > 2 && !confirm(warning)) {
       return
     }
+    $('.mother, .partner').each(function () {
+      const $cell = $(this)
+      removeLeave($cell)
+    })
     $('.mother').each(function () {
       const $cell = $(this)
       const weekNumber = getWeekNumber($cell)
-      toggleLeave($cell, motherLeave.indexOf(weekNumber) !== -1)
+      if (motherLeave.indexOf(weekNumber) !== -1) {
+        addLeave($cell)
+      }
     })
     $('.partner').each(function () {
       const $cell = $(this)
       const weekNumber = getWeekNumber($cell)
-      toggleLeave($cell, partnerLeave.indexOf(weekNumber) !== -1)
+      if (partnerLeave.indexOf(weekNumber) !== -1) {
+        addLeave($cell)
+      }
     })
     onLeaveUpdated()
     $('.birth-week').prev().prev()[0].scrollIntoView(true)
@@ -210,20 +218,21 @@ function handleMaternityBeforeBirthWeek($cell) {
 
 function addLeave($cell) {
   toggleLeave($cell, true)
-  if (hasRemainingSharedPayWeeks()) {
-    $cell.addClass('with-pay')
-  }
 }
 
 function removeLeave($cell) {
   toggleLeave($cell, false)
-  $cell.removeClass('with-pay')
 }
 
 function toggleLeave($cell, isLeave) {
   const $input = $cell.find('input')
   $input.prop('checked', isLeave)
   $input.change()
+  if (isLeave) {
+    $cell.toggleClass('with-pay', hasRemainingSharedPayWeeks())
+  } else {
+    $cell.removeClass('with-pay')
+  }
 }
 
 function hasLeave($cell) {
