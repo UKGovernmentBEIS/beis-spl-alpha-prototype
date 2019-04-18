@@ -21,6 +21,13 @@ router.get('/which-weeks-are-paid', function (req, res) {
   res.render('enhanced-pay-and-leave-policy/which-weeks-are-paid', { data })
 })
 
+router.get('/remove-block/:blockId', function (req, res) {
+  const { data } = req.session
+  const { blockId } = req.params
+  data['leave-blocks'].splice(blockId, 1)
+  res.redirect('/enhanced-pay-and-leave-policy/which-weeks-are-paid')
+})
+
 router.post('/which-weeks-are-paid/:action', function (req, res) {
   const { data } = req.session
   if (req.params.action === 'add-another') {
