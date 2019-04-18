@@ -5,11 +5,10 @@
 {% block pageTitle %}
   Help your employees plan their leave and pay
 {% endblock %}
-
 {% block beforeContent %}
   {{ govukBackLink({
     text: 'Back',
-    href: 'type-of-leave' if data['leave-type'] == 'shared' else 'multiple-blocks-of-leave'
+    href: 'multiple-blocks-of-leave' if data['leave-type'] == 'shared' else 'type-of-leave'
   }) }}
 {% endblock %}
 

@@ -32,19 +32,23 @@
           items: [
             {
               value: "shared",
-              text: "Shared parental leave"
+              text: "Shared parental leave",
+              checked: data['leave-type'] == 'shared'
             },
             {
               value: "maternity",
-              text: "Maternity leave"
+              text: "Maternity leave",
+              checked: data['leave-type'] == 'maternity'
             },
             {
               value: "paternity",
-              text: "Paternity leave"
+              text: "Paternity leave",
+              checked: data['leave-type'] == 'paternity'
             },
             {
               value: "adoption",
-              text: "Adoption leave"
+              text: "Adoption leave",
+              checked: data['leave-type'] == 'adoption'
             }
           ]
         }) }}
