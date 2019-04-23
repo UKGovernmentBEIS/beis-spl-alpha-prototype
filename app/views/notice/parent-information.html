@@ -5,12 +5,12 @@
 {% endblock %}
 
 {% block content %}
+  {% set currentParent = data['secondary-name'] if data['primary-parent-information-complete'] else data['primary-name'] %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
     <h1 class="govuk-heading-xl">
-      {{ data | currentParentName | capitalize }}'s Notices and Declarations
+      {{ currentParent | capitalize }}'s Notices and Declarations
     </h1>
-      {% set currentParent = data['secondary-name'] if data['primary-complete'] else data['primary-name'] %}
       <form action="parent-information" method="POST">
         {{ govukInput({
           label: {
