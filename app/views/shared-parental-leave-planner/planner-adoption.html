@@ -183,10 +183,22 @@
       <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
         <table id="leave-calendar" class="govuk-table">
           <thead class="govuk-table__head">
+            <tr class="govuk-table__row not-pay">
+              <th class="govuk-table__header th-row-1" scope="col"></th>
+              <th class="govuk-table__header th-row-1" scope="col">Primary adopter</th>
+              <th class="govuk-table__header th-row-1" scope="col">Partner</th>
+            </tr>
+            <tr class="govuk-table__row pay-only">
+              <th class="govuk-table__header th-row-1" scope="col"></th>
+              <th class="govuk-table__header th-row-1" scope="col" colspan="2">Primary adopter</th>
+              <th class="govuk-table__header th-row-1" scope="col" colspan="2">Partner</th>
+            </tr>
             <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col"></th>
-              <th class="govuk-table__header" scope="col">Primary adopter</th>
-              <th class="govuk-table__header" scope="col">Primary adopter's partner</th>
+              <th class="govuk-table__header th-row-2" scope="col"></th>
+              <th class="govuk-table__header th-row-2" scope="col">Leave</th>
+              <th class="govuk-table__header th-row-2 pay-only" scope="col">Pay</th>
+              <th class="govuk-table__header th-row-2" scope="col">Leave</th>
+              <th class="govuk-table__header th-row-2 pay-only" scope="col">Pay</th>
             </tr>
           </thead>
           <tbody class="govuk-table__body">
@@ -194,7 +206,7 @@
               {% set date = (dueDate | startOfWeek | offsetWeeks(i) | formatDate("YYYY-MM-DD")) %}
               {% if (i === -2) or ((date | formatDate("DD") | int) <= 7) %}
                 <tr class="month govuk-table__row govuk-!-font-weight-bold">
-                  <td class="govuk-table__cell" colspan="3">
+                  <td class="govuk-table__cell" colspan="5">
                     {{ date | formatDate("MMMM YYYY") }}
                   </td>
                 </tr>
@@ -202,7 +214,7 @@
               {% if (i === 0) %}
                 <tr class="birth-week govuk-!-font-weight-bold govuk-!-font-size-16">
                   <td></td>
-                  <td colspan="2">
+                  <td colspan="4">
                     First week the child lives with you
                   </td>
                 </tr>
@@ -218,14 +230,14 @@
                 {% set motherId = "mother-" + date %}
                 {% set motherPayId = "[pay][mother][" + date +"]" %}
                 {% set motherWeeklyPay = data["primary-weekly-pay"] %}
-                <td class="govuk-table__cell mother {{ 'compulsory disabled' if firstTwoBirthWeeks }}">
+                <td class="govuk-table__cell mother {{ 'compulsory disabled with-pay' if firstTwoBirthWeeks }} {{ 'with-pay' if data['pay']['mother'][date] and data['pay']['mother'][date] !== '£0' }}">
                   <input type="checkbox" id="{{ motherId }}" name="{{ motherId }}" class="mother-leave-input"
                     {% if data[motherId] or firstTwoBirthWeeks %}checked{% endif %}>
                   <!-- Deliberately omit 'for' from label on compulsory maternity weeks, to prevent changing. -->
                   <label {% if not firstTwoBirthWeeks %}for="{{ motherId }}"{% endif %}>
                     <input type="text" id="{{ motherPayId }}" name="{{ motherPayId }}" class="pay-amount-input"/>
                     <div class="initial-maternity-pay pay">
-                      {{ ((motherWeeklyPay * 0.9) | pay) if motherWeeklyPay else "90% of average weekly pay" }}
+                      {{ ((motherWeeklyPay * 0.9) | pay) if motherWeeklyPay else "90% of weekly pay" }}
                     </div>
                     <div class="statutory-pay pay">
                       {{ statutoryPay(motherWeeklyPay) }}
@@ -247,37 +259,55 @@
                     </div>
                   </label>
                 </td>
+                <td class="govuk-table__cell pay-indicator pay-only">
+                  <div class="govuk-body-s is-paid">
+                    <div>✔</div>
+                    <div>Paid</div>
+                  </div>
+                  <div class="govuk-body-s is-unpaid">
+                    <div>✘</div>
+                    <div>Unpaid</div>
+                  </div>
+                </td>
                 {% set partnerId = "partner-" + date %}
                 {% set partnerPayId = "[pay][partner][" + date +"]"%}
                 {% set partnerWeeklyPay = data["secondary-weekly-pay"] %}
-                <td class="govuk-table__cell partner {{ 'disabled' if beforeBirthWeek }}">
+                <td class="govuk-table__cell partner {{ 'disabled' if beforeBirthWeek }} {{ 'with-pay' if (data['pay']['partner'][date] and data['pay']['partner'][date] !== '£0') }}">
                   {% if (not beforeBirthWeek) %}
                     <input type="checkbox" id="{{ partnerId }}" name="{{ partnerId }}" class="partner-leave-input"
                       {% if data[partnerId] %}checked{% endif %}>
                     <label for="{{ partnerId }}">
-                      <div>
-                        <input type="text" id="{{ partnerPayId }}" name="{{ partnerPayId }}" class="pay-amount-input"/>
-                        <div class="statutory-pay pay">
-                          {{ statutoryPay(partnerWeeklyPay) }}
-                        </div>
-                        <div class="unpaid pay">
-                          Unpaid
-                        </div>
-                        <div class="govuk-body-s work-or-other-leave js-only">
-                          Work or other leave
-                        </div>
-                        <div class="govuk-body-s unassigned-leave leave">
-                          Leave
-                        </div>
-                        <div class="govuk-body-s paternity-leave leave">
-                          Paternity leave
-                        </div>
-                        <div class="govuk-body-s shared-parental-leave leave">
-                          Shared parental leave (partner)
-                        </div>
+                      <input type="text" id="{{ partnerPayId }}" name="{{ partnerPayId }}" class="pay-amount-input"/>
+                      <div class="statutory-pay pay">
+                        {{ statutoryPay(partnerWeeklyPay) }}
+                      </div>
+                      <div class="unpaid pay">
+                        Unpaid
+                      </div>
+                      <div class="govuk-body-s work-or-other-leave js-only">
+                        Work or other leave
+                      </div>
+                      <div class="govuk-body-s unassigned-leave leave">
+                        Leave
+                      </div>
+                      <div class="govuk-body-s paternity-leave leave">
+                        Paternity leave
+                      </div>
+                      <div class="govuk-body-s shared-parental-leave leave">
+                        Shared parental leave (partner)
                       </div>
                     </label>
                   {% endif %}
+                </td>
+                <td class="govuk-table__cell {{ 'disabled' if beforeBirthWeek }} pay-indicator pay-only">
+                  <div class="govuk-body-s is-paid">
+                    <div>✔</div>
+                    <div>Paid</div>
+                  </div>
+                  <div class="govuk-body-s is-unpaid">
+                    <div>✘</div>
+                    <div>Unpaid</div>
+                  </div>
                 </td>
               </tr>
             {% endfor %}
