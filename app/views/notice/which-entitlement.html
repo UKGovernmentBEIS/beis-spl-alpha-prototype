@@ -17,8 +17,8 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <form action="which-entitlement" method="POST">
         {{ govukRadios({
-          idPrefix: "relation-to-child",
-          name: "relation-to-child",
+          idPrefix: "entitlement",
+          name: "entitlement",
           fieldset: {
             legend: {
               text: "Which entitlement is the " + (data | currentParentName) + " intending to take?",
