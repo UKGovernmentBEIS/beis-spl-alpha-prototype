@@ -41,3 +41,17 @@ router.post('/parent-information', function (req, res) {
     res.redirect('/notice/parent-information')
   }
 })
+
+router.post('/due-date', function (req, res) {
+  res.redirect('/notice/entitlement-and-intention')
+})
+
+router.post('/entitlement-and-intention', function (req, res) {
+  res.redirect('/notice/spl-dates')
+})
+
+router.post('/spl-dates/add-another', function (req, res) {
+  console.log(req.session.data)
+  const newDate
+  res.redirect('/notice/spl-dates')
+})
