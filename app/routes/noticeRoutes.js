@@ -62,7 +62,7 @@ router.post('/spl-dates/add-another', function (req, res) {
 })
 
 router.post('/spl-dates', function(req, res) {
-  res.redirect('/non-binding-notice')
+  res.redirect('/notice/summary')
 })
 
 module.exports = router
