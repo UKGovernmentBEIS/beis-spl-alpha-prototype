@@ -1,4 +1,5 @@
 {% from "back-link/macro.njk" import govukBackLink %}
+{% from "radios/macro.njk" import govukRadios %}
 
 {% extends "layout.html" %}
 
@@ -9,50 +10,89 @@
 {% macro salaryInput(options) %}
   {% set salaryAmountId = options.idPrefix + "-salary-amount" %}
   {% set salaryPeriodId = options.idPrefix + "-salary-period" %}
-  {{ govukInput({
-    label: {
-      text: options.labelText
+  <div class="salary-group">
+    {{ govukInput({
+      label: {
+        text: (options.parent | capitalize) + "’s salary (£)"
+      },
+      classes: "govuk-input--width-20 app-salary-input",
+      id: salaryAmountId,
+      name: salaryAmountId,
+      value: data[salaryAmountId]
+    }) }}
+    {{ govukSelect({
+      id: salaryPeriodId,
+      name: salaryPeriodId,
+      label: {
+        text: "Per"
+      },
+      items: [
+        {
+          value: "year",
+          text: "Year",
+          selected: data[salaryPeriodId] === "year"
+        },
+        {
+          value: "month",
+          text: "Month",
+          selected: data[salaryPeriodId] === "month"
+        },
+        {
+          value: "week",
+          text: "Week",
+          selected: data[salaryPeriodId] === "week"
+        }
+      ]
+    }) }}
+  </div>
+{% endmacro %}
+
+{% macro payQuestion(options) %}
+  {% set useAverageWeeklyEarningsId = options.idPrefix + "-use-average-weekly-earnings" %}
+  {% set averageWeeklyEarningsId = options.idPrefix + "-average-weekly-earnings" %}
+  {{ govukRadios({
+  classes: "govuk-radios--inline",
+    idPrefix: useAverageWeeklyEarningsId,
+    name: useAverageWeeklyEarningsId,
+    fieldset: {
+      legend: {
+        text: "Do you know the average weekly earnings for the " + options.parent + "?",
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--m"
+      }
     },
-    classes: "govuk-input--width-20 app-salary-input",
-    id: salaryAmountId,
-    name: salaryAmountId,
-    value: data[salaryAmountId]
-  }) }}
-  {{ govukSelect({
-    id: salaryPeriodId,
-    name: salaryPeriodId,
-    label: {
-      text: "Per"
+    hint: {
+      text: "If you don’t know this, an estimate of statutory pay can be given based on current pay information."
     },
     items: [
       {
-        value: "year",
-        text: "Year",
-        selected: data[salaryPeriodId] === "year"
+        value: "yes",
+        text: "I know this",
+        checked: data[useAverageWeeklyEarningsId] === "yes",
+        conditional: {
+          html: govukInput({
+            name: averageWeeklyEarningsId,
+            classes: "govuk-input--width-10",
+            label: {
+              text: (options.parent | capitalize) + "’s average weekly earnings (£)"
+            },
+            value: data[averageWeeklyEarningsId]
+          })
+        }
       },
       {
-        value: "month",
-        text: "Month",
-        selected: data[salaryPeriodId] === "month"
-      },
-      {
-        value: "week",
-        text: "Week",
-        selected: data[salaryPeriodId] === "week"
+        value: "no",
+        checked: data[useAverageWeeklyEarningsId] === "no",
+        text: "I don’t know this",
+        conditional: {
+          html: salaryInput(options)
+        }
       }
     ]
   }) }}
 {% endmacro %}
 
 {% block content %}
-
-  {% set primarySalaryLabel %}
-    {{ data['primary-name'] | capitalize }}'s salary (£)
-  {% endset %}
-
-  {% set secondarySalaryLabel %}
-    Partner's salary (£)
-  {% endset %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -61,31 +101,25 @@
         href: "due-date"
       }) }}
       <h1 class="govuk-heading-xl">
-        What is your salary before tax?
+        How much do you get paid?
       </h1>
       <p>
-        Enter your salary to see how much you’ll be paid while on leave. If you choose to skip this step, you’ll only see statutory pay amounts.
+      </p>
+      <p>
+        To calculate your average weekly earnings your employer will average your gross earnings over a period of at least
+        eight weeks up to and including the last payday before the end of your qualifying week. The qualifying week is
+        {{"the 15th week before the week your baby is due" if data["birth-or-adoption"] === "birth" else "the week of your match date" }}.
+        This period may vary depending on how often you are paid – weekly, monthly or other intervals.
       </p>
       <form action="parent-salaries" method="POST">
-        {% call govukFieldset({
-          legend: {
-            text: "Salary before tax",
-            classes: "govuk-fieldset__legend--m"
-          }
-        }) %}
-          <div class="salary-group">
-            {{ salaryInput({
-              idPrefix: "primary",
-              labelText: primarySalaryLabel
-            }) }}
-          </div>
-          <div class="salary-group">
-            {{ salaryInput({
-              idPrefix: "secondary",
-              labelText: secondarySalaryLabel
-            }) }}
-          </div>
-        {% endcall %}
+        {{ payQuestion({
+          idPrefix: "primary",
+          parent: data["primary-name"]
+        }) }}
+        {{ payQuestion({
+          idPrefix: "secondary",
+          parent: "partner"
+        }) }}
         <button type="submit" class="govuk-button">
           Next
         </button>

@@ -76,14 +76,18 @@ router.route('/shared-parental-leave-planner/planner').get(function (req, res) {
 router.route('/shared-parental-leave-planner/parent-salaries').post(function (req, res) {
   const { data } = req.session
   const {
+    'primary-use-average-weekly-earnings': primaryUseAverageWeeklyEarnings,
+    'primary-average-weekly-earnings': primaryAverageWeeklyEarnings,
+    'secondary-use-average-weekly-earnings': secondaryUseAverageWeeklyEarnings,
+    'secondary-average-weekly-earnings': secondaryAverageWeeklyEarnings,
     'primary-salary-amount': primarySalaryAmount,
     'primary-salary-period': primarySalaryPeriod,
     'secondary-salary-amount': secondarySalaryAmount,
     'secondary-salary-period': secondarySalaryPeriod
   } = data
 
-  const primaryWeeklyEarnings = getWeeklyEarnings(primarySalaryAmount, primarySalaryPeriod)
-  const secondaryWeeklyEarnings = getWeeklyEarnings(secondarySalaryAmount, secondarySalaryPeriod)
+  const primaryWeeklyEarnings = getWeeklyEarnings(primaryUseAverageWeeklyEarnings, primaryAverageWeeklyEarnings, primarySalaryAmount, primarySalaryPeriod)
+  const secondaryWeeklyEarnings = getWeeklyEarnings(secondaryUseAverageWeeklyEarnings, secondaryAverageWeeklyEarnings, secondarySalaryAmount, secondarySalaryPeriod)
 
   if (data['birth-or-adoption'] === 'birth') {
     data['mother-weekly-pay'] = primaryWeeklyEarnings
@@ -268,15 +272,18 @@ function isEligiblePaternityWeek(week, dueDate) {
   return moment(week).diff(birthWeek, 'weeks') < 8
 }
 
-function getWeeklyEarnings(amount, period) {
-  amount = parseFloat(amount)
+function getWeeklyEarnings(useAverageWeeklyEarnings, averageWeeklyEarnings, pay, period) {
+  if (useAverageWeeklyEarnings === "yes") {
+    return parseFloat(averageWeeklyEarnings)
+  }
+  pay = parseFloat(pay)
   switch (period) {
     case 'week':
-      return amount
+      return pay
     case 'month':
-      return (amount * 12) / 52
+      return (pay * 12) / 52
     case 'year':
-      return amount / 52
+      return pay / 52
     default:
       return null
   }
