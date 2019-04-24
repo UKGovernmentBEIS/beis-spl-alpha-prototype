@@ -1,0 +1,153 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Complete notices and declarations for Shared Parental Leave and Pay
+{% endblock %}
+
+{% macro leaveBlockInput(options) %}
+  {% set linkHref = 'remove-block/' + options.blockNumber%}
+    {{ govukDateInput({
+      fieldset: {
+        legend: {
+          text: "Start date"
+        }
+      },
+      id: 'notice-leave-blocks-new-start',
+      name: '[notice-leave-blocks][new][start]',
+      items: [
+        {
+          name: "[notice-leave-blocks][new][start][day]",
+          label: 'Day',
+          value: "",
+          classes: "govuk-input--width-2"
+        },
+        {
+          name: "[notice-leave-blocks][new][start][month]",
+          label: "Month",
+          value: "",
+          classes: "govuk-input--width-2"
+        },
+        {
+          name: "[notice-leave-blocks][new][start][year]",
+          label: "Year",
+          value: "",
+          classes: "govuk-input--width-4"
+        }
+      ]
+    }) }}
+
+    {{ govukDateInput({
+      fieldset: {
+        legend: {
+          text: "End date"
+        }
+      },
+      id: 'notice-leave-blocks-new-end',
+      name: '[notice-leave-blocks][new][end]',
+      items: [
+        {
+          name: "[notice-leave-blocks][new][end][day]",
+          label: 'Day',
+          value: "",
+          classes: "govuk-input--width-2"
+        },
+        {
+          name: "[notice-leave-blocks][new][end][month]",
+          label: "Month",
+          value: "",
+          classes: "govuk-input--width-2"
+        },
+        {
+          name: "[notice-leave-blocks][new][end][year]",
+          label: "Year",
+          value: "",
+          classes: "govuk-input--width-4"
+        }
+      ]
+    }) }}
+
+    {{ govukRadios({
+      classes: "govuk-radios--inline",
+      idPrefix: 'notice-leave-blocks-start-new-binding',
+      name: '[notice-leave-blocks][new][binding]',
+      fieldset: {
+        legend: {
+          text: "Are these dates final?"
+        }
+      },
+      hint: {
+        text: "We'll provide you with a template for the binding notice to your employer"
+      },
+      items: [
+        {
+          value: "yes",
+          text: "Yes"
+        },
+        {
+          value: "no",
+          text: "No"
+        }
+      ]
+    }) }}
+{% endmacro %}
+
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-xl">
+        What are the {{ data['primary-name'] }}'s intended shared parental leave dates?
+      </h1>
+
+      <form method="POST" action="spl-dates">
+        <div class="salary-group">
+          {{ leaveBlockInput({
+            start: leaveBlock['start'],
+            end: leaveBlock['end']
+          }) }}
+
+          {{ govukButton({
+            classes: 'hmcts-button--secondary',
+            text: 'Save this block and add another',
+            attributes: {
+              formaction: "spl-dates/add-another"
+            }
+          }) }}
+          <br>
+
+          {% if data['notice-leave-blocks'] | length %}
+            <div class="govuk-body govuk-!-margin-bottom-8">
+              {{ govukTable({
+                caption: "Leave blocks",
+                captionClasses: "govuk-fieldset__legend--m",
+                head: [
+                  {
+                    text: "Start date",
+                    classes: 'govuk-!-width-one-quarter'
+                  },
+                  {
+                    text: "End date",
+                    classes: 'govuk-!-width-one-quarter'
+                  },
+                  {
+                    text: "Final",
+                    classes: 'govuk-!-width-one-quarter'
+                  },
+                  {
+                    text: "",
+                    classes: 'govuk-!-width-one-quarter'
+                  }
+                ],
+                rows: data['notice-leave-blocks'] | getNoticeLeaveBlocksTableRows
+              }) }}
+            </div>
+          {% endif %}
+
+          <button type="submit" class="govuk-button">
+            Continue
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

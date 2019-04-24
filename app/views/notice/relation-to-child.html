@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Complete notices and declarations for Shared Parental Leave and Pay
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <form action="relation-to-child" method="POST">
+        {{ govukRadios({
+          idPrefix: "current-parent",
+          name: "current-parent",
+          fieldset: {
+            legend: {
+              text: "What is your relation to the child?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--xl"
+            }
+          },
+          items: [
+            {
+              value: "primary",
+              text: data['primary-name'] | capitalize
+            },
+            {
+              value: "secondary",
+              text: data['secondary-name'] | capitalize
+            }
+          ]
+        }) }}
+        <button type="submit" class="govuk-button">
+          Continue
+        </button>
+    </div>
+  </div>
+
+{% endblock %}

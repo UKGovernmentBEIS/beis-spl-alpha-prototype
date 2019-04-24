@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Complete notices and declarations for Shared Parental Leave and Pay
+{% endblock %}
+
+{% block content %}
+  {% set currentParent = data['secondary-name'] if data['primary-parent-information-complete'] else data['primary-name'] %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-xl">
+      {{ currentParent | capitalize }}'s Notices and Declarations
+    </h1>
+      <form action="parent-information" method="POST">
+        {{ govukInput({
+          label: {
+            text: "What is the " + currentParent + "'s name?",
+            classes: "govuk-label--m"
+          },
+          id: 'current-parent-name',
+          name: "current-parent-name"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "What is the " + currentParent + "'s national insurance number?",
+            classes: "govuk-label--m"
+          },
+          id: 'current-parent-ni-number',
+          name: "current-parent-ni-number"
+        }) }}
+
+        {% call govukFieldset({
+          legend: {
+            text: "What is the " + currentParent + "'s address?",
+            classes: "govuk-fieldset__legend--m"
+          }
+        }) %}
+
+          {{ govukInput({
+            label: {
+              html: 'Building and street <span class="govuk-visually-hidden">line 1 of 2</span>'
+            },
+            id: "address-line-1",
+            name: "address-line-1"
+          }) }}
+
+          {{ govukInput({
+            label: {
+              html: '<span class="govuk-visually-hidden">Building and street line 2 of 2</span>'
+            },
+            id: "address-line-2",
+            name: "address-line-2"
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Town or city"
+            },
+            classes: "govuk-!-width-two-thirds",
+            id: "address-town",
+            name: "address-town"
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "County"
+            },
+            classes: "govuk-!-width-two-thirds",
+            id: "address-county",
+            name: "address-county"
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Postcode"
+            },
+            classes: "govuk-input--width-10",
+            id: "address-postcode",
+            name: "address-postcode"
+          }) }}
+        {% endcall %}
+
+        <button type="submit" class="govuk-button">
+          Continue
+        </button>
+      </form>
+      <a class="govuk-link--no-visited-state govuk-!-font-size-19" href="/notice/parent-information/skip-parent">
+        Skip and complete on printed form
+      </a>
+    </div>
+  </div>
+
+{% endblock %}

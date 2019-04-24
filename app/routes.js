@@ -12,6 +12,7 @@ const { validateDueDate } = require('./validators')
 
 router.use('/eligibility-tool', require("./routes/eligibilityToolRoutes"))
 router.use('/enhanced-pay-and-leave-policy', require('./routes/enhancedPayAndLeavePolicyRoutes'))
+router.use('/notice', require('./routes/noticeRoutes'))
 
 router.get('/shared-parental-leave-and-pay/eligibility', function (req, res) {
   res.redirect('/shared-parental-leave-and-pay')

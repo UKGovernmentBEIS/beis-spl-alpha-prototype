@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Complete notices and declarations for Shared Parental Leave and Pay
+{% endblock %}
+
+{% block content %}
+  {% set questionText %}
+    {% if data | isBirth %}
+      What is the child's expected date of birth / actual date of birth?
+    {% else %}
+      What date did, or will the child start living with you?
+    {% endif %}
+  {% endset %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <form action="due-date" method="POST">
+          {{ govukDateInput({
+            id: "due-date",
+            namePrefix: "due-date",
+            fieldset: {
+              legend: {
+                text: questionText,
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl"
+              }
+            },
+            hint: {
+              text: "For example, 01 08 2019"
+            }
+          }) }}
+        <button type="submit" class="govuk-button">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

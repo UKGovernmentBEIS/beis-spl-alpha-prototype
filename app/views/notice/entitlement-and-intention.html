@@ -1,0 +1,174 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Complete notices and declarations for Shared Parental Leave and Pay
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-xl">
+        Notice 1a: {{ data['primary-name'] | capitalize }}'s notice of entitlement and intention
+      </h1>
+      <form action="entitlement-and-intention" method="POST">
+        {% call govukFieldset({
+          legend: {
+            text: "About the " + data['primary-name'] + "'s " + data['primary-leave-type'] + " entitlement:",
+            classes: "govuk-fieldset__legend--m"
+          }
+        }) %}
+          {{ govukDateInput({
+            id: "maternity-leave-start",
+            namePrefix: "maternity-leave-start",
+            fieldset: {
+              legend: {
+                text: "Date " + data['primary-leave-type'] + " leave will start"
+              }
+            },
+            hint: {
+              text: "For example, 01 08 2019"
+            }
+          }) }}
+
+          {{ govukDateInput({
+            id: "maternity-leave-end",
+            namePrefix: "maternity-leave-end",
+            fieldset: {
+              legend: {
+                text: "Date " + data['primary-leave-type'] + " leave will end"
+              }
+            },
+            hint: {
+              text: "For example, 01 08 2019"
+            }
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Number of weeks of " + data['primary-leave-type'] + " leave left at the date " + data['primary-leave-type'] + " leave will end"
+            },
+            classes: "govuk-input--width-2",
+            id: "maternity-leave-weeks-remaining",
+            name: "maternity-leave-weeks-remaining"
+          }) }}
+
+          {{ govukDateInput({
+            id: "maternity-pay-start",
+            namePrefix: "maternity-pay-start",
+            fieldset: {
+              legend: {
+                text: "Date " + data['primary-leave-type'] + " pay will start"
+              }
+            },
+            hint: {
+              text: "For example, 01 08 2019"
+            }
+          }) }}
+
+          {{ govukDateInput({
+            id: "maternity-pay-end",
+            namePrefix: "maternity-pay-end",
+            fieldset: {
+              legend: {
+                text: "Date " + data['primary-leave-type'] + " pay will end"
+              }
+            },
+            hint: {
+              text: "For example, 01 08 2019"
+            }
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Number of weeks of statutory " + data['primary-leave-type'] + " pay left at the date " + data['primary-leave-type'] + " pay will end"
+            },
+            classes: "govuk-input--width-2",
+            id: "maternity-pay-weeks-remaining",
+            name: "maternity-pay-weeks-remaining"
+          }) }}
+
+        {% endcall %}
+
+        {% if data['entitlement'] != 'pay' %}
+
+          {% call govukFieldset({
+            legend: {
+              text: "About the " + data['primary-name'] + "'s shared parental leave entitlement:",
+              classes: "govuk-fieldset__legend--m"
+            }
+          }) %}
+
+            {{ govukInput({
+              label: {
+                text: "Weeks of shared parental leave created"
+              },
+              classes: "govuk-input--width-2",
+              id: "spl-weeks-created",
+              name: "spl-weeks-created"
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Number of weeks of shared parental leave the " + data['primary-name'] + " intends to take"
+              },
+              classes: "govuk-input--width-2",
+              id: "spl-weeks-created",
+              name: "spl-weeks-created"
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Number of weeks of shared parental leave the partner intends to take"
+              },
+              classes: "govuk-input--width-2",
+              id: "spl-weeks-created",
+              name: "spl-weeks-created"
+            }) }}
+          {% endcall %}
+        {% endif %}
+
+        {% if data['entitlement'] != 'leave' %}
+
+          {% call govukFieldset({
+            legend: {
+              text: "About the mother's shared parental pay entitlement:",
+              classes: "govuk-fieldset__legend--m"
+            }
+          }) %}
+
+            {{ govukInput({
+              label: {
+                text: "Weeks of shared parental pay created"
+              },
+              classes: "govuk-input--width-2",
+              id: "shpp-weeks-created",
+              name: "shpp-weeks-created"
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Number of weeks of shared parental pay the " + data['primary-name'] + " intends to take"
+              },
+              classes: "govuk-input--width-2",
+              id: "shpp-weeks-created",
+              name: "shpp-weeks-created"
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Number of weeks of shared parental pay the partner intends to take"
+              },
+              classes: "govuk-input--width-2",
+              id: "shpp-weeks-created",
+              name: "shpp-weeks-created"
+            }) }}
+          {% endcall %}
+        {% endif %}
+
+        <button type="submit" class="govuk-button">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
