@@ -1,9 +1,7 @@
 const express = require('express')
 const router = express.Router()
-
-module.exports = router
-
 const dataUtils = require('../assets/javascripts/dataUtils')
+const dates = require('../assets/javascripts/dates')
 
 router.post('/index', function (req, res) {
   res.redirect('/notice/birth-or-adoption')
@@ -47,11 +45,24 @@ router.post('/due-date', function (req, res) {
 })
 
 router.post('/entitlement-and-intention', function (req, res) {
+  req.session.data['notice-leave-blocks'] = []
   res.redirect('/notice/spl-dates')
 })
 
 router.post('/spl-dates/add-another', function (req, res) {
-  console.log(req.session.data)
-  const newDate
+  const newBlockData = req.session.data['notice-leave-blocks'].new
+  const newBlockStart = dates.providedDate(newBlockData.start.year, newBlockData.start.month, newBlockData.start.day)
+  const newBlockEnd = dates.providedDate(newBlockData.end.year, newBlockData.end.month, newBlockData.end.day)
+  req.session.data['notice-leave-blocks'].push({
+    start: newBlockStart,
+    end: newBlockEnd,
+    binding: newBlockData.binding
+  })
   res.redirect('/notice/spl-dates')
 })
+
+router.post('/spl-dates', function(req, res) {
+  res.redirect('/non-binding-notice')
+})
+
+module.exports = router

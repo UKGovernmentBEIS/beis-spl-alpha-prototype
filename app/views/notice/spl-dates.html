@@ -73,7 +73,7 @@
     }) }}
 
     {{ govukRadios({
-       classes: "govuk-radios--inline",
+      classes: "govuk-radios--inline",
       idPrefix: 'notice-leave-blocks-start-new-binding',
       name: '[notice-leave-blocks][new][binding]',
       fieldset: {
@@ -106,6 +106,34 @@
       <h1 class="govuk-heading-xl">
         When does the mother plan to take shared parental leave?
       </h1>
+      {% if data['notice-leave-blocks'] | length %}
+        <div class="govuk-body govuk-!-margin-bottom-8">
+          {{ govukTable({
+            caption: "Leave blocks",
+            captionClasses: "govuk-fieldset__legend--m",
+            head: [
+              {
+                text: "Start date",
+                classes: 'govuk-!-width-one-quarter'
+              },
+              {
+                text: "End date",
+                classes: 'govuk-!-width-one-quarter'
+              },
+              {
+                text: "Binding",
+                classes: 'govuk-!-width-one-quarter'
+              },
+              {
+                text: "",
+                classes: 'govuk-!-width-one-quarter'
+              }
+            ],
+            rows: data['notice-leave-blocks'] | getNoticeLeaveBlocksTableRows
+          }) }}
+        </div>
+      {% endif %}
+
       <form method="POST">
         <div class="salary-group">
           {{ payBlockInput({
@@ -120,8 +148,6 @@
               formaction: "spl-dates/add-another"
             }
           }) }}
-          <a class="govuk-link--no-visited-state govuk-!-font-size-19" href="{{ linkHref }}"> Remove this block</a>
-
           <br>
 
           <button type="submit" formaction="spl-dates" class="govuk-button">

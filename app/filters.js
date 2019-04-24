@@ -141,6 +141,25 @@ module.exports = function (env) {
       ]
     )
   }
+
+  filters.getNoticeLeaveBlocksTableRows = function (noticeLeaveBlocks) {
+    return noticeLeaveBlocks.map(block => {
+      return [
+        {
+          text: filters.formatDate(block['start'], "DD MMMM YYYY")
+        },
+        {
+          text: filters.formatDate(block['end'], "DD MMMM YYYY")
+        },
+        {
+          text: filters.capitalize(block['binding'])
+        },
+        {
+          text: "Remove"
+        }
+      ]
+    })
+  }
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */
