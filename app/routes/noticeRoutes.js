@@ -45,6 +45,10 @@ router.post('/due-date', function (req, res) {
 })
 
 router.post('/entitlement-and-intention', function (req, res) {
+  res.redirect('/notice/shared-entitlement-and-intention')
+})
+
+router.post('/shared-entitlement-and-intention', function (req, res) {
   req.session.data['notice-leave-blocks'] = []
   res.redirect('/notice/spl-dates')
 })

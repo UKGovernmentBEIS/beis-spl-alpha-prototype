@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Complete notices and declarations for Shared Parental Leave and Pay
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-xl">
+        About the {{ data['primary-name'] }}'s shared parental leave and pay entitlement
+      </h1>
+      <form action="shared-entitlement-and-intention" method="POST">
+
+        {% if data['entitlement'] != 'pay' %}
+
+          {% call govukFieldset({
+            legend: {
+              text: "About the " + data['primary-name'] + "'s shared parental leave entitlement",
+              classes: "govuk-fieldset__legend--m"
+            }
+          }) %}
+
+            {{ govukInput({
+              label: {
+                text: "Weeks of shared parental leave created"
+              },
+              classes: "govuk-input--width-2",
+              id: "spl-weeks-created",
+              name: "spl-weeks-created"
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Number of weeks of shared parental leave the " + data['primary-name'] + " intends to take"
+              },
+              classes: "govuk-input--width-2",
+              id: "spl-weeks-created",
+              name: "spl-weeks-created"
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Number of weeks of shared parental leave the partner intends to take"
+              },
+              classes: "govuk-input--width-2",
+              id: "spl-weeks-created",
+              name: "spl-weeks-created"
+            }) }}
+          {% endcall %}
+        {% endif %}
+
+        {% if data['entitlement'] != 'leave' %}
+
+          {% call govukFieldset({
+            legend: {
+              text: "About the mother's shared parental pay entitlement",
+              classes: "govuk-fieldset__legend--m"
+            }
+          }) %}
+
+            {{ govukInput({
+              label: {
+                text: "Weeks of shared parental pay created"
+              },
+              classes: "govuk-input--width-2",
+              id: "shpp-weeks-created",
+              name: "shpp-weeks-created"
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Number of weeks of shared parental pay the " + data['primary-name'] + " intends to take"
+              },
+              classes: "govuk-input--width-2",
+              id: "shpp-weeks-created",
+              name: "shpp-weeks-created"
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Number of weeks of shared parental pay the partner intends to take"
+              },
+              classes: "govuk-input--width-2",
+              id: "shpp-weeks-created",
+              name: "shpp-weeks-created"
+            }) }}
+          {% endcall %}
+        {% endif %}
+
+        <button type="submit" class="govuk-button">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
