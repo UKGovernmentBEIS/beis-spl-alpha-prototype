@@ -8,12 +8,12 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h1 class="govuk-heading-xl">
-        Notice 1a: Mother's notice of entitlement and intention
+        Notice 1a: {{ data['primary-name'] | capitalize }}'s notice of entitlement and intention
       </h1>
       <form action="entitlement-and-intention" method="POST">
         {% call govukFieldset({
           legend: {
-            text: "About the mother's maternity entitlement:",
+            text: "About the " + data['primary-name'] + "'s " + data['primary-leave-type'] + " entitlement:",
             classes: "govuk-fieldset__legend--m"
           }
         }) %}
@@ -22,7 +22,7 @@
             namePrefix: "maternity-leave-start",
             fieldset: {
               legend: {
-                text: "Date maternity leave will start"
+                text: "Date " + data['primary-leave-type'] + " leave will start"
               }
             },
             hint: {
@@ -35,7 +35,7 @@
             namePrefix: "maternity-leave-end",
             fieldset: {
               legend: {
-                text: "Date maternity leave will end"
+                text: "Date " + data['primary-leave-type'] + " leave will end"
               }
             },
             hint: {
@@ -45,7 +45,7 @@
 
           {{ govukInput({
             label: {
-              text: "Number of weeks of maternity leave left at the date maternity leave will end"
+              text: "Number of weeks of " + data['primary-leave-type'] + " leave left at the date " + data['primary-leave-type'] + " leave will end"
             },
             classes: "govuk-input--width-2",
             id: "maternity-leave-weeks-remaining",
@@ -57,7 +57,7 @@
             namePrefix: "maternity-pay-start",
             fieldset: {
               legend: {
-                text: "Date maternity pay will start"
+                text: "Date " + data['primary-leave-type'] + " pay will start"
               }
             },
             hint: {
@@ -70,7 +70,7 @@
             namePrefix: "maternity-pay-end",
             fieldset: {
               legend: {
-                text: "Date maternity pay will end"
+                text: "Date " + data['primary-leave-type'] + " pay will end"
               }
             },
             hint: {
@@ -80,7 +80,7 @@
 
           {{ govukInput({
             label: {
-              text: "Number of weeks of statutory maternity pay left at the date maternity pay will end"
+              text: "Number of weeks of statutory " + data['primary-leave-type'] + " pay left at the date " + data['primary-leave-type'] + " pay will end"
             },
             classes: "govuk-input--width-2",
             id: "maternity-pay-weeks-remaining",
@@ -93,7 +93,7 @@
 
           {% call govukFieldset({
             legend: {
-              text: "About the mother's shared parental leave entitlement:",
+              text: "About the " + data['primary-name'] + "'s shared parental leave entitlement:",
               classes: "govuk-fieldset__legend--m"
             }
           }) %}
@@ -109,7 +109,7 @@
 
             {{ govukInput({
               label: {
-                text: "Number of weeks of shared parental leave the mother intends to take"
+                text: "Number of weeks of shared parental leave the " + data['primary-name'] + " intends to take"
               },
               classes: "govuk-input--width-2",
               id: "spl-weeks-created",
@@ -147,7 +147,7 @@
 
             {{ govukInput({
               label: {
-                text: "Number of weeks of shared parental pay the mother intends to take"
+                text: "Number of weeks of shared parental pay the " + data['primary-name'] + " intends to take"
               },
               classes: "govuk-input--width-2",
               id: "shpp-weeks-created",

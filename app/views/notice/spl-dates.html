@@ -4,14 +4,8 @@
   Complete notices and declarations for Shared Parental Leave and Pay
 {% endblock %}
 
-{% macro payBlockInput(options) %}
+{% macro leaveBlockInput(options) %}
   {% set linkHref = 'remove-block/' + options.blockNumber%}
-  {% call govukFieldset({
-    legend: {
-      text: "Start and end date for this block of leave?",
-      classes: "govuk-fieldset__legend--m"
-    }
-  }) %}
     {{ govukDateInput({
       fieldset: {
         legend: {
@@ -78,8 +72,7 @@
       name: '[notice-leave-blocks][new][binding]',
       fieldset: {
         legend: {
-          text: "Are you ready to give binding notice for this block of leave?",
-          classes: "govuk-fieldset__legend--m"
+          text: "Are these dates final?"
         }
       },
       hint: {
@@ -96,7 +89,6 @@
         }
       ]
     }) }}
-  {% endcall %}
 {% endmacro %}
 
 
@@ -104,39 +96,12 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h1 class="govuk-heading-xl">
-        When does the mother plan to take shared parental leave?
+        What are the {{ data['primary-name'] }}'s intended shared parental leave dates?
       </h1>
-      {% if data['notice-leave-blocks'] | length %}
-        <div class="govuk-body govuk-!-margin-bottom-8">
-          {{ govukTable({
-            caption: "Leave blocks",
-            captionClasses: "govuk-fieldset__legend--m",
-            head: [
-              {
-                text: "Start date",
-                classes: 'govuk-!-width-one-quarter'
-              },
-              {
-                text: "End date",
-                classes: 'govuk-!-width-one-quarter'
-              },
-              {
-                text: "Binding",
-                classes: 'govuk-!-width-one-quarter'
-              },
-              {
-                text: "",
-                classes: 'govuk-!-width-one-quarter'
-              }
-            ],
-            rows: data['notice-leave-blocks'] | getNoticeLeaveBlocksTableRows
-          }) }}
-        </div>
-      {% endif %}
 
-      <form method="POST">
+      <form method="POST" action="spl-dates">
         <div class="salary-group">
-          {{ payBlockInput({
+          {{ leaveBlockInput({
             start: leaveBlock['start'],
             end: leaveBlock['end']
           }) }}
@@ -150,7 +115,35 @@
           }) }}
           <br>
 
-          <button type="submit" formaction="spl-dates" class="govuk-button">
+          {% if data['notice-leave-blocks'] | length %}
+            <div class="govuk-body govuk-!-margin-bottom-8">
+              {{ govukTable({
+                caption: "Leave blocks",
+                captionClasses: "govuk-fieldset__legend--m",
+                head: [
+                  {
+                    text: "Start date",
+                    classes: 'govuk-!-width-one-quarter'
+                  },
+                  {
+                    text: "End date",
+                    classes: 'govuk-!-width-one-quarter'
+                  },
+                  {
+                    text: "Final",
+                    classes: 'govuk-!-width-one-quarter'
+                  },
+                  {
+                    text: "",
+                    classes: 'govuk-!-width-one-quarter'
+                  }
+                ],
+                rows: data['notice-leave-blocks'] | getNoticeLeaveBlocksTableRows
+              }) }}
+            </div>
+          {% endif %}
+
+          <button type="submit" class="govuk-button">
             Continue
           </button>
         </div>
