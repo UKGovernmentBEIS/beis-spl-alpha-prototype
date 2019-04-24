@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Plan leave and pay when you have a child
+{% endblock %}
+
+{% set hintHtml %}
+  <p class="govuk-hint">
+    By answering the next few questions you'll be able to see how much pay you're entitled to according
+    to your company's enhanced parental leave policies. If you select no, you'll see statutory pay entitlements only.
+  </p>
+  <p class="govuk-hint">
+    You'll need:
+  </p>
+  <ul>
+    <li>
+      a <a href="/enhanced-pay-and-leave-policy" target="_blank">parental leave policy code</a> from your employer; or
+    </li>
+    <li>
+      details about your employer's maternity, adoption, paternity and shared parental leave policies,
+      such as the percentage of your income that's paid and the number of weeks it's paid for
+    </li>
+  </ul>
+{% endset %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <!-- TODO: Update back link. -->
+      {{ govukBackLink({
+        text: "Back",
+        href: "#"
+      }) }}
+      <form action="enhanced-pay" method="POST">
+        {{ govukRadios({
+          idPrefix: "use-enhanced-policy",
+          name: "use-enhanced-policy",
+          fieldset: {
+            legend: {
+              text: "Would you like to include any enhanced pay offered by your employer?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--xl"
+            }
+          },
+          hint: {
+            html: hintHtml
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+          ]
+        }) }}
+        <button type="submit" class="govuk-button">
+          Next
+        </button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
