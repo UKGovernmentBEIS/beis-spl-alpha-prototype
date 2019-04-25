@@ -57,7 +57,9 @@ router.post('/shared-entitlement-and-intention', function (req, res) {
   const { data } = req.session
   data['notice-leave-blocks'] = []
   const parent = data[`${data['current-parent']}-name`]
-  data[`${parent}s-spl-blocks`].forEach(block => data['notice-leave-blocks'].push(block))
+  if (data[`${parent}s-spl-blocks`]) {
+    data[`${parent}s-spl-blocks`].forEach(block => data['notice-leave-blocks'].push(block))
+  }
   res.redirect('/notice/spl-dates')
 })
 

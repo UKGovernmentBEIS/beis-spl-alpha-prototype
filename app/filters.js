@@ -200,26 +200,35 @@ module.exports = function (env) {
   }
 
   filters.maternityPayStart = function(data) {
-    return data['payBlocks'].find(block => block.mother !== '£0').start
+    if (data['payBlocks']) {
+      return data['payBlocks'].find(block => block.mother !== '£0').start
+    } else {
+      return ''
+    }
   }
 
   filters.maternityPayEnd = function(data) {
     let endDate = ""
-    for (block of data['payBlocks']) {
-      if(endDate ==='£0') { continue }
-      if (block.mother !== '£0') {
-        endDate = block.end
-      } else {
-        break
+    if (data['payBlocks']) {
+      for (block of data['payBlocks']) {
+        if(endDate ==='£0') { continue }
+        if (block.mother !== '£0') {
+          endDate = block.end
+        } else {
+          break
+        }
       }
-    }
 
-    return endDate
+      return endDate
+    } else {
+      return ''
+    }
   }
 
   filters.remainingMaternityLeaveWeeks = function(data) {
-    const start = data['maternity-leave-start'] || (data['maternity-leave'] && data['maternity-leave'] ['start'])
-    const end = data['maternity-leave-end'] || (data['maternity-leave'] && data['maternity-leave']['end'])
+    const start = data['maternity-leave-start'] || filters.maternityLeaveStart(data)
+    const end = data['maternity-leave-end'] || filters.maternityLeaveEnd(data)
+    if (start === undefined || end === undefined) { return '' }
     const weeksLeave = moment(end).diff(start, 'weeks') + 1
     return 52 - weeksLeave
   }
@@ -228,12 +237,15 @@ module.exports = function (env) {
     const start = data['maternity-pay-start'] || filters.maternityPayStart(data)
     const end = data['maternity-pay-start'] || filters.maternityPayEnd(data)
     const weeksPay = moment(end).diff(start, 'weeks') + 1
-    return 52 - weeksPay
+    if (start && end) {
+      return 52 - weeksPay
+     } else { return  '' }
   }
 
   filters.splWeeksIntention = function(data, parent) {
     if (data[`${parent}-spl-weeks-number`]) { return data[`${parent}-spl-weeks-number`] }
     const blocks = data[`${parent === 'primary' ? 'mother' : 'partner'}s-spl-blocks`]
+    if ( blocks && blocks.length === 0) { return '' }
     let total = 0
     if (blocks) {
       for (block of blocks) {
@@ -246,6 +258,7 @@ module.exports = function (env) {
 
   filters.shppWeeksIntention = function(data, parent) {
     if (data[`${parent}-shpp-weeks-number`]) { return data[`${parent}-shpp-weeks-number`] }
+    if (!data['payBlocks']) {return}
     const payWeeks = data['pay'][parent === 'primary' ? 'mother' : 'partner']
     const sortedWeeks = Object.entries(payWeeks).sort((week1, week2) => {
       return week1[0] < week2[0]
@@ -267,16 +280,24 @@ module.exports = function (env) {
     }
   }
 
+  filters.maternityLeaveStart = function (data) {
+    return data['maternity-leave'] && data['maternity-leave']['start']
+  }
+
+  filters.maternityLeaveEnd = function (data) {
+    return data['maternity-leave'] && data['maternity-leave']['end']
+  }
+
   filters.year = function(dateString) {
-    return moment(dateString).year()
+    return dateString ? moment(dateString).year() : ''
   }
 
   filters.month = function(dateString) {
-    return moment(dateString).month() + 1
+    return dateString ? moment(dateString).month() + 1 : ''
   }
 
   filters.day = function(dateString) {
-    return moment(dateString).date()
+    return dateString ? moment(dateString).date() : ''
   }
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app

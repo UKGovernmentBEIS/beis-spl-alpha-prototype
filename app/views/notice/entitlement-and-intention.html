@@ -33,17 +33,17 @@
               {
                 name: "day",
                 classes: "govuk-input--width-2",
-                value: data['maternity-leave-start-day'] or data['maternity-leave']['start'] | day
+                value: data['maternity-leave-start-day'] or data | maternityLeaveStart | day
               },
               {
                 name: "month",
                 classes: "govuk-input--width-2",
-                value: data['maternity-leave-start-month'] or data['maternity-leave']['start'] | month
+                value: data['maternity-leave-start-month'] or data | maternityLeaveStart | month
               },
               {
                 name: "year",
                 classes: "govuk-input--width-4",
-                value: data['maternity-leave-start-year'] or  data['maternity-leave']['start'] | year
+                value: data['maternity-leave-start-year'] or data | maternityLeaveStart | year
               }
             ]
           }) }}
@@ -64,17 +64,17 @@
               {
                 name: "day",
                 classes: "govuk-input--width-2",
-                value: data['maternity-leave-end-day'] or data['maternity-leave']['end'] | day
+                value: data['maternity-leave-end-day'] or data | maternityLeaveEnd | day
               },
               {
                 name: "month",
                 classes: "govuk-input--width-2",
-                value: data['maternity-leave-end-month'] or data['maternity-leave']['end'] | month
+                value: data['maternity-leave-end-month'] or data | maternityLeaveEnd | month
               },
               {
                 name: "year",
                 classes: "govuk-input--width-4",
-                value: data['maternity-leave-end-year'] or data['maternity-leave']['end'] | year
+                value: data['maternity-leave-end-year'] or data | maternityLeaveEnd | year
               }
             ]
           }) }}
