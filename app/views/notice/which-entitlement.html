@@ -32,15 +32,18 @@
           items: [
             {
               value: "leave",
-              text: "Shared parental leave"
+              text: "Shared parental leave",
+              checked: data | currentParentTakingSpl and not data | currentParentTakingShpp
             },
             {
               value: "pay",
-              text: "Shared parental pay"
+              text: "Shared parental pay",
+              checked: data | currentParentTakingShpp and not data | currentParentTakingSpl
             },
             {
               value: "both",
-              text: "Both"
+              text: "Both",
+              checked: data | currentParentTakingShpp and data | currentParentTakingSpl
             }
           ]
         }) }}

@@ -183,6 +183,24 @@ module.exports = function (env) {
       ]
     })
   }
+
+  filters.currentParentTakingSpl = function(data) {
+    const parent = data['current-parent'] === 'primary' ? 'mother' : 'partner'
+    if (data[`${parent}s-spl-blocks`]) {
+      return data[`${parent}s-spl-blocks`].length > 0
+    }
+    return false
+  }
+
+  filters.currentParentTakingShpp = function (data) {
+    const parent = data['current-parent'] === 'primary' ? 'mother' : 'partner'
+    if (data['payBlocks']) {
+      return data['payBlocks'].some(block => {
+        return (block[parent] && block[parent] !== '£0')
+      })
+    }
+    return false
+  }
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */
