@@ -54,12 +54,16 @@ router.post('/entitlement-and-intention', function (req, res) {
 })
 
 router.post('/shared-entitlement-and-intention', function (req, res) {
-  req.session.data['notice-leave-blocks'] = []
+  const { data } = req.session
+  data['notice-leave-blocks'] = []
+  const parent = data[`${data['current-parent']}-name`]
+  data[`${parent}s-spl-blocks`].forEach(block => data['notice-leave-blocks'].push(block))
   res.redirect('/notice/spl-dates')
 })
 
 router.post('/spl-dates/add-another', function (req, res) {
-  const newBlockData = req.session.data['notice-leave-blocks'].new
+  if (!req.session.data['notice-leave-blocks']) { req.session.data['notice-leave-blocks'] = [] }
+  const newBlockData = req.session.data['new-notice-leave-blocks']
   const newBlockStart = dates.providedDate(newBlockData.start.year, newBlockData.start.month, newBlockData.start.day)
   const newBlockEnd = dates.providedDate(newBlockData.end.year, newBlockData.end.month, newBlockData.end.day)
   req.session.data['notice-leave-blocks'].push({
@@ -73,5 +77,12 @@ router.post('/spl-dates/add-another', function (req, res) {
 router.post('/spl-dates', function(req, res) {
   res.redirect('/notice/summary')
 })
+
+router.get('/spl-dates/delete/:id', function (req, res) {
+  const { data } = req.session
+  data['notice-leave-blocks'].splice(req.params.id, 1)
+  res.redirect('/notice/spl-dates')
+})
+
 
 module.exports = router

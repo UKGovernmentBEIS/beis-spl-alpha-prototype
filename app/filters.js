@@ -166,7 +166,7 @@ module.exports = function (env) {
   }
 
   filters.getNoticeLeaveBlocksTableRows = function (noticeLeaveBlocks) {
-    return noticeLeaveBlocks.map(block => {
+    return noticeLeaveBlocks.map((block, idx) => {
       return [
         {
           text: filters.formatDate(block['start'], "DD MMMM YYYY")
@@ -175,10 +175,7 @@ module.exports = function (env) {
           text: filters.formatDate(block['end'], "DD MMMM YYYY")
         },
         {
-          text: filters.capitalize(block['binding'])
-        },
-        {
-          text: "Remove"
+          html: `<a href="spl-dates/delete/${idx}" class="govuk-link">Remove</a>`
         }
       ]
     })
@@ -244,7 +241,7 @@ module.exports = function (env) {
         total += weeksLeave
       }
     }
-    return total > 0 ? total : ''
+    return total
   }
 
   filters.shppWeeksIntention = function(data, parent) {
@@ -264,8 +261,8 @@ module.exports = function (env) {
       let paternityWeeks = 0
       if (data['paternity-leave']) {
         paternityWeeks = moment(data['paternity-leave'].end).diff(data['paternity-leave'].start, 'weeks') + 1
+        if (paternityWeeks > 2) { paternityWeeks = 2 }
       }
-      console.log(paidWeeks)
       return paidWeeks.length - paternityWeeks
     }
   }

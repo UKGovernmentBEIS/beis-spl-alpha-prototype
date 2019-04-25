@@ -13,22 +13,22 @@
         }
       },
       id: 'notice-leave-blocks-new-start',
-      name: '[notice-leave-blocks][new][start]',
+      name: '[new-notice-leave-blocks][start]',
       items: [
         {
-          name: "[notice-leave-blocks][new][start][day]",
+          name: "[new-notice-leave-blocks][start][day]",
           label: 'Day',
           value: "",
           classes: "govuk-input--width-2"
         },
         {
-          name: "[notice-leave-blocks][new][start][month]",
+          name: "[new-notice-leave-blocks][start][month]",
           label: "Month",
           value: "",
           classes: "govuk-input--width-2"
         },
         {
-          name: "[notice-leave-blocks][new][start][year]",
+          name: "[new-notice-leave-blocks][start][year]",
           label: "Year",
           value: "",
           classes: "govuk-input--width-4"
@@ -43,49 +43,25 @@
         }
       },
       id: 'notice-leave-blocks-new-end',
-      name: '[notice-leave-blocks][new][end]',
+      name: '[new-notice-leave-blocks][end]',
       items: [
         {
-          name: "[notice-leave-blocks][new][end][day]",
+          name: "[new-notice-leave-blocks][end][day]",
           label: 'Day',
           value: "",
           classes: "govuk-input--width-2"
         },
         {
-          name: "[notice-leave-blocks][new][end][month]",
+          name: "[new-notice-leave-blocks][end][month]",
           label: "Month",
           value: "",
           classes: "govuk-input--width-2"
         },
         {
-          name: "[notice-leave-blocks][new][end][year]",
+          name: "[new-notice-leave-blocks][end][year]",
           label: "Year",
           value: "",
           classes: "govuk-input--width-4"
-        }
-      ]
-    }) }}
-
-    {{ govukRadios({
-      classes: "govuk-radios--inline",
-      idPrefix: 'notice-leave-blocks-start-new-binding',
-      name: '[notice-leave-blocks][new][binding]',
-      fieldset: {
-        legend: {
-          text: "Are these dates final?"
-        }
-      },
-      hint: {
-        text: "We'll provide you with a template for the binding notice to your employer"
-      },
-      items: [
-        {
-          value: "yes",
-          text: "Yes"
-        },
-        {
-          value: "no",
-          text: "No"
         }
       ]
     }) }}
@@ -98,7 +74,6 @@
       <h1 class="govuk-heading-xl">
         What are the {{ data['primary-name'] }}'s intended shared parental leave dates?
       </h1>
-
       <form method="POST" action="spl-dates">
         <div class="salary-group">
           {{ leaveBlockInput({
@@ -122,16 +97,10 @@
                 captionClasses: "govuk-fieldset__legend--m",
                 head: [
                   {
-                    text: "Start date",
-                    classes: 'govuk-!-width-one-quarter'
+                    text: "Start date"
                   },
                   {
-                    text: "End date",
-                    classes: 'govuk-!-width-one-quarter'
-                  },
-                  {
-                    text: "Final",
-                    classes: 'govuk-!-width-one-quarter'
+                    text: "End date"
                   },
                   {
                     text: "",
