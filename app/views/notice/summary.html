@@ -8,9 +8,46 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h1 class="govuk-heading-xl">
-        Summary
+        Mother's notices
       </h1>
 
+      <p>
+        You can now download the following notices and declarations to sign and give to your employer 8 weeks before your first block of shared parental leave or pay starts.
+        These notices will be downloaded as a single document.
+      </p>
+
+      <ul class="govuk-list">
+      {% if data['current-parent'] == 'primary' %}
+        <li>Mother’s Notice of Entitlement and Intention</li>
+        <li>Mother’s Declarations to her employer</li>
+        <li>Father’s Declarations to the mother’s employer</li>
+        <li>Mother’s Maternity Leave and Pay Curtailment Notice</li>
+      {% elif data['current-parent'] == 'secondary' %}
+        <li>Father / Partner's Notice of Entitlement and Intention</li>
+        <li>Father / Partner's Declarations to their employer</li>
+        <li>Mother's Declarations to the Father / Partner's employer</li>
+      {% endif %}
+      </ul>
+
+      <a href="#" class="govuk-button">Download notices</a>
+
+      <h2 class="govuk-heading-l">What to do next</h2>
+
+      {% if data['current-parent'] == 'primary'%}
+        <p>
+          If your partner is also taking shared parental leave and pay, you can <a href="/notice/reset" class="govuk-link">start again</a> to generate their notices.
+          You will not need to re-enter their personal information.
+        </p>
+      {# {% elif data['current-parent'] == 'secondary' %} #}
+      {% else %}
+        <p>
+          If your shared parental leave starts before the mother goes back to work, the mother must give her employer notice to XXXXX[curtail her maternity entitlement.] (I think we should provide an empty curtailment notice form)XXXX
+        </p>
+        <p>
+          If the mother is also taking shared parental leave and pay, you can <a href="/notice/reset" class="govuk-link">start again</a>  to generate her notices.
+          You will not need to re-enter her personal information.
+        </p>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

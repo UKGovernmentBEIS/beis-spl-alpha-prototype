@@ -84,5 +84,9 @@ router.get('/spl-dates/delete/:id', function (req, res) {
   res.redirect('/notice/spl-dates')
 })
 
+router.get('/reset', function(req, res) {
+  req.session.data['current-parent-information-complete'] = false
+  res.redirect('/notice')
+})
 
 module.exports = router
