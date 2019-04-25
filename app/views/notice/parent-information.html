@@ -9,7 +9,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
     <h1 class="govuk-heading-xl">
-      {{ data | currentParentName | capitalize }}'s information
+      {{ currentParent | capitalize }}'s information
     </h1>
       <form action="parent-information" method="POST">
         {{ govukInput({
@@ -17,8 +17,9 @@
             text: "What is the " + currentParent + "'s name?",
             classes: "govuk-label--m"
           },
-          id: 'current-parent-name',
-          name: "current-parent-name"
+          id: currentParent + '-real-name',
+          name: currentParent + "-real-name",
+          value: data[currentParent + '-real-name']
         }) }}
 
         {{ govukInput({
@@ -30,8 +31,9 @@
             text: "It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’."
           },
           classes: "govuk-input--width-10",
-          id: 'current-parent-ni-number',
-          name: "current-parent-ni-number"
+          id: currentParent + '-ni-number',
+          name: currentParent + "-ni-number",
+          value: data[currentParent + '-ni-number']
         }) }}
 
         {% call govukFieldset({
@@ -45,16 +47,18 @@
             label: {
               html: 'Building and street <span class="govuk-visually-hidden">line 1 of 2</span>'
             },
-            id: "address-line-1",
-            name: "address-line-1"
+            id: currentParent + "-address-line-1",
+            name: currentParent + "-address-line-1",
+            value: data[currentParent + '-address-line-1']
           }) }}
 
           {{ govukInput({
             label: {
               html: '<span class="govuk-visually-hidden">Building and street line 2 of 2</span>'
             },
-            id: "address-line-2",
-            name: "address-line-2"
+            id: currentParent + "-address-line-2",
+            name: currentParent + "-address-line-2",
+            value: data[currentParent + '-address-line-2']
           }) }}
 
           {{ govukInput({
@@ -62,8 +66,9 @@
               text: "Town or city"
             },
             classes: "govuk-!-width-two-thirds",
-            id: "address-town",
-            name: "address-town"
+            id: currentParent + "-address-town",
+            name: currentParent + "-address-town",
+            value: data[currentParent + '-address-town']
           }) }}
 
           {{ govukInput({
@@ -71,8 +76,10 @@
               text: "County"
             },
             classes: "govuk-!-width-two-thirds",
-            id: "address-county",
-            name: "address-county"
+            id: currentParent + "-address-county",
+            name: currentParent + "-address-county",
+            value: data[currentParent + '-address-country']
+
           }) }}
 
           {{ govukInput({
@@ -80,8 +87,10 @@
               text: "Postcode"
             },
             classes: "govuk-input--width-10",
-            id: "address-postcode",
-            name: "address-postcode"
+            id: currentParent + "-address-postcode",
+            name: currentParent + "-address-postcode",
+            value: data[currentParent + '-address-postcode']
+
           }) }}
         {% endcall %}
 
