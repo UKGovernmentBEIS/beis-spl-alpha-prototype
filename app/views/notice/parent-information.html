@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-  {% set currentParent = data | currentParentName if data['current-parent-information-complete'] else data | otherParentName %}
+  {% set currentParent = data | otherParentName if data['current-parent-information-complete'] else data | currentParentName %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
     <h1 class="govuk-heading-xl">
