@@ -28,7 +28,24 @@
             },
             hint: {
               text: "For example, 01 08 2019"
-            }
+            },
+            items: [
+              {
+                name: "day",
+                classes: "govuk-input--width-2",
+                value: data['maternity-leave-start-day'] or data['maternity-leave']['start'] | day
+              },
+              {
+                name: "month",
+                classes: "govuk-input--width-2",
+                value: data['maternity-leave-start-month'] or data['maternity-leave']['start'] | month
+              },
+              {
+                name: "year",
+                classes: "govuk-input--width-4",
+                value: data['maternity-leave-start-year'] or  data['maternity-leave']['start'] | year
+              }
+            ]
           }) }}
 
           {{ govukDateInput({
@@ -42,7 +59,24 @@
             },
             hint: {
               text: "For example, 01 08 2019"
-            }
+            },
+            items: [
+              {
+                name: "day",
+                classes: "govuk-input--width-2",
+                value: data['maternity-leave-end-day'] or data['maternity-leave']['end'] | day
+              },
+              {
+                name: "month",
+                classes: "govuk-input--width-2",
+                value: data['maternity-leave-end-month'] or data['maternity-leave']['end'] | month
+              },
+              {
+                name: "year",
+                classes: "govuk-input--width-4",
+                value: data['maternity-leave-end-year'] or data['maternity-leave']['end'] | year
+              }
+            ]
           }) }}
 
           {{ govukInput({
@@ -52,7 +86,8 @@
             },
             classes: "govuk-input--width-2",
             id: "maternity-leave-weeks-remaining",
-            name: "maternity-leave-weeks-remaining"
+            name: "maternity-leave-weeks-remaining",
+            value: data["maternity-leave-weeks-remaining"] or data | remainingMaternityLeaveWeeks
           }) }}
 
         {% endcall %}
@@ -74,7 +109,24 @@
             },
             hint: {
               text: "For example, 01 08 2019"
-            }
+            },
+            items: [
+              {
+                name: "day",
+                classes: "govuk-input--width-2",
+                value: data['maternity-pay-start-day'] or data | maternityPayStart | day
+              },
+              {
+                name: "month",
+                classes: "govuk-input--width-2",
+                value: data['maternity-pay-start-month'] or data | maternityPayStart | month
+              },
+              {
+                name: "year",
+                classes: "govuk-input--width-4",
+                value: data['maternity-pay-start-year'] or  data | maternityPayStart | year
+              }
+            ]
           }) }}
 
           {{ govukDateInput({
@@ -88,7 +140,24 @@
             },
             hint: {
               text: "For example, 01 08 2019"
-            }
+            },
+            items: [
+              {
+                name: "day",
+                classes: "govuk-input--width-2",
+                value: data['maternity-pay-start-day'] or data | maternityPayEnd | day
+              },
+              {
+                name: "month",
+                classes: "govuk-input--width-2",
+                value: data['maternity-pay-start-month'] or data | maternityPayEnd | month
+              },
+              {
+                name: "year",
+                classes: "govuk-input--width-4",
+                value: data['maternity-pay-start-year'] or  data | maternityPayEnd | year
+              }
+            ]
           }) }}
 
           {{ govukInput({
@@ -98,7 +167,8 @@
             },
             classes: "govuk-input--width-2",
             id: "maternity-pay-weeks-remaining",
-            name: "maternity-pay-weeks-remaining"
+            name: "maternity-pay-weeks-remaining",
+            value: data["maternity-pay-weeks-remaining"] or data | remainingMaternityPayWeeks
           }) }}
 
         {% endcall %}

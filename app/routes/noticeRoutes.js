@@ -45,6 +45,11 @@ router.post('/due-date', function (req, res) {
 })
 
 router.post('/entitlement-and-intention', function (req, res) {
+  const { data } = req.session
+  data['maternity-leave-start'] = dates.providedDate(data['maternity-leave-start-year'], data['maternity-leave-start-month'], data['maternity-leave-start-day'])
+  data['maternity-leave-end'] = dates.providedDate(data['maternity-leave-end-year'], data['maternity-leave-end-month'], data['maternity-leave-end-day'])
+  data['maternity-pay-start'] = dates.providedDate(data['maternity-pay-start-year'], data['maternity-pay-start-month'], data['maternity-pay-start-day'])
+  data['maternity-pay-end'] = dates.providedDate(data['maternity-pay-end-year'], data['maternity-pay-end-month'], data['maternity-pay-end-day'])
   res.redirect('/notice/shared-entitlement-and-intention')
 })
 

@@ -8,7 +8,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h1 class="govuk-heading-xl">
-        About the {{ data['primary-name'] }}'s shared parental leave and pay entitlement
+        Shared parental leave and pay entitlement
       </h1>
       <form action="shared-entitlement-and-intention" method="POST">
 
@@ -16,27 +16,23 @@
 
           {% call govukFieldset({
             legend: {
-              text: "About the " + data['primary-name'] + "'s shared parental leave entitlement",
+              text: "Shared parental leave entitlement",
               classes: "govuk-fieldset__legend--m"
             }
           }) %}
 
-            {{ govukInput({
-              label: {
-                text: "Weeks of shared parental leave created"
-              },
-              classes: "govuk-input--width-2",
-              id: "spl-weeks-created",
-              name: "spl-weeks-created"
-            }) }}
+            <p>
+              Weeks of shared parental leave available: <strong>{{ data['maternity-leave-weeks-remaining'] }}</strong>
+            </p>
 
             {{ govukInput({
               label: {
                 text: "Number of weeks of shared parental leave the " + data['primary-name'] + " intends to take"
               },
               classes: "govuk-input--width-2",
-              id: "spl-weeks-created",
-              name: "spl-weeks-created"
+              id: "primary-spl-weeks-number",
+              name: "primary-spl-weeks-number",
+              value: data | splWeeksIntention('primary')
             }) }}
 
             {{ govukInput({
@@ -44,8 +40,9 @@
                 text: "Number of weeks of shared parental leave the partner intends to take"
               },
               classes: "govuk-input--width-2",
-              id: "spl-weeks-created",
-              name: "spl-weeks-created"
+              id: "secondary-spl-weeks-number",
+              name: "secondary-spl-weeks-number",
+              value: data | splWeeksIntention('secondary')
             }) }}
           {% endcall %}
         {% endif %}
@@ -54,27 +51,23 @@
 
           {% call govukFieldset({
             legend: {
-              text: "About the mother's shared parental pay entitlement",
+              text: "Shared parental pay entitlement",
               classes: "govuk-fieldset__legend--m"
             }
           }) %}
 
-            {{ govukInput({
-              label: {
-                text: "Weeks of shared parental pay created"
-              },
-              classes: "govuk-input--width-2",
-              id: "shpp-weeks-created",
-              name: "shpp-weeks-created"
-            }) }}
+            <p>
+              Weeks of shared parental pay available: <strong>{{ data['maternity-pay-weeks-remaining'] }}</strong>
+            </p>
 
             {{ govukInput({
               label: {
                 text: "Number of weeks of shared parental pay the " + data['primary-name'] + " intends to take"
               },
               classes: "govuk-input--width-2",
-              id: "shpp-weeks-created",
-              name: "shpp-weeks-created"
+              id: "primary-shpp-weeks-number",
+              name: "primary-shpp-weeks-number",
+              value: data | shppWeeksIntention('primary')
             }) }}
 
             {{ govukInput({
@@ -82,8 +75,9 @@
                 text: "Number of weeks of shared parental pay the partner intends to take"
               },
               classes: "govuk-input--width-2",
-              id: "shpp-weeks-created",
-              name: "shpp-weeks-created"
+              id: "secondary-shpp-weeks-number",
+              name: "secondary-shpp-weeks-number",
+              value: data | shppWeeksIntention('secondary')
             }) }}
           {% endcall %}
         {% endif %}

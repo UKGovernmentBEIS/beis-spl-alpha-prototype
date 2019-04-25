@@ -201,6 +201,86 @@ module.exports = function (env) {
     }
     return false
   }
+
+  filters.maternityPayStart = function(data) {
+    return data['payBlocks'].find(block => block.mother !== '£0').start
+  }
+
+  filters.maternityPayEnd = function(data) {
+    let endDate = ""
+    for (block of data['payBlocks']) {
+      if(endDate ==='£0') { continue }
+      if (block.mother !== '£0') {
+        endDate = block.end
+      } else {
+        break
+      }
+    }
+
+    return endDate
+  }
+
+  filters.remainingMaternityLeaveWeeks = function(data) {
+    const start = data['maternity-leave-start'] || (data['maternity-leave'] && data['maternity-leave'] ['start'])
+    const end = data['maternity-leave-end'] || (data['maternity-leave'] && data['maternity-leave']['end'])
+    const weeksLeave = moment(end).diff(start, 'weeks') + 1
+    return 52 - weeksLeave
+  }
+
+  filters.remainingMaternityPayWeeks = function(data) {
+    const start = data['maternity-pay-start'] || filters.maternityPayStart(data)
+    const end = data['maternity-pay-start'] || filters.maternityPayEnd(data)
+    const weeksPay = moment(end).diff(start, 'weeks') + 1
+    return 52 - weeksPay
+  }
+
+  filters.splWeeksIntention = function(data, parent) {
+    if (data[`${parent}-spl-weeks-number`]) { return data[`${parent}-spl-weeks-number`] }
+    const blocks = data[`${parent === 'primary' ? 'mother' : 'partner'}s-spl-blocks`]
+    let total = 0
+    if (blocks) {
+      for (block of blocks) {
+        const weeksLeave = moment(block.end).diff(block.start, 'weeks') + 1
+        total += weeksLeave
+      }
+    }
+    return total > 0 ? total : ''
+  }
+
+  filters.shppWeeksIntention = function(data, parent) {
+    if (data[`${parent}-shpp-weeks-number`]) { return data[`${parent}-shpp-weeks-number`] }
+    const payWeeks = data['pay'][parent === 'primary' ? 'mother' : 'partner']
+    const sortedWeeks = Object.entries(payWeeks).sort((week1, week2) => {
+      return week1[0] < week2[0]
+    })
+    if (parent === 'primary') {
+      let firstPaidWeek = sortedWeeks.findIndex(week => week[1] !== '£0') + 1
+      const paidWeeks = sortedWeeks.slice(firstPaidWeek)
+      const endOfSmp = paidWeeks.findIndex(week => week[1] === '£0')
+      const shppWeeks = paidWeeks.slice(endOfSmp)
+      return shppWeeks.filter(week => week[1] !== '£0').length
+    } else if (parent === 'secondary') {
+      const paidWeeks = sortedWeeks.filter(week => week[1] !== '£0')
+      let paternityWeeks = 0
+      if (data['paternity-leave']) {
+        paternityWeeks = moment(data['paternity-leave'].end).diff(data['paternity-leave'].start, 'weeks') + 1
+      }
+      console.log(paidWeeks)
+      return paidWeeks.length - paternityWeeks
+    }
+  }
+
+  filters.year = function(dateString) {
+    return moment(dateString).year()
+  }
+
+  filters.month = function(dateString) {
+    return moment(dateString).month() + 1
+  }
+
+  filters.day = function(dateString) {
+    return moment(dateString).date()
+  }
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */
