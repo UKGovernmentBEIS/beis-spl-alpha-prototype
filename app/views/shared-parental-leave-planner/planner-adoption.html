@@ -316,9 +316,11 @@
       </div>
       <div class="govuk-grid-column-one-third planner-sidebar js-only">
         <h2 class="govuk-heading-m">
-          Leave weeks
+          Leave and pay totals
         </h2>
-        <p>Any unused adoption leave can be taken as shared parental leave.</p>
+        <p>
+          Any unused adoption leave can be taken as shared parental leave, and any unused adoption pay can be taken as shared parental pay.
+        </p>
         {{ govukSummaryList({
           rows: [
             {
@@ -339,7 +341,7 @@
             },
             {
               key: {
-                text: "Primary adopter's partner's SPL"
+                text: "Partner's SPL"
               },
               value: {
                 html: '<span id="partners-spl-weeks"></span>'
@@ -347,11 +349,11 @@
             },
             {
               key: {
-                classes: "maternity-spl-remaining-total",
+                classes: "maternity-spl-remaining total",
                 text: "Remaining"
               },
               value: {
-                classes: "maternity-spl-remaining-total",
+                classes: "maternity-spl-remaining total",
                 html: '<span id="maternity-spl-remaining-weeks"></span>'
               }
             }
@@ -365,7 +367,35 @@
             You have no more shared parental leave, reduce your adoption leave to create more.
           </p>
         </div>
-        <p>Paternity leave is a separate entitlement.</p>
+        {{ govukSummaryList({
+          classes: "pay-only",
+          rows: [
+            {
+              key: {
+                text: "Paid weeks"
+              },
+              value: {
+                html: '<span id="mother-shared-paid-weeks"></span>'
+              }
+            },
+            {
+              key: {
+                classes: "paid-weeks-remaining total",
+                text: "Remaining"
+              },
+              value: {
+                classes: "paid-weeks-remaining total",
+                html: '<span id="mother-shared-remaining-paid-weeks"></span>'
+              }
+            }
+          ]
+        }) }}
+        <div class="leave-messages">
+          <p id="maternity-or-shared-pay-maximum" class="govuk-body-s warning">
+            You have taken more than the maximum of 39 weeks adoption or shared parental pay.
+          </p>
+        </div>
+        <p>Paternity leave and pay are separate entitlements.</p>
         {{ govukSummaryList({
           rows: [
             {
@@ -378,9 +408,11 @@
             },
             {
               key: {
+                classes: "total",
                 text: "Remaining"
               },
               value: {
+                classes: "total",
                 html: '<span id="paternity-remaining-weeks"></span>'
               }
             }
