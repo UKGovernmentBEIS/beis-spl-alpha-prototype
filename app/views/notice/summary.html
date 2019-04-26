@@ -49,11 +49,11 @@
         </p>
       {% elif data['current-parent'] == 'secondary' %}
         <p>
-          If your shared parental leave starts before the mother goes back to work, the mother must give her employer notice to <a href="#" class="govuk-link">curtail her maternity entitlement</a>.
+          If your shared parental leave starts before the {{ data['primary-name'] }} goes back to work, the {{ data['primary-name'] }}  must give {{'her' if data | isBirth else 'their' }} employer notice to <a href="#" class="govuk-link">curtail {{'her' if data | isBirth else 'their' }} {{ data['primary-leave-type'] }} entitlement</a>.
         </p>
         <p>
-          If the mother is also taking shared parental leave and pay, you can <a href="/notice/reset" class="govuk-link">start again</a>  to generate her notices.
-          You will not need to re-enter her personal information.
+          If the {{ data['primary-name'] }} is also taking shared parental leave and pay, you can <a href="/notice/reset" class="govuk-link">start again</a> to generate {{'her' if data | isBirth else 'their' }} notices.
+          You will not need to re-enter {{'her' if data | isBirth else 'their' }} personal information.
         </p>
       {% endif %}
     </div>
