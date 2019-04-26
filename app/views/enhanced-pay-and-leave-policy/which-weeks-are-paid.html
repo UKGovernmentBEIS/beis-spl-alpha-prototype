@@ -15,10 +15,6 @@
 {% macro payBlockInput(options) %}
   {% set linkHref = 'remove-block/' + options.blockNumber%}
   {% call govukFieldset({
-    legend: {
-      text: "What weeks are paid/unpaid?",
-      classes: "govuk-fieldset__legend--m"
-    }
   }) %}
     <div class="salary-group">
       {{ govukInput({
@@ -46,10 +42,21 @@
 
 
 {% block content %}
+  {% set question %}
+    {% if data['leave-type'] == 'maternity' %}
+      Mothers are entitled to 52 weeks maternity leave. how much pay do you offer mothers over this period of time?
+    {% elif data['leave-type'] == 'adoption' %}
+      Primary adopters are entitled to 52 weeks adoption leave. How much pay do you offer adopters over this period of time?
+    {% elif data['leave-type'] == 'paternity' %}
+      Fathers / partners are entitled to 2 weeks paternity leave. How much pay do you offer fathers over this period of time?
+    {% elif data['leave-type'] == 'shared' %}
+      Parents are entitled to up to 50 weeks of shared parental leave. How much pay do you offer parents over this period of time?
+    {% endif %}
+  {% endset %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h1 class="govuk-heading-xl">
-        Help your employees plan their leave and pay
+        {{ question }}
       </h1>
       <form method="POST">
         {% for leaveBlock in data['leave-blocks'] %}

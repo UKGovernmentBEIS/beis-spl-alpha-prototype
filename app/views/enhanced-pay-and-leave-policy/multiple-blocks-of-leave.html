@@ -14,34 +14,36 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <h1 class="govuk-heading-xl">
-        Help your employees plan their leave and pay
-      </h1>
       <form action="multiple-blocks-of-leave" method="POST">
         {{ govukRadios({
-          classes: "govuk-radios--inline",
           idPrefix: "multiple-blocks",
           name: "multiple-blocks",
           fieldset: {
             legend: {
-              text: "Will leave policy allow for multiple blocks of leave?",
+              text: "Does this pay enhancement still apply if employees take their shared parental leave in multiple blocks?",
               isPageHeading: true,
-              classes: "govuk-fieldset__legend--m"
+              classes: "govuk-fieldset__legend--xl"
             }
           },
           hint: {
-            text: 'If you select yes this means you are allowing users to plan mulitple blocks of leave at the enhanced pay rate. Select "No" if you are making your enhanced leave scheme only available to use for one block.'
+            text: 'Employees are entitled to up to three blocks of leave'
           },
           items: [
             {
               value: "yes",
               text: "Yes",
-              checked: data['multiple-blocks'] == 'yes'
+              checked: data['multiple-blocks'] == 'yes',
+              hint: {
+                text: 'Select if you continue to enhance pay if the employee takes shared parental leave in multiple blocks'
+              }
             },
             {
               value: "no",
               text: "No",
-              checked: data['multiple-blocks'] == 'no'
+              checked: data['multiple-blocks'] == 'no',
+              hint: {
+                text: 'Select if you only enhance pay if the employee takes shared parental leave in one continuous block'
+              }
             }
           ]
         }) }}
