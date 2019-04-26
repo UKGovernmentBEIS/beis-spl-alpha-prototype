@@ -28,10 +28,12 @@
         <li>{{ data['primary-name'] | capitalize }}’s Declarations to her employer</li>
         <li>{{ data['secondary-name'] | capitalize }}’s Declarations to the {{ data['primary-name'] }}’s employer</li>
         <li>{{ data['primary-name'] | capitalize }}’s Maternity Leave and Pay Curtailment Notice</li>
+        <li>{{ data['primary-name'] | capitalize }}’s Binding Period of Leave Notice (only if your dates are final)</li>
       {% elif data['current-parent'] == 'secondary' %}
         <li>{{ data['secondary-name'] | capitalize }}'s Notice of Entitlement and Intention</li>
         <li>{{ data['secondary-name'] | capitalize }}'s Declarations to their employer</li>
         <li>{{ data['primary-name'] | capitalize }}'s Declarations to the {{ data['secondary-name'] }}'s employer</li>
+        <li>{{ data['secondary-name'] | capitalize }}’s Binding Period of Leave Notice (only if your dates are final)</li>
       {% endif %}
       </ul>
 
