@@ -97,7 +97,9 @@ router.get('/spl-dates/delete/:id', function (req, res) {
 })
 
 router.get('/reset', function(req, res) {
-  req.session.data['current-parent-information-complete'] = false
+  const { data } = req.session
+  data['current-parent-information-complete'] = false
+  data['current-parent'] = data['current-parent'] === 'primary' ? 'secondary' : 'primary'
   res.redirect('/notice')
 })
 
