@@ -35,7 +35,8 @@
       {% endif %}
       </ul>
 
-      <a href="/spl-forms/SPL_notices_and_declarations_for_testing.pdf" target="_blank" class="govuk-button">Download notices</a>
+      {% set link = "Partner_SPL_Notices_and_Declarations_for_testing" if data['current-parent'] == 'secondary' else "Mother_SPL_Notices_and_Declarations_for_testing" %}
+      <a href="/spl-forms/{{link}}.pdf" target="_blank" class="govuk-button">Download notices</a>
 
       <h2 class="govuk-heading-l">What to do next</h2>
 
