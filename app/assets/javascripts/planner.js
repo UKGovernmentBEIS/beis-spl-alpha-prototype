@@ -303,6 +303,7 @@ function updatePay() {
 
   const maternityOrSharedPaidWeeks = $('.with-pay .maternity-leave:visible, .with-pay .shared-parental-leave:visible').length
   const maternityOrSharedRemainingPaidWeeks = MATERNITY_PAY_WEEKS - maternityOrSharedPaidWeeks
+  const hasUnpaidWeeks = $('.is-unpaid:visible').length > 0
 
   // Remaining pay.
   $('#mother-shared-paid-weeks').text(toWeeksString(maternityOrSharedPaidWeeks))
@@ -311,6 +312,7 @@ function updatePay() {
 
   // Warnings
   $('#maternity-or-shared-pay-maximum').toggle(maternityOrSharedRemainingPaidWeeks < 0)
+  $('#paid-leave-remaining').toggle(hasUnpaidWeeks && maternityOrSharedRemainingPaidWeeks > 0)
 }
 
 function toWeeksString(numberOfWeeks) {
