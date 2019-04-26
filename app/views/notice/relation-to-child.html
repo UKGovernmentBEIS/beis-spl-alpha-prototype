@@ -28,11 +28,13 @@
           items: [
             {
               value: "primary",
-              text: data['primary-name'] | capitalize
+              text: data['primary-name'] | capitalize,
+              checked: data['current-parent'] == 'primary'
             },
             {
               value: "secondary",
-              text: data['primary-name'] | capitalize + "'s partner"
+              text: data['primary-name'] | capitalize + "'s partner",
+              checked: data['current-parent'] == 'secondary'
             }
           ]
         }) }}
