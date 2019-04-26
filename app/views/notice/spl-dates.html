@@ -4,6 +4,13 @@
   Complete notices and declarations for Shared Parental Leave and Pay
 {% endblock %}
 
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "shared-entitlement-and-intention"
+  }) }}
+{% endblock %}
+
 {% macro leaveBlockInput(options) %}
   {% set linkHref = 'remove-block/' + options.blockNumber%}
     {{ govukDateInput({

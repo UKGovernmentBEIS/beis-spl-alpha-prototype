@@ -4,6 +4,13 @@
   Complete notices and declarations for Shared Parental Leave and Pay
 {% endblock %}
 
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "parent-information/back"
+  }) }}
+{% endblock %}
+
 {% block content %}
   {% set currentParent = data | otherParentName if data['current-parent-information-complete'] else data | currentParentName %}
   <div class="govuk-grid-row">

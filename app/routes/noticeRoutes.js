@@ -30,6 +30,16 @@ router.get("/parent-information/skip-parent", function (req, res) {
   }
 })
 
+router.get("/parent-information/back", function (req, res) {
+  const { data } = req.session
+  if (data['current-parent-information-complete']) {
+    data['current-parent-information-complete'] = false
+    res.redirect('/notice/parent-information')
+  } else {
+    res.redirect('/notice/which-entitlement')
+  }
+})
+
 router.post('/parent-information', function (req, res) {
   const { data } = req.session
   if (data['current-parent-information-complete']) {
