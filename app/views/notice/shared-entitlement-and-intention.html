@@ -21,9 +21,11 @@
             }
           }) %}
 
+          {% if data['maternity-leave-weeks-remaining'] %}
             <p>
               Weeks of shared parental leave available: <strong>{{ data['maternity-leave-weeks-remaining'] }}</strong>
             </p>
+          {% endif %}
 
             {{ govukInput({
               label: {
@@ -56,9 +58,11 @@
             }
           }) %}
 
+          {% if data['maternity-pay-weeks-remaining'] %}
             <p>
               Weeks of shared parental pay available: <strong>{{ data['maternity-pay-weeks-remaining'] }}</strong>
             </p>
+          {% endif %}
 
             {{ govukInput({
               label: {
