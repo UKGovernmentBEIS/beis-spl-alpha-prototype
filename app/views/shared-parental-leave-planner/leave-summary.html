@@ -1,5 +1,7 @@
 {% from "back-link/macro.njk" import govukBackLink %}
 {% from "summary-list/macro.njk" import govukSummaryList %}
+{% from "inset-text/macro.njk" import govukInsetText %}
+
 
 {% from "components/leave-block-summary.njk" import leaveBlockSummary %}
 
@@ -90,6 +92,12 @@
         <p>
           If the employer has their own forms, they can be used instead as long as the relevant notices and declarations are included.
         </p>
+        {% set insetHtml %}
+          You can also <a href="/notice" class="govuk-link">complete these notice forms using an online tool</a>. Your key dates will be filled out for you based on your chosen plan (you'll have the opportunity to change them), but you'll need to provide a name, address and National Insurance number for you and your partner.
+        {% endset %}
+        {{ govukInsetText({
+          html: insetHtml
+        }) }}
         <h4 class="govuk-heading-s">
           Changing your plans
         </h4>
@@ -158,11 +166,17 @@
           {% endif %}
         {% endset %}
         <p>
-          To take SPL you can complete the {{ secondaryNoticeFormLink | safe }} and submit it to the {{ data['secondary-name'] }}’s employer by the notice dates above.
+          To take SPL you’ll need to <a class="govuk-link" href="/notice">complete the necessary notice and declaration forms</a> and submit them to the {{ data['secondary-name'] }}’s employer by the notice dates above.
         </p>
         <p>
           If the employer has their own forms, they can be used instead as long as the relevant notices and declarations are included.
         </p>
+        {% set insetHtml %}
+          You can also <a href="/notice" class="govuk-link">complete these notice forms using an online tool</a>. Your key dates will be filled out for you based on your chosen plan (you'll have the opportunity to change them), but you'll need to provide a name, address and National Insurance number for you and your partner.
+        {% endset %}
+        {{ govukInsetText({
+          html: insetHtml
+        }) }}
         <h4 class="govuk-heading-s">
           Changing your plans
         </h4>
