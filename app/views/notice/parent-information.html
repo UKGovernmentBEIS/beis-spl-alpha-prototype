@@ -52,11 +52,14 @@
         }) %}
 
         {% if data['current-parent-information-complete'] %}
-          <p>
-            <a href="/notice/parent-information/use-other-parent-address" class="govuk-link">
-              Use address from {{ formParent }}
-            </a>
-          </p>
+          {% set formOtherParentName = data | currentParentName if data['current-parent-information-complete'] else data | otherParentName %}
+          {{ govukButton({
+            classes: 'hmcts-button--secondary',
+            text: 'Use address from ' + formOtherParentName,
+            attributes: {
+              formaction: "parent-information/use-other-parent-address"
+            }
+          }) }}
         {% endif %}
 
           {{ govukInput({

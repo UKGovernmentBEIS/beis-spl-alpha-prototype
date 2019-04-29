@@ -50,7 +50,7 @@ router.post('/parent-information', function (req, res) {
   }
 })
 
-router.get('/parent-information/use-other-parent-address', function(req, res) {
+router.post('/parent-information/use-other-parent-address', function(req, res) {
   const addressFields = [ 'address-line-1', 'address-line-2', 'address-town', 'address-county', 'address-postcode' ]
   const { data } = req.session
   const currentParent = data['current-parent']
