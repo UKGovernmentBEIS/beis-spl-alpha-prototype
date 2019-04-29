@@ -12,60 +12,69 @@
 {% endblock %}
 
 {% block content %}
-  {% set currentParent = data | otherParentName if data['current-parent-information-complete'] else data | currentParentName %}
+  {% set formParent = data['current-parent'] if data['current-parent-information-complete'] else data | otherParent %}
+  {% set formParentName = data | otherParentName if data['current-parent-information-complete'] else data | currentParentName %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
     <h1 class="govuk-heading-xl">
-      {{ currentParent | capitalize }}'s information
+      {{ formParentName | capitalize }}'s information
     </h1>
       <form action="parent-information" method="POST">
         {{ govukInput({
           label: {
-            text: "What is the " + currentParent + "'s name?",
+            text: "What is the " + formParentName + "'s name?",
             classes: "govuk-label--m"
           },
-          id: currentParent + '-real-name',
-          name: currentParent + "-real-name",
-          value: data[currentParent + '-real-name']
+          id: formParent + '-real-name',
+          name: formParent + "-real-name",
+          value: data[formParent + '-real-name']
         }) }}
 
         {{ govukInput({
           label: {
-            text: "What is the " + currentParent + "'s national insurance number?",
+            text: "What is the " + formParentName + "'s national insurance number?",
             classes: "govuk-label--m"
           },
           hint: {
             text: "It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’."
           },
           classes: "govuk-input--width-10",
-          id: currentParent + '-ni-number',
-          name: currentParent + "-ni-number",
-          value: data[currentParent + '-ni-number']
+          id: formParent + '-ni-number',
+          name: formParent + "-ni-number",
+          value: data[formParent + '-ni-number']
         }) }}
 
         {% call govukFieldset({
           legend: {
-            text: "What is the " + currentParent + "'s address?",
+            text: "What is the " + formParentName + "'s address?",
             classes: "govuk-fieldset__legend--m"
           }
         }) %}
+
+        {% if data['current-parent-information-complete'] %}
+          <p>
+            <a href="/notice/parent-information/use-other-parent-address" class="govuk-link">
+              Use address from {{ formParent }}
+            </a>
+          </p>
+        {% endif %}
 
           {{ govukInput({
             label: {
               html: 'Building and street <span class="govuk-visually-hidden">line 1 of 2</span>'
             },
-            id: currentParent + "-address-line-1",
-            name: currentParent + "-address-line-1",
-            value: data[currentParent + '-address-line-1']
+            id: formParent + "-address-line-1",
+            name: formParent + "-address-line-1",
+            value: data[formParent + '-address-line-1']
           }) }}
 
           {{ govukInput({
             label: {
               html: '<span class="govuk-visually-hidden">Building and street line 2 of 2</span>'
             },
-            id: currentParent + "-address-line-2",
-            name: currentParent + "-address-line-2",
-            value: data[currentParent + '-address-line-2']
+            id: formParent + "-address-line-2",
+            name: formParent + "-address-line-2",
+            value: data[formParent + '-address-line-2']
           }) }}
 
           {{ govukInput({
@@ -73,9 +82,9 @@
               text: "Town or city"
             },
             classes: "govuk-!-width-two-thirds",
-            id: currentParent + "-address-town",
-            name: currentParent + "-address-town",
-            value: data[currentParent + '-address-town']
+            id: formParent + "-address-town",
+            name: formParent + "-address-town",
+            value: data[formParent + '-address-town']
           }) }}
 
           {{ govukInput({
@@ -83,10 +92,9 @@
               text: "County"
             },
             classes: "govuk-!-width-two-thirds",
-            id: currentParent + "-address-county",
-            name: currentParent + "-address-county",
-            value: data[currentParent + '-address-country']
-
+            id: formParent + "-address-county",
+            name: formParent + "-address-county",
+            value: data[formParent + '-address-county']
           }) }}
 
           {{ govukInput({
@@ -94,9 +102,9 @@
               text: "Postcode"
             },
             classes: "govuk-input--width-10",
-            id: currentParent + "-address-postcode",
-            name: currentParent + "-address-postcode",
-            value: data[currentParent + '-address-postcode']
+            id: formParent + "-address-postcode",
+            name: formParent + "-address-postcode",
+            value: data[formParent + '-address-postcode']
 
           }) }}
         {% endcall %}

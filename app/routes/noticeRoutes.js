@@ -50,6 +50,16 @@ router.post('/parent-information', function (req, res) {
   }
 })
 
+router.get('/parent-information/use-other-parent-address', function(req, res) {
+  const addressFields = [ 'address-line-1', 'address-line-2', 'address-town', 'address-county', 'address-postcode' ]
+  const { data } = req.session
+  const currentParent = data['current-parent']
+  const otherParent = data['current-parent'] === 'primary' ? 'secondary' : 'primary'
+  addressFields.forEach(field => data[`${currentParent}-${field}`] = data[`${otherParent}-${field}`])
+
+  res.redirect('/notice/parent-information')
+})
+
 router.post('/due-date', function (req, res) {
   res.redirect('/notice/entitlement-and-intention')
 })

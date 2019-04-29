@@ -103,6 +103,10 @@ module.exports = function (env) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  filters.otherParent = function(data) {
+    return data['current-parent'] === 'primary' ? 'secondary' : 'primary'
+  }
+
   filters.currentParentName= function(data) {
     return data[`${data['current-parent']}-name`]
   }
