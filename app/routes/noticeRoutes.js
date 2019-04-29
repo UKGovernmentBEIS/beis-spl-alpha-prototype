@@ -75,18 +75,12 @@ router.post('/shared-entitlement-and-intention', function (req, res) {
 
 router.post('/spl-dates/add-another', function (req, res) {
   if (!req.session.data['notice-leave-blocks']) { req.session.data['notice-leave-blocks'] = [] }
-  const newBlockData = req.session.data['new-notice-leave-blocks']
-  const newBlockStart = dates.providedDate(newBlockData.start.year, newBlockData.start.month, newBlockData.start.day)
-  const newBlockEnd = dates.providedDate(newBlockData.end.year, newBlockData.end.month, newBlockData.end.day)
-  req.session.data['notice-leave-blocks'].push({
-    start: newBlockStart,
-    end: newBlockEnd,
-    binding: newBlockData.binding
-  })
+  saveNewNoticeLeaveBlock(req.session.data)
   res.redirect('/notice/spl-dates')
 })
 
 router.post('/spl-dates', function(req, res) {
+  saveNewNoticeLeaveBlock(req.session.data)
   res.redirect('/notice/summary')
 })
 
@@ -104,3 +98,13 @@ router.get('/reset', function(req, res) {
 })
 
 module.exports = router
+
+const saveNewNoticeLeaveBlock = function (data) {
+  const newBlockData = data['new-notice-leave-blocks']
+  const newBlockStart = dates.providedDate(newBlockData.start.year, newBlockData.start.month, newBlockData.start.day)
+  const newBlockEnd = dates.providedDate(newBlockData.end.year, newBlockData.end.month, newBlockData.end.day)
+  data['notice-leave-blocks'].push({
+    start: newBlockStart,
+    end: newBlockEnd
+  })
+}
