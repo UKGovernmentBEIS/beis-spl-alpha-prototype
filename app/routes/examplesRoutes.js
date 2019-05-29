@@ -9,4 +9,8 @@ router.get('/supporting-the-mother-after-birth', function (req, res) {
   res.render('shared-parental-leave-planner/examples/supporting-the-mother-after-birth')
 })
 
+router.get('/sharing-primary-care-responsibility', function (req, res) {
+  res.render('shared-parental-leave-planner/examples/sharing-primary-care-responsibility')
+})
+
 module.exports = router
