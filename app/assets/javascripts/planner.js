@@ -17,180 +17,183 @@ const PATERNITY_PAY_WEEKS = 2
 const $calendar = $('table#leave-calendar')
 
 $(document).ready(function () {
-  const parents = [MOTHER, PARTNER]
-  parents.forEach(function (parent) {
-    $('.' + parent + '-leave-input').on('change', function () {
-      const $this = $(this)
-      const $row = $(this).closest('tr')
-      $row.toggleClass(parent + '-leave', $this.prop('checked'))
-    }).change() // Initialize.
-  })
+  const $isExample = $('#is-example-js-only')
+  if (!$isExample.length) {
+    const parents = [MOTHER, PARTNER]
+    parents.forEach(function (parent) {
+      $('.' + parent + '-leave-input').on('change', function () {
+        const $this = $(this)
+        const $row = $(this).closest('tr')
+        $row.toggleClass(parent + '-leave', $this.prop('checked'))
+      }).change() // Initialize.
+    })
 
-  // Run once to intialize.
-  onLeaveUpdated()
+    // Run once to intialize.
+    onLeaveUpdated()
 
-  $('input[class$="-leave-input"] + label').on('click', function (event) {
-    event.preventDefault()
-  }).on('mousedown', function (mouseDownEvent) {
-    if (mouseDownEvent.which !== 1) {
-      // Only respond to primary mouse button.
-      return
-    }
+    $('input[class$="-leave-input"] + label').on('click', function (event) {
+      event.preventDefault()
+    }).on('mousedown', function (mouseDownEvent) {
+      if (mouseDownEvent.which !== 1) {
+        // Only respond to primary mouse button.
+        return
+      }
 
-    const $originalCell = $(this).closest('td')
-    if ($originalCell.hasClass(DISABLED)) {
-      return
-    }
+      const $originalCell = $(this).closest('td')
+      if ($originalCell.hasClass(DISABLED)) {
+        return
+      }
 
-    mouseDownEvent.preventDefault()
+      mouseDownEvent.preventDefault()
 
-    if ($originalCell.hasClass(MOTHER) && getWeekNumber($originalCell) < 0) {
-      handleMaternityBeforeBirthWeek($originalCell)
-      return
-    }
+      if ($originalCell.hasClass(MOTHER) && getWeekNumber($originalCell) < 0) {
+        handleMaternityBeforeBirthWeek($originalCell)
+        return
+      }
 
-    $calendar.addClass(DRAGGING)
+      $calendar.addClass(DRAGGING)
 
-    const $originalRow = $originalCell.parent()
-    const column = $originalCell.hasClass(MOTHER) ? MOTHER : PARTNER
-    const addOrRemoveLeave = hasLeave($originalCell) ? removeLeave : addLeave
-    const onRowMouseOver = function () {
-      const $row = $(this)
-      const isForward = getWeekNumber($row) >= getWeekNumber($originalRow)
-      const $rowsBetween = isForward ? $originalRow.nextUntil($row.next()) : $originalRow.prevUntil($row.prev())
-      $rowsBetween.add($originalRow).each(function () {
-        const $cellInRow = $(this).find('.' + column)
-        if ($cellInRow.hasClass(DISABLED)) {
-          return
+      const $originalRow = $originalCell.parent()
+      const column = $originalCell.hasClass(MOTHER) ? MOTHER : PARTNER
+      const addOrRemoveLeave = hasLeave($originalCell) ? removeLeave : addLeave
+      const onRowMouseOver = function () {
+        const $row = $(this)
+        const isForward = getWeekNumber($row) >= getWeekNumber($originalRow)
+        const $rowsBetween = isForward ? $originalRow.nextUntil($row.next()) : $originalRow.prevUntil($row.prev())
+        $rowsBetween.add($originalRow).each(function () {
+          const $cellInRow = $(this).find('.' + column)
+          if ($cellInRow.hasClass(DISABLED)) {
+            return
+          }
+          addOrRemoveLeave($cellInRow)
+        })
+        onLeaveUpdated()
+      }
+
+      // Handle row that was clicked on.
+      onRowMouseOver.call($originalRow)
+
+      const $weeks = $('tr.week')
+      $weeks.on('mouseover', onRowMouseOver)
+      $calendar.one('mouseup mouseleave', function () {
+        $weeks.off('mouseover', onRowMouseOver)
+        $calendar.removeClass(DRAGGING)
+      })
+
+
+      // Scrollling
+      const scrolling = { up: null, down: null }
+
+      function scroll(direction) {
+        const scrollPx = 15
+        if (direction === 'up') {
+          $(window).scrollTop($(window).scrollTop() - scrollPx)
+        } else if (direction === 'down') {
+          $(window).scrollTop($(window).scrollTop() + scrollPx)
         }
-        addOrRemoveLeave($cellInRow)
+      }
+
+      function startScrolling(direction) {
+        const scrollTime = 15
+        scrolling[direction] = setInterval(() => scroll(direction), scrollTime)
+      }
+
+      function stopScrolling(direction) {
+        clearInterval(scrolling[direction])
+        scrolling[direction] = null
+      }
+
+      $(document).mouseup(function() {
+        stopScrolling('up')
+        stopScrolling('down')
+        $calendar.off('mousemove')
+      })
+
+      let prevYCoord = mouseDownEvent.pageY
+      $calendar.bind('mousemove', function(mouseMoveEvent) {
+        const currentYCoord = mouseMoveEvent.pageY
+        if (!scrolling['down'] && prevYCoord < currentYCoord) {
+          if (mouseMoveEvent.clientY > 0.8 * $(window).height()) {
+            stopScrolling('up')
+            startScrolling('down')
+          }
+        } else if (!scrolling['up'] && prevYCoord > currentYCoord) {
+          if (mouseMoveEvent.clientY < 0.2 * $(window).height()) {
+            stopScrolling('down')
+            startScrolling('up')
+          }
+        }
+        prevYCoord = currentYCoord
+      })
+    })
+
+    $('.pay-indicator').on('click', function() {
+      const $cell = $(this).prev()
+      if (!hasLeave($cell)) {
+        addLeave($cell)
+      } else if ($cell.hasClass('with-pay')) {
+        $cell.removeClass('with-pay')
+      } else {
+        $cell.addClass('with-pay')
+      }
+      updatePay()
+    })
+
+    // fix to cover for removed 'show indicative pay' checkbox
+    const checked = true
+    $calendar.toggleClass('show-pay', checked)
+    $('.pay-only').toggle(checked)
+    $('.not-pay').toggle(!checked)
+    // end of fix
+
+    $('.leave-example').on('click', function () {
+      const $this = $(this)
+      const motherLeave = $this.data('mother-leave').split(',').map(function (n) { return parseInt(n) })
+      const partnerLeave = $this.data('partner-leave').split(',').map(function (n) { return parseInt(n) })
+      const warning = 'This will overwrite any leave that you have already entered on the calendar.'
+      if ($('.mother-leave').length + $('.partner-leave').length > 2 && !confirm(warning)) {
+        return
+      }
+      $('.mother, .partner').each(function () {
+        const $cell = $(this)
+        removeLeave($cell)
+      })
+      $('.mother').each(function () {
+        const $cell = $(this)
+        const weekNumber = getWeekNumber($cell)
+        if (motherLeave.indexOf(weekNumber) !== -1) {
+          addLeave($cell)
+        }
+      })
+      $('.partner').each(function () {
+        const $cell = $(this)
+        const weekNumber = getWeekNumber($cell)
+        if (partnerLeave.indexOf(weekNumber) !== -1) {
+          addLeave($cell)
+        }
       })
       onLeaveUpdated()
-    }
-
-    // Handle row that was clicked on.
-    onRowMouseOver.call($originalRow)
-
-    const $weeks = $('tr.week')
-    $weeks.on('mouseover', onRowMouseOver)
-    $calendar.one('mouseup mouseleave', function () {
-      $weeks.off('mouseover', onRowMouseOver)
-      $calendar.removeClass(DRAGGING)
+      $('.birth-week').prev().prev()[0].scrollIntoView(true)
+      $('button#clear-example').removeAttr('disabled')
     })
 
-
-    // Scrollling
-    const scrolling = { up: null, down: null }
-
-    function scroll(direction) {
-      const scrollPx = 15
-      if (direction === 'up') {
-        $(window).scrollTop($(window).scrollTop() - scrollPx)
-      } else if (direction === 'down') {
-        $(window).scrollTop($(window).scrollTop() + scrollPx)
-      }
-    }
-
-    function startScrolling(direction) {
-      const scrollTime = 15
-      scrolling[direction] = setInterval(() => scroll(direction), scrollTime)
-    }
-
-    function stopScrolling(direction) {
-      clearInterval(scrolling[direction])
-      scrolling[direction] = null
-    }
-
-    $(document).mouseup(function() {
-      stopScrolling('up')
-      stopScrolling('down')
-      $calendar.off('mousemove')
-    })
-
-    let prevYCoord = mouseDownEvent.pageY
-    $calendar.bind('mousemove', function(mouseMoveEvent) {
-      const currentYCoord = mouseMoveEvent.pageY
-      if (!scrolling['down'] && prevYCoord < currentYCoord) {
-        if (mouseMoveEvent.clientY > 0.8 * $(window).height()) {
-          stopScrolling('up')
-          startScrolling('down')
+    $("#planner-form").on('submit', function () {
+      // store mother pay amount in hidden text field
+      $('.pay-amount-input').each(function(_, payInput) {
+        let amount
+        $payInput = $(payInput)
+        const $cell = $payInput.closest('td')
+        if($cell.hasClass("with-initial-maternity-pay")) {
+          amount = $cell.find(".initial-maternity-pay").text()
+        } else if ($cell.hasClass("with-statutory-pay")) {
+          amount = $cell.find(".statutory-pay").text()
+        } else {
+          amount = '£0'
         }
-      } else if (!scrolling['up'] && prevYCoord > currentYCoord) {
-        if (mouseMoveEvent.clientY < 0.2 * $(window).height()) {
-          stopScrolling('down')
-          startScrolling('up')
-        }
-      }
-      prevYCoord = currentYCoord
+        $payInput.val(amount)
+      })
     })
-  })
-
-  $('.pay-indicator').on('click', function() {
-    const $cell = $(this).prev()
-    if (!hasLeave($cell)) {
-      addLeave($cell)
-    } else if ($cell.hasClass('with-pay')) {
-      $cell.removeClass('with-pay')
-    } else {
-      $cell.addClass('with-pay')
-    }
-    updatePay()
-  })
-
-  // fix to cover for removed 'show indicative pay' checkbox
-  const checked = true
-  $calendar.toggleClass('show-pay', checked)
-  $('.pay-only').toggle(checked)
-  $('.not-pay').toggle(!checked)
-  // end of fix
-
-  $('.leave-example').on('click', function () {
-    const $this = $(this)
-    const motherLeave = $this.data('mother-leave').split(',').map(function (n) { return parseInt(n) })
-    const partnerLeave = $this.data('partner-leave').split(',').map(function (n) { return parseInt(n) })
-    const warning = 'This will overwrite any leave that you have already entered on the calendar.'
-    if ($('.mother-leave').length + $('.partner-leave').length > 2 && !confirm(warning)) {
-      return
-    }
-    $('.mother, .partner').each(function () {
-      const $cell = $(this)
-      removeLeave($cell)
-    })
-    $('.mother').each(function () {
-      const $cell = $(this)
-      const weekNumber = getWeekNumber($cell)
-      if (motherLeave.indexOf(weekNumber) !== -1) {
-        addLeave($cell)
-      }
-    })
-    $('.partner').each(function () {
-      const $cell = $(this)
-      const weekNumber = getWeekNumber($cell)
-      if (partnerLeave.indexOf(weekNumber) !== -1) {
-        addLeave($cell)
-      }
-    })
-    onLeaveUpdated()
-    $('.birth-week').prev().prev()[0].scrollIntoView(true)
-    $('button#clear-example').removeAttr('disabled')
-  })
-
-  $("#planner-form").on('submit', function () {
-    // store mother pay amount in hidden text field
-    $('.pay-amount-input').each(function(_, payInput) {
-      let amount
-      $payInput = $(payInput)
-      const $cell = $payInput.closest('td')
-      if($cell.hasClass("with-initial-maternity-pay")) {
-        amount = $cell.find(".initial-maternity-pay").text()
-      } else if ($cell.hasClass("with-statutory-pay")) {
-        amount = $cell.find(".statutory-pay").text()
-      } else {
-        amount = '£0'
-      }
-      $payInput.val(amount)
-    })
-  })
+  }
 })
 
 function handleMaternityBeforeBirthWeek($cell) {
