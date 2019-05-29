@@ -84,6 +84,39 @@
   {% endcall %}
 {% endset %}
 
+{% set policyInfo %}
+  <h3 class="govuk-heading-s">
+    Maternity leave and pay
+  </h3>
+  <p>
+    Maternity Leave is available for up to 52 weeks. Statutory Maternity Pay is available for 39 weeks. You get 90% of your average weekly earnings for the first 6 weeks and £148.68 (or 90% of your average weekly earnings if you earn less than £165.20) for the next 33 weeks.
+  </p>
+  <p>
+    You must take maternity leave and pay in one continous block. You can start 11 weeks before the expected week of birth.  You must take 2 weeks of maternity leave after your baby is born.
+  </p>
+
+  <h3 class="govuk-heading-s">
+    Shared parental leave and pay
+  </h3>
+  <p>
+    Shared Parental Leave is available for up to 50 weeks minus any maternity leave taken by the mother. Statutory Shared Parental Pay is available for up to 37 weeks minus any Statutory Maternity Pay taken by mother. You get £148.68 or 90% of your average weekly earnings if you earn less than £165.20.
+  </p>
+  <p>
+    You can take shared parental leave and pay in multiple blocks with periods of work in between. You and your partner can be off work at the same time, or one after the other.
+  </p>
+
+  <h3 class="govuk-heading-s">
+    Paternity leave and pay
+  </h3>
+  <p>
+    Paternity Leave is available for 2 weeks. Statutory Paternity Pay is available for up to 2 weeks. You get £148.68 or 90% of your average weekly earnings if you earn less than £165.20.
+  </p>
+  <p>
+    You must take paternity leave in the first 8 weeks after the baby is born.
+  </p>
+
+{% endset %}
+
 {% block content %}
 
   <div class="govuk-grid-row">
@@ -96,89 +129,60 @@
         Plan leave and pay when you have a child
       </h1>
 
+      <h2 class="govuk-heading-m">
+        Create your leave and pay plan
+      </h2>
+
       <p>
-        Shared parental leave is available for up to 50 weeks, minus any maternity leave taken by the mother.
+        Click in the calendar to select the weeks you and your partner would like to take off work when you have a child.
       </p>
+
       <p>
-        Eligible parents can take up to three blocks (more if their employer allows), either at the same time, or one after the other.</p>
+        You can also select the weeks you'd like to receive statutory pay.
       </p>
+
+      <p>
+        The planner will show you the most suitable type of leave (for example, maternity leave or shared parental leave) and an estimated statutory pay amount.
+      </p>
+
+      <p>
+        The leave weeks table tells you how much statutory leave and pay you have left at any given point.
+      </p>
+
       <h2 class="govuk-heading-m">
         Examples of shared parental leave
       </h2>
+
+      <ul class="govuk-list">
+        <li>
+          <a class="govuk-link" href="examples/managing-parenting-and-your-career">
+            Managing parenting and your career
+          </a>
+        </li>
+        <li>
+          <a class="govuk-link" href="#">
+            Supporting the mother after birth
+          </a>
+        </li>
+        <li>
+          <a class="govuk-link" href="#">
+            Sharing primary care responsibility
+          </a>
+        </li>
+      </ul>
+
       {{ govukAccordion({
         items: [
           {
             heading: {
-              text: "Managing parenting and your career"
+              text: "Maternity, Paternity and Shared Parental Leave and Pay guidance"
             },
             content: {
-              html: example1
-            }
-          },
-          {
-            heading: {
-              text: "Supporting the mother after birth"
-            },
-            content: {
-              html: example2
-            }
-          },
-          {
-            heading: {
-              text: "Sharing primary care responsibility"
-            },
-            content: {
-              html: example3
+              html: policyInfo
             }
           }
         ]
       }) }}
-      <button id="clear-example" class="govuk-button leave-example" data-mother-leave="0,1" data-partner-leave="" disabled>
-        Clear example and plan your own leave
-      </button>
-      <h2 class="govuk-heading-m">
-        Plan your leave and pay
-      </h2>
-      <p>
-        Click in the calendar below to select the weeks you and your partner would like to take off work when you're having a child. 
-      </p>
-      <p>
-        You can also select the weeks you'd like to receive statutory pay.
-      </p>  
-      <p>
-        The planner will work out the type of leave and pay (for example, maternity leave or shared parental leave) based on which parent is taking time off, when, and for how long. You can adjust this according to your plan.
-      </p>
-      <p>
-        <span class="js-only">
-          The leave weeks table tells you how much leave and pay you have left at any given point.
-        </span>
-      </p>
-      {{ govukCheckboxes({
-        classes: "js-only",
-        hint: {
-          text: "Tick below to see an indication of statutory pay alongside leave."
-        },
-        items: [
-          {
-            id: "show-statutory-pay",
-            text: "Show indicative pay"
-          }
-        ]
-      }) }}
-      <div class="pay-only">
-        <h2 class="govuk-heading-m">
-          Statutory pay amounts
-        </h2>
-        <p>
-          Maternity pay is available for 39 weeks. You'll get 90% of your average weekly earnings for the first 6 weeks of leave and statutory pay for the remaining 33 weeks.
-       </p>
-        <p>
-          Shared parental pay and paternity pay is paid at the statutory rate all the way through.
-        </p>
-        <p>
-          The statutory amount is always £148.68, or 90% of your average weekly earnings if you earn less than £165.20.
-        </p>
-      </div>
     </div>
   </div>
   <form action="summary" method="POST" id="planner-form">

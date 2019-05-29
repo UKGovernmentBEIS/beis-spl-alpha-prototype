@@ -137,12 +137,12 @@ $(document).ready(function () {
     updatePay()
   })
 
-  $('input#show-statutory-pay').on('change', function () {
-    const checked = $(this).prop('checked')
-    $calendar.toggleClass('show-pay', checked)
-    $('.pay-only').toggle(checked)
-    $('.not-pay').toggle(!checked)
-  }).change()
+  // fix to cover for removed 'show indicative pay' checkbox
+  const checked = true
+  $calendar.toggleClass('show-pay', checked)
+  $('.pay-only').toggle(checked)
+  $('.not-pay').toggle(!checked)
+  // end of fix
 
   $('.leave-example').on('click', function () {
     const $this = $(this)
