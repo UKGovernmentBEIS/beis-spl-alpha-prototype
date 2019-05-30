@@ -86,25 +86,24 @@
         ]
       }) }}
 
-    {% set hasCheckedEligibility = data["primary-eligibility"] or data["secondary-eligibility"] %}
+      {% set hasCheckedEligibility = data["primary-eligibility"] or data["secondary-eligibility"] %}
 
-    {% if hasCheckedEligibility and (data['primary-eligibility']['spl'] === false or data['primary-eligibility']['shpp'] === false or data['secondary-eligibility']['spl'] === false or data['secondary-eligibility']['shpp'] === false) %}
+      <h2 class="govuk-heading-m">
+        Next steps
+      </h2>
+      {% if hasCheckedEligibility and (data['primary-eligibility']['spl'] === false or data['primary-eligibility']['shpp'] === false or data['secondary-eligibility']['spl'] === false or data['secondary-eligibility']['shpp'] === false) %}
+        <p>
+          To understand why you or your partner are not eligible for Shared Parental Leave or Statutory Shared Parental Pay, you can check the guidelines on
+          {% if data | isBirth %}
+            <a href="/shared-parental-leave-and-pay/eligibility-for-birth-parents">eligibility for birth parents</a>.
+          {% else %}
+            <a href="/shared-parental-leave-and-pay/eligibility-for-adopters">eligibility for adopters</a>.
+          {% endif %}
+        </p>
+      {% endif %}
       <p>
-        To understand why you or your partner aren't eligible for shared parental leave or shared parental pay, you can check the guidelines on
-        {% if data | isBirth %}
-          <a href="/shared-parental-leave-and-pay/eligibility-for-birth-parents">eligibility for birth parents</a>.
-        {% else %}
-          <a href="/shared-parental-leave-and-pay/eligibility-for-adopters">eligibility for adopters</a>.
-        {% endif %}
+        If you or your partner are eligible, you can use the <a href="/shared-parental-leave-planner">Shared Parental Leave and Pay planning tool</a> to plan how you take time off work to care for your child in the first year of birth or placement.
       </p>
-    {% endif %}
-
-    <form method="POST" action="results">
-      <button {% if not hasCheckedEligibility %}disabled{% endif %} type="submit" class="govuk-button">
-        Continue to planner
-      </button>
-    </form>
-
     </div>
   </div>
 
