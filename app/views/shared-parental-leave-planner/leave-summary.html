@@ -16,10 +16,10 @@
     Employers can refuse discontinuous leave
   </strong>
 </div>
-  <p>You can notify your employer of multple blocks of shared parental leave at the same time but your employer can refuse your plan and ask you to take shared parental leave as one continuous block. 
+  <p>You can notify your employer of multple blocks of shared parental leave at the same time but your employer can refuse your plan and ask you to take shared parental leave as one continuous block.
   </p>
   <p>You can take up to 3 blocks of shared parental leave by giving one notice for each block of leave. Any additional blocks will have to be included in one of the 3 notices and will need to be approved by your employer.
-  </p> 
+  </p>
 {% endset %}
 
 {% block content %}
@@ -81,7 +81,7 @@
             notify: {
               date: block.start | offsetWeeks(-8),
               explanation: "8 weeks before block starts",
-              asterisk: loop.length > 1
+              asterisk: false
             }
           }) }}
         {% endfor %}
@@ -97,7 +97,7 @@
           {% endif %}
         {% endset %}
         <p>
-          To take shared parental leave you can complete the {{ primaryNoticeFormLink | safe }} and submit it to the {{ data['primary-name']}}’s employer at least 8 weeks before you want to start your leave.      
+          To take shared parental leave you can complete the {{ primaryNoticeFormLink | safe }} and submit it to the {{ data['primary-name']}}’s employer at least 8 weeks before you want to start your leave.
         </p>
         <h4 class="govuk-heading-s">
           Changing your plans
@@ -106,7 +106,7 @@
           When you give notice for shared parental leave you have 2 weeks to agree your plan with your employer.
         </p>
         <p>
-          If you want to change your plan after you've agreed it, you'll have to use one of your 3 shared parental leave notices to inform your employer 8 weeks before you want to start your leave. 
+          If you want to change your plan after you've agreed it, you'll have to use one of your 3 shared parental leave notices to inform your employer 8 weeks before you want to start your leave.
         </p>
       {% endif %}
       <h2 class="govuk-heading-l">
@@ -169,7 +169,7 @@
           {% endif %}
         {% endset %}
         <p>
-          To take shared parental leave you can complete the {{ secondaryNoticeFormLink | safe }} and submit it to the {{ data['secondary-name']}}’s employer at least 8 weeks before you want to start your leave.        
+          To take shared parental leave you can complete the {{ secondaryNoticeFormLink | safe }} and submit it to the {{ data['secondary-name']}}’s employer at least 8 weeks before you want to start your leave.
         </p>
         <h4 class="govuk-heading-s">
           Changing your plans
@@ -178,8 +178,8 @@
           When you give notice for shared parental leave you have 2 weeks to agree your plan with your employer.
         </p>
         <p>
-          If you want to change your plan after you've agreed it, you'll have to use one of your 3 shared parental leave notices to inform your employer 8 weeks before you want to start your leave. 
-        </p>  
+          If you want to change your plan after you've agreed it, you'll have to use one of your 3 shared parental leave notices to inform your employer 8 weeks before you want to start your leave.
+        </p>
 
       {% endif %}
       <button class="govuk-button" onclick="alert('Printing is coming soon.')">Print this plan</button>
