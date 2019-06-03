@@ -9,17 +9,11 @@
 {% set partnerHasSpl = data["partners-spl-blocks"] and data["partners-spl-blocks"].length > 0 %}
 {% set partnerHasPaternityLeave = data["paternity-leave"] %}
 {% set multipleSplPerNoticeHtml %}
-<div class="govuk-warning-text">
-  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-  <strong class="govuk-warning-text__text">
-    <span class="govuk-warning-text__assistive">Warning</span>
-    Employers can refuse discontinuous leave
-  </strong>
-</div>
-  <p>You can notify your employer of multple blocks of shared parental leave at the same time but your employer can refuse your plan and ask you to take shared parental leave as one continuous block. 
+  
+  <p>
+    *You can notify your employer of multple blocks of shared parental leave at the same time if your employer agrees.
   </p>
-  <p>You can take up to 3 blocks of shared parental leave by giving one notice for each block of leave. Any additional blocks will have to be included in one of the 3 notices and will need to be approved by your employer.
-  </p> 
+
 {% endset %}
 
 {% block content %}
