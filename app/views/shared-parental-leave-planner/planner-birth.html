@@ -42,7 +42,7 @@
     Shared Parental Leave is available for up to 50 weeks minus any maternity leave taken by the mother. Statutory Shared Parental Pay is available for up to 37 weeks minus any Statutory Maternity Pay taken by mother. You get £148.68 or 90% of your average weekly earnings if you earn less than £165.20.
   </p>
   <p>
-    You can take shared parental leave and pay in multiple blocks with periods of work in between. You and your partner can be off work at the same time, or one after the other.
+    You can take shared parental leave and pay in blocks with periods of work in between. You and your partner can be off work at the same time, or one after the other.
   </p>
 
   <h3 class="govuk-heading-s">
@@ -69,33 +69,36 @@
         Plan leave and pay when you have a child
       </h1>
 
-      <h2 class="govuk-heading-m">
-        Create your leave and pay plan
-      </h2>
-
       <p>
         Click in the calendar to select the weeks you and your partner would like to take off work when you have a child.
+      </p>  
+      
+      <p>
+        You can try out different plans such as taking leave together or taking leave in blocks. You can also change the weeks you want to receive pay.  
       </p>
 
       <p>
-        You can also select the weeks you'd like to receive statutory pay.
+        The calendar will display the relevant type of statutory leave and pay for your plan. That could be: 
       </p>
 
-      <p>
-        The planner will show you the most suitable type of leave (for example, maternity leave or shared parental leave) and an estimated statutory pay amount.
-      </p>
-
+      <ul class="govuk-list govuk-list--bullet">
+        <li>
+        <a href="https://www.gov.uk/maternity-pay-leave" class="govuk-link"> Maternity leave and pay</a></li>
+        <li>
+        <a href="/shared-parental-leave-and-pay" class="govuk-link"> Shared parental leave and pay</a></li>
+        <li><a href="https://www.gov.uk/paternity-pay-leave" class="govuk-link"> Paternity leave and pay</a></li>
+      </ul>
       <h2 class="govuk-heading-m">
-        Examples of shared parental leave
+        Example leave and pay plans
       </h2>
       <span id="more-detail-hint" class="govuk-hint">
         Examples will open in a new page
       </span>
 
-      <ul class="govuk-list">
+      <ul class="govuk-list govuk-list--bullet">
         <li>
           <a class="govuk-link" target="_blank" href="examples/managing-parenting-and-your-career">
-            Managing parenting and your career
+            Managing parenting and work
           </a>
         </li>
         <li>
@@ -109,19 +112,6 @@
           </a>
         </li>
       </ul>
-
-      {{ govukAccordion({
-        items: [
-          {
-            heading: {
-              text: "Maternity, Paternity and Shared Parental Leave and Pay guidance"
-            },
-            content: {
-              html: policyInfo
-            }
-          }
-        ]
-      }) }}
     </div>
   </div>
   <form action="summary" method="POST" id="planner-form">
@@ -266,7 +256,7 @@
           Leave and pay totals
         </h2>
         <p>
-          Any unused maternity leave can be taken as shared parental leave (SPL), and any unused maternity pay can be taken as shared parental pay (ShPP).
+          Parents have a combined total of 52 weeks that can be taken as maternity leave or shared parental leave (SPL).
         </p>
         {{ govukSummaryList({
           rows: [
@@ -345,7 +335,7 @@
             You still have paid leave remaining but have taken some unpaid leave.
           </p>
         </div>
-        <p>Paternity leave and pay are separate entitlements.</p>
+        <p>Paternity leave is separate, take it in the first 8 weeks after birth.</p>
         {{ govukSummaryList({
           rows: [
             {
