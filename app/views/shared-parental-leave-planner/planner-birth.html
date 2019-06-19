@@ -9,7 +9,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Plan leave and pay when you have a child
+  Plan shared parental leave and pay
 {% endblock %}
 
 {% set dueDate %}
@@ -66,44 +66,77 @@
         href: "parent-salaries"
       }) }}
       <h1 class="govuk-heading-xl">
-        Plan leave and pay when you have a child
+        Plan shared parental leave and pay
       </h1>
 
       <p>
-        Click in the calendar to select the weeks you and your partner would like to take off work when you have a child.
-      </p>  
+        Use this calendar to plan <a href=/shared-parental-leave-and-pay>shared parental leave and pay</a> alongside <a href=/maternity-pay-leave> maternity</a> and <a href=/paternity-pay-leave>paternity</a> leave and pay. The calendar is based on your child's birth week.
+      </p>
+      <p>
+        Click the cells to select the weeks each parent wants to take off work, starting with the mother's maternity leave. 
+      </p>
+      <p>
+        If you're taking more than 37 weeks of leave, you can also select which leave weeks are paid and unpaid. The statutory pay amount is indicative only.
+      </p>
+
+      <details class="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            How shared parental leave and pay works
+          </span>
+        </summary>
+         <div class="govuk-details__text">
+          <h3 class="govuk-heading-s">
+            How much you can get
+          </h3>
+          <p>Shared parental leave and pay is created from unused maternity leave and pay. Parents can split up to 50 weeks of shared parental leave and 37 weeks of statutory shared parental pay between them.</p> 
+          
+          <h3 class="govuk-heading-s">
+            When you can start
+          </h3>
+          
+          <p>You can start shared parental leave any time after the child's birth, as long as the mother has ended her maternity leave (either by returning to work or committing to an end date in writing).</p>
+          <p>This means the partner can start shared parental leave while the mother is on maternity leave.</p>
+          <h3 class="govuk-heading-s">
+            How you can take it
+          </h3>
+          
+          <p>Both the mother and the partner can take shared parental leave in blocks, either at the same time or one after the other.</p> 
+      </details>
       
-      <p>
-        You can try out different plans such as taking leave together or taking leave in blocks. You can also change the weeks you want to receive pay.  
-      </p>
-
-      <p>
-        The calendar will display the relevant type of statutory leave and pay for your plan, that could be <a href="https://www.gov.uk/maternity-pay-leave" class="govuk-link">maternity</a>,<a href="https://www.gov.uk/paternity-pay-leave" class="govuk-link">paternity</a>, or </a><a href="/shared-parental-leave-and-pay" class="govuk-link">shared parental</a> leave and pay.
-      </p>
+      <details class="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            Examples of shared parental leave and pay plans
+          </span>
+        </summary>
+        <span id="more-detail-hint" class="govuk-hint">
+          Examples will open in a new page.
+        </span>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>
+            <a class="govuk-link" target="_blank" href="examples/managing-parenting-and-your-career">
+              Managing parenting and work
+            </a>
+          </li>
+          <li>
+            <a class="govuk-link" target="_blank" href="examples/supporting-the-mother-after-birth">
+              Supporting the mother after birth
+            </a>
+          </li>
+          <li>
+            <a class="govuk-link" target="_blank" href="examples/sharing-primary-care-responsibility">
+              Sharing primary care responsibility
+            </a>
+          </li>
+        </ul>
+      </details>
+      
       <h2 class="govuk-heading-m">
-        Example leave and pay plans
+         Your plan
       </h2>
-      <span id="more-detail-hint" class="govuk-hint">
-        Examples will open in a new page
-      </span>
+      <p> Create your own leave plan in this calendar.</p>
 
-      <ul class="govuk-list govuk-list--bullet">
-        <li>
-          <a class="govuk-link" target="_blank" href="examples/managing-parenting-and-your-career">
-            Managing parenting and work
-          </a>
-        </li>
-        <li>
-          <a class="govuk-link" target="_blank" href="examples/supporting-the-mother-after-birth">
-            Supporting the mother after birth
-          </a>
-        </li>
-        <li>
-          <a class="govuk-link" target="_blank" href="examples/sharing-primary-care-responsibility">
-            Sharing primary care responsibility
-          </a>
-        </li>
-      </ul>
     </div>
   </div>
   <form action="summary" method="POST" id="planner-form">
